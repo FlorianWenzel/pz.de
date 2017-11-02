@@ -2,7 +2,8 @@ loadPage('home');
 
 
 function loadPage(page){
-  $('#content').load(page+'.html')
+  window.scrollTo(0, 0);
+  $('#content').load('pages/'+page+'.html')
 }
 
 function em(input) {

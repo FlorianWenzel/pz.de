@@ -1,19 +1,20 @@
 html {
   overflow: auto;
+  overflow-x: hidden;
+  background-color: white;
 }
 #content {
   margin-top: 3.25rem;
-  margin-bottom: 4.5rem;
 }
 #footer {
   z-index: 100;
-  position: fixed;
-  bottom: 0px;
   width: 100vw;
+  border-top: solid 1px #00d1b2;
 }
 #header {
   z-index: 100;
   position: fixed;
   top: 0px;
   width: 100vw;
+  border-bottom: solid 1px #00d1b2;
 }
