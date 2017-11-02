@@ -15,3 +15,8 @@ app.get('*', function(req, res){
 });
 var io = socketio(server);
 server.listen(80);
+io.on('connection', function (socket) {
+  console.log(socket.handshake.address + 'just connected')
+  socket.on('addToWhitelist', function(username){
+  })
+});

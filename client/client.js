@@ -1,5 +1,5 @@
 loadPage('home');
-
+io = io.connect()
 
 function loadPage(page){
   window.scrollTo(0, 0);
