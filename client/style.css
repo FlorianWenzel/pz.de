@@ -1,0 +1,19 @@
+html {
+  overflow: auto;
+}
+#content {
+  margin-top: 3.25rem;
+  margin-bottom: 4.5rem;
+}
+#footer {
+  z-index: 100;
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+}
+#header {
+  z-index: 100;
+  position: fixed;
+  top: 0px;
+  width: 100vw;
+}
