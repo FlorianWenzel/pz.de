@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title>PokerZwiebel</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="css/bulma.css" />
     <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="css/bulma.css" />
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
@@ -26,6 +26,7 @@
     <script src="./socket.io/socket.io.js"></script>
     <script src="https://embed.twitch.tv/embed/v1.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./js/cookie.js"></script>
   </head>
 
   <body>
@@ -33,7 +34,7 @@
       <nav class="navbar is-dark">
         <div class="navbar-brand">
           <a class="navbar-item" onclick="loadPage('home')">
-            <img src="./img/logo-white.png" alt="Bulma: a modern CSS framework based on Flexbox">
+            <img src="./img/logo-white.png" alt="">
           </a>
           <a class="navbar-item" onclick="loadPage('stream')">
             <span class="icon">
@@ -45,21 +46,35 @@
             <span class="icon">
               <i class="fa fa-heart"></i>
             </span>
-            -Back
+            ZwiebelBack
           </a>
         </div>
 
         <!-- *DESKTOP ONLY  MENU* -->
         <div class="navbar-menu">
-
-
           <div class="navbar-end">
+            <div class="currency-display hidden navbar-item">
+              <figure class="image is-24x24">
+                <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/coin.png" />
+              </figure>
+              <span id="coins-amount" class="tag is-dark">
+                1337
+              </span>
+            </div>
+            <div class="currency-display hidden navbar-item">
+              <figure class="image is-24x24">
+                <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/taler.png" />
+              </figure>
+              <span id="taler-amount" class="tag is-dark">
+                23
+              </span>
+            </div>
             <div class="navbar-item">
-              <a class="button is-info">
+              <a id="login-button-link" class="button is-info" onclick="modal('login')">
                 <span class="icon">
                   <i class="fa fa-user"></i>
                 </span>
-                <span>Login</span>
+                <span id="login-button-text">Login</span>
               </a>
             </div>
           </div>
@@ -68,9 +83,42 @@
       </nav>
     </header>
 
+    <!-- END PAGE CONTENT -->
     <div id="content">
-
     </div>
+    <!-- END PAGE CONTENT -->
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <article class="message is-info">
+          <div class="message-header">
+            Zwiebel - Nation
+            <button onclick="modal('close')" class="delete"></button>
+          </div>
+          <div id="modal-content" class="message-body">
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" placeholder="Benutzername">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input" type="password" placeholder="Passwort">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <a class="button is-primary">Login</a> <a onclick="modal('register')" class="button is-primary">Registrieren</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <!-- END MODAL -->
 
     <footer id="footer" class="hero is-dark">
       <div class="container is-dark">
@@ -82,5 +130,5 @@
       </div>
     </footer>
   </body>
-  <script src="./client.js"></script>
+  <script src="./js/client.js"></script>
 </html>

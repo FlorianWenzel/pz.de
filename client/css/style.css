@@ -1,7 +1,12 @@
+
+--primary:#06c;
 html {
   overflow: auto;
   overflow-x: hidden;
   background-color: white;
+}
+.hidden {
+  display: none!important;
 }
 #content {
   margin-top: 3.25rem;
