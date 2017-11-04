@@ -30,7 +30,7 @@
   </head>
 
   <body>
-    <header id="header">
+    <header id="header" class="unselectable">
       <nav class="navbar is-dark">
         <div class="navbar-brand">
           <a class="navbar-item" onclick="loadPage('home')">
@@ -48,16 +48,12 @@
             </span>
             ZwiebelBack
           </a>
-        </div>
-
-        <!-- *DESKTOP ONLY  MENU* -->
-        <div class="navbar-menu">
-          <div class="navbar-end">
-            <div class="currency-display hidden navbar-item">
+          <div class="navbar is-info" style="position:fixed; right: 0px;">
+            <div class="currency-display hidden navbar-item ">
               <figure class="image is-24x24">
                 <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/coin.png" />
               </figure>
-              <span id="coins-amount" class="tag is-dark">
+              <span id="coins-amount" class="tag is-dark selectable">
                 1337
               </span>
             </div>
@@ -65,12 +61,12 @@
               <figure class="image is-24x24">
                 <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/taler.png" />
               </figure>
-              <span id="taler-amount" class="tag is-dark">
+              <span id="taler-amount" class="tag is-dark selectable">
                 23
               </span>
             </div>
             <div class="navbar-item">
-              <a id="login-button-link" class="button is-info" onclick="modal('login')">
+              <a id="login-button-link" class="button is-primary" onclick="modal('login')">
                 <span class="icon">
                   <i class="fa fa-user"></i>
                 </span>
@@ -79,9 +75,13 @@
             </div>
           </div>
         </div>
-        <!-- *END DESKTOP ONLY  MENU* -->
       </nav>
     </header>
+
+    <!-- NOTIFICATION -->
+    <ul id="notifications">
+    </ul>
+    <!-- END NOTIFICATION -->
 
     <!-- END PAGE CONTENT -->
     <div id="content">

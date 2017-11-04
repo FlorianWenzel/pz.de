@@ -8,6 +8,22 @@ html {
 .hidden {
   display: none!important;
 }
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.selectable {
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}
 #content {
   margin-top: 3.25rem;
 }
@@ -21,5 +37,16 @@ html {
   position: fixed;
   top: 0px;
   width: 100vw;
-  border-bottom: solid 1px #00d1b2;
+}
+.notification{
+  margin-bottom: .25rem;
+}
+#notifications{
+  position: fixed;
+  right: .25rem;
+  top: 3.5rem;
+  z-index: 300;
+  width: 20%;
+  min-width: 300px;
+  max-width: 100%;
 }

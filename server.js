@@ -31,7 +31,7 @@ var timer = 0;
 setInterval(interval, (1000))
 function interval() {
   if(timer % 60 == 0){
-    coincmds.giveCoins(channel, users, account.twitchID)
+    coincmds.giveCoins(channel, users, account.twitchID, io)
   }
   db.saveDatabase();
   timer++;
@@ -69,14 +69,15 @@ io.on('connection', function (socket) {
   socket.on('login', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
     if(!user){
+      socket.emit('loginUnsuccessful');
       return;
     }
     if(user.password != password){
-      //TODO: WRONG PW
+      socket.emit('loginUnsuccessful');
+      return;
     }
     user.loggedIntoWebsite ++;
     socket.join(username.toLowerCase())
-    console.log('did it')
     socket.emit('loginSuccessfull', user);
   })
 });

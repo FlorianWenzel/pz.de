@@ -15,7 +15,7 @@ module.exports = {
     }
     return;
   },
-  giveCoins: function(channel, users, twitchID){
+  giveCoins: function(channel, users, twitchID, io){
     var online;
     request({
         url: 'https://api.twitch.tv/kraken/streams/'+channel+'?client_id=' + twitchID,
@@ -47,6 +47,7 @@ module.exports = {
                   user = users.findOne({ name:viewer[i]});
                   if(user){
                     user.coins += 1
+                    io.to(user.name).emit('updateCoins', user.coins)
                 }
               }
             }
