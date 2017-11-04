@@ -16,7 +16,6 @@ module.exports = {
     return;
   },
   giveCoins: function(channel, users, twitchID, io){
-    var online;
     request({
         url: 'https://api.twitch.tv/kraken/streams/'+channel+'?client_id=' + twitchID,
         json: true
@@ -60,15 +59,16 @@ module.exports = {
       client.say(channel, userstate.username + ' besitzt ' + users.findOne({ name:userstate.username}).coins.toString() + ' ZwiebelCoins!')
     }
   },
-  setCoins: function (client, users, channel, userstate, message) {
+  setCoins: function (client, users, channel, userstate, message, io) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!setcoins" || isNaN(msg[2]) || parseInt(msg[2])<=0){
       client.say(channel, 'Benutz !setcoins <User> <Wie viel>')
     }else {
-      getter = users.findOne({ name:msg[1].toLowerCase()});
-      if(getter){
-        getter.coins = parseInt(msg[2]);
+      user = users.findOne({ name:msg[1].toLowerCase()});
+      if(user){
+        user.coins = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
+        io.to(user.name).emit('updateCoins', user.coins)
       }else{
           client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;

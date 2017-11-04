@@ -50,27 +50,27 @@
           </a>
           <div class="navbar is-info" style="position:fixed; right: 0px;">
             <div class="currency-display hidden navbar-item ">
-              <figure class="image is-24x24">
-                <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/coin.png" />
+              <figure class="image is-32x32" style="margin-right: 5px;">
+                <img title="ZwiebelCoin" src="./img/coin100x100.png" />
               </figure>
-              <span id="coins-amount" class="tag is-dark selectable">
+              <span id="coins-amount" class="tag is-medium is-dark selectable">
                 1337
               </span>
             </div>
             <div class="currency-display hidden navbar-item">
-              <figure class="image is-24x24">
-                <img style="border: solid white 1px; border-radius: 50%;" title="ZwiebelCoin" src="./img/taler.png" />
+              <figure class="image is-32x32" style="margin-right: 5px;">
+                <img title="ZwiebelTaler" src="./img/taler100x100.png" />
               </figure>
-              <span id="taler-amount" class="tag is-dark selectable">
+              <span id="taler-amount" class="tag is-medium is-dark selectable">
                 23
               </span>
             </div>
             <div class="navbar-item">
               <a id="login-button-link" class="button is-primary" onclick="modal('login')">
                 <span class="icon">
-                  <i class="fa fa-user"></i>
+                  <i id="login-button-icon" class="fa fa-user"></i>
                 </span>
-                <span id="login-button-text">Login</span>
+                <span id="login-button-text">Einloggen</span>
               </a>
             </div>
           </div>
@@ -110,7 +110,7 @@
             </div>
             <div class="field">
               <div class="control">
-                <a class="button is-primary">Login</a> <a onclick="modal('register')" class="button is-primary">Registrieren</a>
+                <a class="button is-primary">Einloggen</a> <a onclick="modal('register')" class="button is-primary">Registrieren</a>
               </div>
             </div>
           </div>

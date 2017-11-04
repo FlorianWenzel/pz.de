@@ -58,15 +58,19 @@ function modal(a){
       });
       break;
     case 'register':
-      $('#modal-content').html('Um dich zu registrieren musst du dem ZwiebelBot !password whispern, schreib dazu einfach "/w ZwiebeiBot !password" in irgendeinen Twitch-Chat (zB den weiter unten ⬇).<br> <strong>Wichtig</strong>: Das in der Mitte von Zwiebe<strong>L</strong>bot ist ein <strong>i</strong> !<br><br><a onclick="modal(\'login\')" class="button is-primary">Einloggen</a><br>'+
-      '<iframe frameborder="<frameborder width>"' +
+      $('#modal-content').html('Um dich zu registrieren musst du dem ZwiebelBot !password whispern, schreib dazu einfach "/w ZwiebeiBot !password" in irgendeinen Twitch-Chat (zB den weiter unten ⬇).<br> <strong>Wichtig</strong>: Das in der Mitte von Zwiebe<strong>L</strong>bot ist ein <strong>i</strong> !<br><br><a onclick="modal(\'login\')" class="button is-centered is-primary">Einloggen</a><br><br>'+
+      '<iframe id="iframe" frameborder="<frameborder width>"' +
         'scrolling="no"' +
         'id="pokerzwiebel"' +
         'src="https://twitch.tv/pokerzwiebel/chat"' +
         'height="500"' +
-        'width="' + $('#modal-content').width() +'"' +
+        'width="' + $('#modal-content').innerWidth() +'"' +
       '</iframe>'
       )
+      setInterval(function(){
+        $('#iframe').attr('width', $('#modal-content').width())
+        console.log('yep')
+      }, 1000)
       break;
     case 'close':
       $('#modal').removeClass('is-active')
@@ -79,7 +83,7 @@ function showNotification(type, msg){
   id = notifications.length;
   notifications.push(id);
   $('#notifications').append(
-    '<li id="notification-' + id + '" class="notification-li">' +
+    '<li id="notification-' + id + '" class="notification-li fly-in">' +
       '<div class="notification is-'+type+'">' +
         '<button onclick="deleteNotification('+id+')" class="delete"></button>' +
         msg +
@@ -88,8 +92,12 @@ function showNotification(type, msg){
   )
 }
 function deleteNotification(id){
-  console.log('lul')
-  $('#notification-'+id).remove()
+  $( "#notification-"+id ).animate({
+  opacity: 0.25,
+  left: "+=50",
+  height: "toggle"
+}, 150, function() {
+    $('#notification-'+id).remove()});
 }
 
 function login(){
@@ -134,15 +142,19 @@ socket.on('loginUnsuccessful', function loginUnsuccessful(){
 
 
 function showLogout(){
-  $('#login-button-text').html('Abmelden?')
+  $('#login-button-text').html('Abmelden')
   $("#login-button-link").removeClass("is-primary is-warning is-danger is-info is-white is-dark");
   $("#login-button-link").addClass("is-danger");
   $("#login-button-link").attr("onclick","logout();");
+  $('#login-button-icon').removeClass('fa-user');
+  $('#login-button-icon').addClass('fa-sign-out');
   timeout = setInterval(function(){
     $('#login-button-text').html(user.name)
     $("#login-button-link").removeClass("is-primary is-warning is-danger is-info is-white is-dark");
     $("#login-button-link").addClass("is-primary");
     $("#login-button-link").attr("onclick","showLogout();");
+    $('#login-button-icon').removeClass('fa-sign-out');
+    $('#login-button-icon').addClass('fa-user');
     clearInterval(timeout);
   }, 1500)
 }

@@ -106,11 +106,11 @@ client.on("chat", function(channel, userstate, message, self){
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
     coincmds.viewCoins(client, users, channel, userstate);
   }else if(message.includes('!setcoins') && (userstate.mod || '#' + userstate.username == channel)){
-    coincmds.setCoins(client, users, channel, userstate, message);
+    coincmds.setCoins(client, users, channel, userstate, message, io);
   //GAMBLE
   }else if(message.includes("!gamble")){
-    casino.gamble(client, users, channel, userstate, message);
+    casino.gamble(client, users, channel, userstate, message, io);
   }else if(message.includes('!slots ') || message.includes('!slot ') || message.includes('!s ')){
-    casino.slots(client, users, channel, userstate, message);
+    casino.slots(client, users, channel, userstate, message, io);
   }
 })
