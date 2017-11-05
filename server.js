@@ -11,6 +11,7 @@ const coincmds = require('./coincmds.js');
 const casino = require('./gamble.js');
 const channel = 'dukexentis';
 const pwgen = require('password-generator');
+const request = require('request');
 
 var options = {
   options: {
@@ -66,7 +67,7 @@ var io = socketio(server);
 server.listen(80);
 io.on('connection', function (socket) {
   console.log(socket.handshake.address + 'just connected')
-  socket.on('login', function(username, password){
+  socket.on('autoLogin', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
     if(!user){
       socket.emit('loginUnsuccessful');
@@ -79,6 +80,14 @@ io.on('connection', function (socket) {
     user.loggedIntoWebsite ++;
     socket.join(username.toLowerCase())
     socket.emit('loginSuccessfull', user);
+  })
+  socket.on('auth', function (code){
+    request({
+        url: 'https://api.twitch.tv/kraken/oauth2/token?client_id='+account.twitchID+'&client_secret=' + account.twitchSecret + '&code=' + code + '&grant_type=authorization_code&redirect_uri=http://pokerzwiebel.de/login',
+        json: true
+    }, function (error, response, body) {
+      console.log(body)
+    })
   })
 });
 

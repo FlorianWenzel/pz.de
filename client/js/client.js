@@ -6,11 +6,18 @@ var selfDestructions = [];
 
 loadPage('home');
 socket = io.connect()
-autoLogin()
+onload()
 
-function autoLogin(){
+function onload(){
+  //AUTO-LOGIN
   if(pwCookie && usrCookie){
     socket.emit('login', usrCookie, pwCookie);
+    return;
+  }
+  if(document.location.href.includes('/login')){
+    console.log('login')
+    code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
+    socket.emit('auth', code)
   }
 }
 
@@ -19,64 +26,8 @@ function loadPage(page){
   $('#content').load('html/'+page+'.html')
 }
 
-function modal(a){
-  switch (a) {
-    case 'login':
-      $('#modal').addClass('is-active')
-      $('#modal-content').html(
-          '<div class="field">' +
-            '<div id="username-field-control" class="control has-icons-left">' +
-              '<input id="username-field" class="input" type="text" placeholder="Benutzername">' +
-              '<span class="icon is-small is-left">' +
-                '<i class="fa fa-user"></i>' +
-              '</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="field">' +
-            '<div id="password-field-control" class="control has-icons-left">' +
-              '<input id="password-field" class="input" type="password" placeholder="Passwort">' +
-                '<span class="icon is-small is-left">' +
-                  '<i class="fa fa-lock"></i>' +
-                '</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="field">' +
-            '<div class="control">' +
-              '<a id="login-button" onclick="login();" class="button is-primary">Login</a> <a onclick="modal(\'register\')" class="button is-primary">Registrieren</a>' +
-            '</div>' +
-          '</div>' +
-        '</div>');
-      $('#username-field').keypress(function(event){
-        if(event.keyCode == 13){
-          $('#password-field').select();
-        }
-      });
-      $('#password-field').keypress(function(event){
-        if(event.keyCode == 13){
-          $('#login-button').click();
-        }
-      });
-      break;
-    case 'register':
-      $('#modal-content').html('Um dich zu registrieren musst du dem ZwiebelBot !password whispern, schreib dazu einfach "/w ZwiebeiBot !password" in irgendeinen Twitch-Chat (zB den weiter unten ⬇).<br> <strong>Wichtig</strong>: Das in der Mitte von Zwiebe<strong>L</strong>bot ist ein <strong>i</strong> !<br><br><a onclick="modal(\'login\')" class="button is-centered is-primary">Einloggen</a><br><br>'+
-      '<iframe id="iframe" frameborder="<frameborder width>"' +
-        'scrolling="no"' +
-        'id="pokerzwiebel"' +
-        'src="https://twitch.tv/pokerzwiebel/chat"' +
-        'height="500"' +
-        'width="' + $('#modal-content').innerWidth() +'"' +
-      '</iframe>'
-      )
-      setInterval(function(){
-        $('#iframe').attr('width', $('#modal-content').width())
-        console.log('yep')
-      }, 1000)
-      break;
-    case 'close':
-      $('#modal').removeClass('is-active')
-      break;
-    default:
-  }
+function redirectToTwitch(){
+  window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=channel_check_subscription'
 }
 
 function showNotification(type, msg){
