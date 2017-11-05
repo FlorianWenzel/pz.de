@@ -66,7 +66,6 @@ app.get('*', function(req, res){
 var io = socketio(server);
 server.listen(80);
 io.on('connection', function (socket) {
-  console.log(socket.handshake.address + 'just connected')
   socket.on('autoLogin', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
     if(!user){
@@ -100,6 +99,7 @@ io.on('connection', function (socket) {
         user = users.findOne({name:username.toLowerCase()})
         if(!user){
           coincmds.knowUser(users, username);
+          user = users.findOne({name:username.toLowerCase()})
         }
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())

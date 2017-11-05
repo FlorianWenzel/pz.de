@@ -41,6 +41,7 @@ function showNotification(type, msg){
     '</li>'
   )
 }
+
 function deleteNotification(id){
   $( "#notification-"+id ).animate({
   opacity: 0.25,
@@ -60,9 +61,14 @@ socket.on('loginSuccessfull', function(usr){
   Cookies.set('UID', user.password, { expires: 365})
   $('#login-button-text').html(user.name)
   $("#login-button-link").attr("onclick","showLogout();");
+  $("#login-button-link").removeClass("lila");
+  $("#login-button-link").addClass("is-info");
+  $('#login-button-icon').removeClass('fa-twitch');
+  $('#login-button-icon').addClass('fa-user');
   $('#coins-amount').html(user.coins);
   $('#taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
+  window.history.pushState('home', 'PokerZwiebel', '/');
 })
 
 function showLogout(){
@@ -70,14 +76,15 @@ function showLogout(){
   $("#login-button-link").removeClass("is-primary is-warning is-danger is-info is-white is-dark");
   $("#login-button-link").addClass("is-danger");
   $("#login-button-link").attr("onclick","logout();");
+  $('#login-button-link').removeClass('is-info');
   $('#login-button-icon').removeClass('fa-user');
   $('#login-button-icon').addClass('fa-sign-out');
   timeout = setInterval(function(){
     $('#login-button-text').html(user.name)
     $("#login-button-link").removeClass("is-primary is-warning is-danger is-info is-white is-dark");
-    $("#login-button-link").addClass("is-primary");
     $("#login-button-link").attr("onclick","showLogout();");
     $('#login-button-icon').removeClass('fa-sign-out');
+    $('#login-button-link').addClass('is-info');
     $('#login-button-icon').addClass('fa-user');
     clearInterval(timeout);
   }, 1500)

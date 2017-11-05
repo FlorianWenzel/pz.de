@@ -5,6 +5,9 @@ html {
   overflow-x: hidden;
   background-color: white;
 }
+.lila{
+  background-color: #6441A4!important;
+}
 .hidden {
   display: none!important;
 }

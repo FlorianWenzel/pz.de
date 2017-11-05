@@ -6,8 +6,7 @@ module.exports = {
     if(!users.findOne({name:username})){
       users.insert({
         name: username,
-        gambleCooldown: new Date().getTime() - 100000000,
-        password: pwGen(12, false),
+        password: pwGen(30, false),
         loggedIntoWebsite: 0,
         coins: 0,
         taler: 0
