@@ -82,11 +82,29 @@ io.on('connection', function (socket) {
     socket.emit('loginSuccessfull', user);
   })
   socket.on('auth', function (code){
-    request({
+    request.post({
         url: 'https://api.twitch.tv/kraken/oauth2/token?client_id='+account.twitchID+'&client_secret=' + account.twitchSecret + '&code=' + code + '&grant_type=authorization_code&redirect_uri=http://pokerzwiebel.de/login',
         json: true
     }, function (error, response, body) {
-      console.log(body)
+      if(!body.access_token){
+        return;
+      }
+      request({
+        url: 'https://api.twitch.tv/kraken?oauth_token=' + body.access_token,
+        json: true
+      }, function (error, response, body){
+        if(!body.token.user_name){
+          return;
+        }
+        username = body.token.user_name;
+        user = users.findOne({name:username.toLowerCase()})
+        if(!user){
+          coincmds.knowUser(users, username);
+        }
+        user.loggedIntoWebsite ++;
+        socket.join(username.toLowerCase())
+        socket.emit('loginSuccessfull', user);
+      })
     })
   })
 });

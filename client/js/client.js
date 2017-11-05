@@ -11,11 +11,10 @@ onload()
 function onload(){
   //AUTO-LOGIN
   if(pwCookie && usrCookie){
-    socket.emit('login', usrCookie, pwCookie);
+    socket.emit('autoLogin', usrCookie, pwCookie);
     return;
   }
   if(document.location.href.includes('/login')){
-    console.log('login')
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
     socket.emit('auth', code)
   }
@@ -27,7 +26,7 @@ function loadPage(page){
 }
 
 function redirectToTwitch(){
-  window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=channel_check_subscription'
+  window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=&force_verify=true'
 }
 
 function showNotification(type, msg){
@@ -51,22 +50,6 @@ function deleteNotification(id){
     $('#notification-'+id).remove()});
 }
 
-function login(){
-  u = $('#username-field').val();
-  p = $('#password-field').val();
-  if(p == '' || u == ''){
-    if(!u){
-      $('#username-field').addClass('is-danger')
-    }
-    if(!p){
-      $('#password-field').addClass('is-danger')
-    }
-    return;
-  }
-  $('#password-field-control').addClass('is-loading')
-  $('#username-field-control').addClass('is-loading')
-  socket.emit('login', u, p);
-}
 socket.on('updateCoins', function(amount){
   $('#coins-amount').html(amount);
 })+
@@ -75,22 +58,12 @@ socket.on('loginSuccessfull', function(usr){
   user = usr;
   Cookies.set('USR', user.name, { expires: 365})
   Cookies.set('UID', user.password, { expires: 365})
-  modal('close')
   $('#login-button-text').html(user.name)
   $("#login-button-link").attr("onclick","showLogout();");
   $('#coins-amount').html(user.coins);
   $('#taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
 })
-
-socket.on('loginUnsuccessful', function loginUnsuccessful(){
-  $('#password-field-control').removeClass('is-loading')
-  $('#username-field-control').removeClass('is-loading')
-  $('#username-field').addClass('is-danger');
-  $('#password-field').addClass('is-danger');
-  showNotification('danger', 'Falscher Benutzername oder falsches Passwort!')
-})
-
 
 function showLogout(){
   $('#login-button-text').html('Abmelden')
