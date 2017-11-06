@@ -1,6 +1,6 @@
 var pwCookie = Cookies.get('UID')
 var usrCookie = Cookies.get('USR')
-var usr;
+var user;
 var notifications = [];
 var selfDestructions = [];
 
@@ -23,6 +23,51 @@ function onload(){
 function loadPage(page){
   window.scrollTo(0, 0);
   $('#content').load('html/'+page+'.html')
+}
+
+function refreshProgressBar(){
+  coins = parseInt($('#coins-amount').html())
+  if(!$('#progressBar')){
+    return;
+  }
+  if(coins > 1000){
+    coins = 1000
+  }
+  $('#progressBar').attr('value', coins/1000 * 100)
+  $('#progressText').html(coins + ' / 1000')
+  if(coins < 333){
+    $('#progressBar').removeClass('is-warning')
+    $('#progressBar').removeClass('is-success')
+    $('#progressBar').addClass('is-danger')
+  }else if(coins < 666){
+    $('#progressBar').removeClass('is-danger')
+    $('#progressBar').removeClass('is-success')
+    $('#progressBar').addClass('is-warning')
+  }else{
+    $('#progressBar').removeClass('is-warning')
+    $('#progressBar').removeClass('is-danger')
+    $('#progressBar').addClass('is-success')
+  }
+  if(coins >= 1000){
+    $('#convertButton').removeClass('is-danger')
+    $('#convertButton').addClass('is-success')
+  }else{
+    $('#convertButton').addClass('is-danger')
+    $('#convertButton').removeClass('is-success')
+  }
+}
+
+function convert(){
+  coins = parseInt($('#coins-amount').html())
+  if(coins < 1000){
+    $( "#convertButton" ).addClass( "shake" )
+    i = setInterval(function(){
+      $( "#convertButton" ).removeClass( "shake" )
+      clearInterval(i);
+    }, 1000)
+  }else{
+    socket.emit('convert', usrCookie, pwCookie);
+  }
 }
 
 function redirectToTwitch(){
@@ -53,7 +98,16 @@ function deleteNotification(id){
 
 socket.on('updateCoins', function(amount){
   $('#coins-amount').html(amount);
-})+
+  refreshProgressBar();
+})
+
+socket.on('updateTaler', function(amount){
+  $('#taler-amount').html(amount);
+})
+
+socket.on('showNotification', function(type, msg){
+  showNotification(type, msg);
+})
 
 socket.on('loginSuccessfull', function(usr){
   user = usr;

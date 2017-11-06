@@ -68,6 +68,41 @@ module.exports = {
         user.coins = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
         io.to(user.name).emit('updateCoins', user.coins)
+        io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelCoins auf ' + msg[2] + ' gesetzt!</div>');
+      }else{
+          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          return;
+      }
+    }
+  },
+  setTaler: function (client, users, channel, userstate, message, io) {
+    msg = message.split(" ")
+    if(msg.length != 3 || msg[0] != "!settaler" || isNaN(msg[2]) || parseInt(msg[2])<=0){
+      client.say(channel, 'Benutz !settaler <User> <Wie viel>')
+    }else {
+      user = users.findOne({ name:msg[1].toLowerCase()});
+      if(user){
+        user.taler = parseInt(msg[2]);
+        client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelTaler.')
+        io.to(user.name).emit('updateTaler', user.taler)
+        io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelTaler auf ' + msg[2] + ' gesetzt!</div>');
+      }else{
+          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          return;
+      }
+    }
+  },
+  giveTaler: function (client, users, channel, userstate, message, io) {
+    msg = message.split(" ")
+    if(msg.length != 3 || msg[0] != "!givetaler" || isNaN(msg[2])){
+      client.say(channel, 'Benutz !givetaler <User> <Wie viel>')
+    }else {
+      user = users.findOne({ name:msg[1].toLowerCase()});
+      if(user){
+        user.taler += parseInt(msg[2]);
+        client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelTaler erhalten!')
+        io.to(user.name).emit('updateTaler', user.taler)
+        io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelTaler gutgeschrieben!</div>');
       }else{
           client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;
@@ -76,3 +111,7 @@ module.exports = {
   }
 
   };
+
+  function getUserTag(typePrefix, prefix, typeSuffix, suffix) {
+    return '<div style="padding-right: 4px;" class="control"><div class="tags has-addons"><span class="tag is-'+typePrefix+'">'+prefix+'</span><span class="tag is-'+typeSuffix+'">'+suffix+'</span></div></div>'
+  }

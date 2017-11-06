@@ -1,9 +1,10 @@
+<br />
 <div class="tile is-ancestor">
   <div class="tile is-vertical is-8">
     <div class="tile">
       <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification is-primary">
-          <p class="title">Plüschzwiebel</p>
+        <article class="tile is-child notification is-info">
+          <p class="title">ZwiebelMütze</p>
           <p class="subtitle">200 ZwiebelTaler</p>
           <figure class="image">
             <img class="image" src="https://img1.etsystatic.com/119/0/11297648/il_570xN.1045785797_a3l7.jpg"/><br />
@@ -13,8 +14,8 @@
           </div>
         </article>
         <article class="tile is-child notification is-warning">
-          <p class="title">Plüschzwiebel</p>
-          <p class="subtitle">200 ZwiebelTaler</p>
+          <p class="is-size-1">Plüschzwiebel</p>
+          <p class="is-size-2">200 ZwiebelTaler</p>
           <figure class="image">
             <img class="image" src="https://ae01.alicdn.com/kf/HTB1sPxQdm7PL1JjSZFHq6AciXXaq/1-ST-CKE-20-CM-ber-Spiel-Uhr-Overwatches-Spiel-Pl-schtiere-Zwiebel-Kleine-Tintenfisch-Gef.jpg_640x640.jpg"/><br />
           </figure>
@@ -24,13 +25,23 @@
         </article>
       </div>
       <div class="tile is-parent">
-        <article class="tile is-child notification is-info">
-          <p class="title">Wie es funktioniert...</p>
+        <article class="tile is-child notification is-dark" stlye="position: relative;">
+          <p class="title">Und so funktioniert's:</p>
           <p class="subtitle"> </p>
-          <p class="content">
-            asdf
+          <p class="content" style="margin-bottom: 3rem;">
+            <br />
+            Durch deine Unterstützung des Streams, also Donos, Subs und Bits sammelst du ZwiebelTaler, diese kannst du hier gegen ZwiebelMerch eintauschen!<br /><br />
+            Fürs Streamschauen gibt's ZwiebelCoins, eine pro Minute, diese kannst du hier in ZwiebelTaler umtauschen! <br />
+            <strong>1000 ZwiebelCoins entsprechen 1 ZwiebelTaler</strong>
           </p>
-        </article>
+          <progress id="progressBar" class="progress is-danger" style="margin-bottom:0px;" value="0" max="100">90%</progress>
+          <p id="progressText" class="content has-text-centered">
+            10/1000<br />
+          </p>
+          <div class="has-text-centered">
+            <button id="convertButton" onclick="convert();" class="button is-danger">Umtauschen!</button>
+          </div>
+        </p>
       </div>
     </div>
     <div class="tile is-parent">
@@ -59,6 +70,9 @@
     </article>
   </div>
 </div>
+<script>
+  refreshProgressBar();
+</script>
 <style>
 html{
   overflow-x: hidden;

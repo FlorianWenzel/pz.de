@@ -12,6 +12,9 @@ const casino = require('./gamble.js');
 const channel = 'dukexentis';
 const pwgen = require('password-generator');
 const request = require('request');
+const io_client = require('socket.io-client');
+const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken)
+
 
 var options = {
   options: {
@@ -107,8 +110,76 @@ io.on('connection', function (socket) {
       })
     })
   })
+  socket.on('convert',function(usr, pw){
+    user = users.findOne({name:usr, password:pw})
+    if(!user){return;}
+    if(user.coins < 1000){return;}
+    user.coins -= 1000;
+    user.taler += 1;
+    socket.emit('updateTaler', user.taler)
+    socket.emit('updateCoins', user.coins)
+    socket.emit('showNotification', 'success', 'Erfolgreich 1000 ZwiebelCoins in 1 ZwiebelTaler umgetauscht!')
+  })
 });
 
+
+streamlabs.on('event', (eventData) => {
+  if (!eventData.for && eventData.type === 'donation') {
+    //code to handle donation events
+    user = users.findOne({name: eventData.message[0].from.toLowerCase()});
+    if(!user){
+      console.log('user not found')
+      return;
+    }
+    taler = Math.floor(10 * eventData.message[0].amount);
+    user.taler += taler;
+    if(taler > 0){
+      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Donation ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
+      io.to(user.name).emit('updateTaler', user.taler);
+    }
+  }
+  if(eventData.type === 'bits'){
+    //code to handle bit events
+    user = users.findOne({name: eventData.message[0].name.toLowerCase()});
+    if(!user){
+      console.log('user not found')
+      return;
+    }
+    taler = Math.floor(eventData.message[0].amount / 10);
+    user.taler += taler;
+    if(taler > 0){
+    io.to(user.name).emit('notificationDonation', taler);
+    io.to(user.name).emit('updateTaler', user.taler);
+
+    }
+  }
+  if (eventData.for === 'twitch_account') {
+    switch(eventData.type) {
+      case 'follow':
+        //code to handle follow events
+        console.log(eventData.message);
+        break;
+      case 'subscription':
+        //code to handle subscription events
+        user = users.findOne({name: eventData.message[0].name.toLowerCase()});
+        if(!user){
+          console.log('user not found')
+          return;
+        }
+        console.log(eventData.message[0].sub_plan)
+        /*
+        user.taler += Math.floor(10 * eventData.message[0].amount);
+        io.to(user.name).emit('notificationDonation', Math.floor(10 * eventData.message[0].amount));
+        io.to(user.name).emit('updateTaler', user.taler);
+        */
+        break;
+
+      default:
+        //default case
+        console.log(eventData.message);
+    }
+  }
+});
 
 
 
@@ -134,6 +205,10 @@ client.on("chat", function(channel, userstate, message, self){
     coincmds.viewCoins(client, users, channel, userstate);
   }else if(message.includes('!setcoins') && (userstate.mod || '#' + userstate.username == channel)){
     coincmds.setCoins(client, users, channel, userstate, message, io);
+  }else if(message.includes('!settaler') && (userstate.mod || '#' + userstate.username == channel)){
+    coincmds.setTaler(client, users, channel, userstate, message, io);
+  }else if(message.includes('!givetaler') && (userstate.mod || '#' + userstate.username == channel)){
+    coincmds.giveTaler(client, users, channel, userstate, message, io);
   //GAMBLE
   }else if(message.includes("!gamble")){
     casino.gamble(client, users, channel, userstate, message, io);
