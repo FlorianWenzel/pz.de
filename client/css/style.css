@@ -7,6 +7,19 @@ html {
 }
 .lila{
   background-color: #6441A4!important;
+  color: white!important;
+}
+.dark{
+  background-color: #363636!important;
+  color: white!important;
+}
+.rot{
+  background-color: #ff3860!important;
+  color: white!important;
+}
+.blue{
+  background-color: #209cee!important;
+  color: white!important;
 }
 .hidden {
   display: none!important;
@@ -47,6 +60,7 @@ html {
 .notification{
   margin-bottom: .25rem;
   min-width: 300px;
+  border: solid #363636 1px;
 }
 #notifications{
   position: fixed;
