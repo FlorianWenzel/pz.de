@@ -60,6 +60,7 @@ function refreshProgressBar(){
 function convert(){
   coins = parseInt($('#coins-amount').html())
   if(coins < 1000){
+    showNotification('danger', 'Zu wenig ZwiebelCoins!')
     $( "#convertButton" ).addClass( "shake" )
     i = setInterval(function(){
       $( "#convertButton" ).removeClass( "shake" )
