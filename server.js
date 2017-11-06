@@ -9,7 +9,7 @@ const https = require('https');
 const account = require('./account.js');
 const coincmds = require('./coincmds.js');
 const casino = require('./gamble.js');
-const channel = 'dukexentis';
+const channel = account.channel;
 const pwgen = require('password-generator');
 const request = require('request');
 const io_client = require('socket.io-client');
@@ -209,6 +209,8 @@ client.on("chat", function(channel, userstate, message, self){
     coincmds.setTaler(client, users, channel, userstate, message, io);
   }else if(message.includes('!givetaler') && (userstate.mod || '#' + userstate.username == channel)){
     coincmds.giveTaler(client, users, channel, userstate, message, io);
+  }else if(message.includes('!givecoins') && (userstate.mod || '#' + userstate.username == channel)){
+    coincmds.giveCoins(client, users, channel, userstate, message, io);
   //GAMBLE
   }else if(message.includes("!gamble")){
     casino.gamble(client, users, channel, userstate, message, io);

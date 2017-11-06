@@ -109,7 +109,6 @@ module.exports = {
       }
     }
   }
-
   };
 
   function getUserTag(typePrefix, prefix, typeSuffix, suffix) {
