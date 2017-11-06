@@ -124,6 +124,7 @@ io.on('connection', function (socket) {
 
 
 streamlabs.on('event', (eventData) => {
+  console.log(eventData)
   if (!eventData.for && eventData.type === 'donation') {
     //code to handle donation events
     user = users.findOne({name: eventData.message[0].from.toLowerCase()});
@@ -145,19 +146,17 @@ streamlabs.on('event', (eventData) => {
       console.log('user not found')
       return;
     }
-    taler = Math.floor(eventData.message[0].amount / 10);
+    taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
     user.taler += taler;
     if(taler > 0){
-    io.to(user.name).emit('notificationDonation', taler);
-    io.to(user.name).emit('updateTaler', user.taler);
-
+      io.to(user.name).emit('notificationDonation', taler);
+      io.to(user.name).emit('updateTaler', user.taler);
     }
   }
   if (eventData.for === 'twitch_account') {
     switch(eventData.type) {
       case 'follow':
         //code to handle follow events
-        console.log(eventData.message);
         break;
       case 'subscription':
         //code to handle subscription events
@@ -166,7 +165,6 @@ streamlabs.on('event', (eventData) => {
           console.log('user not found')
           return;
         }
-        console.log(eventData.message[0].sub_plan)
         /*
         user.taler += Math.floor(10 * eventData.message[0].amount);
         io.to(user.name).emit('notificationDonation', Math.floor(10 * eventData.message[0].amount));
@@ -176,7 +174,6 @@ streamlabs.on('event', (eventData) => {
 
       default:
         //default case
-        console.log(eventData.message);
     }
   }
 });
