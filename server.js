@@ -14,7 +14,8 @@ const pwgen = require('password-generator');
 const request = require('request');
 const io_client = require('socket.io-client');
 const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken)
-
+const log = require('./log.js');
+const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
 
 var options = {
   options: {
@@ -35,7 +36,7 @@ var timer = 0;
 setInterval(interval, (1000))
 function interval() {
   if(timer % 60 == 0){
-    coincmds.giveCoins(channel, users, account.twitchID, io)
+    coincmds.rewardCoins(channel, users, account.twitchID, io)
   }
   db.saveDatabase();
   timer++;
@@ -51,8 +52,12 @@ var db = new loki('./database.json',
 
 function loadHandler() {
     users = db.getCollection('users');
+    logs = db.getCollection('logs');
     if (!users) {
         users = db.addCollection('users');
+    }
+    if (!logs) {
+      logs = db.addCollection('logs');
     }
 }
 
@@ -81,7 +86,8 @@ io.on('connection', function (socket) {
     }
     user.loggedIntoWebsite ++;
     socket.join(username.toLowerCase())
-    socket.emit('loginSuccessfull', user);
+    if(admins.includes(user.name)){isMod = true;}
+    socket.emit('loginSuccessfull', user, isMod);
   })
   socket.on('auth', function (code){
     request.post({
@@ -106,7 +112,9 @@ io.on('connection', function (socket) {
         }
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())
-        socket.emit('loginSuccessfull', user);
+        isMod = false;
+        if(admins.includes(user.name)){isMod = true;}
+        socket.emit('loginSuccessfull', user, isMod);
       })
     })
   })
@@ -118,7 +126,17 @@ io.on('connection', function (socket) {
     user.taler += 1;
     socket.emit('updateTaler', user.taler)
     socket.emit('updateCoins', user.coins)
+    log.addLog(logs, user.name, user.name, 'coins', -1000, 'convert')
+    log.addLog(logs, user.name, user.name, 'taler', +1, 'convert')
     socket.emit('showNotification', 'success', 'Erfolgreich 1000 ZwiebelCoins in 1 ZwiebelTaler umgetauscht!')
+  })
+  socket.on('getAllLogs', function(u, p){
+    if(!(admins.includes(users.findOne({name:u, password:p}).name))){console.log('yo'); return;}
+    socket.emit('getLogs', logs.where(function(){return true;}))
+  })
+  socket.on('getFilteredLogs', function(filter){
+    filteredlogs = log.getFilteredLogs(logs, filter);
+    socket.emit('getLogs', filteredlogs)
   })
 });
 
@@ -171,7 +189,6 @@ streamlabs.on('event', (eventData) => {
         io.to(user.name).emit('updateTaler', user.taler);
         */
         break;
-
       default:
         //default case
     }
@@ -191,23 +208,21 @@ client.on("whisper", function (from, userstate, message, self) {
     client.whisper( from, 'Hi! Dein Benutzername ist: ' + userstate.username + ' und dein Passwort: ' + users.findOne({name:userstate.username}).password)
   }
 })
+
 client.on("chat", function(channel, userstate, message, self){
   if(self){
     return;
   }
   coincmds.knowUser(users, userstate.username)
   //COINS FUNCTIONS
-  //VIEW COINS
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
     coincmds.viewCoins(client, users, channel, userstate);
   }else if(message.includes('!setcoins') && (userstate.mod || '#' + userstate.username == channel)){
-    coincmds.setCoins(client, users, channel, userstate, message, io);
+    coincmds.setCoins(client, users, channel, userstate, message, io, log);
   }else if(message.includes('!settaler') && (userstate.mod || '#' + userstate.username == channel)){
-    coincmds.setTaler(client, users, channel, userstate, message, io);
+    coincmds.setTaler(client, users, channel, userstate, message, io, log);
   }else if(message.includes('!givetaler') && (userstate.mod || '#' + userstate.username == channel)){
-    coincmds.giveTaler(client, users, channel, userstate, message, io);
-  }else if(message.includes('!givecoins') && (userstate.mod || '#' + userstate.username == channel)){
-    coincmds.giveCoins(client, users, channel, userstate, message, io);
+    coincmds.giveTaler(client, users, channel, userstate, message, io, log);
   //GAMBLE
   }else if(message.includes("!gamble")){
     casino.gamble(client, users, channel, userstate, message, io);

@@ -1,5 +1,7 @@
 
---primary:#06c;
+.navbar {
+  height: 3.25rem!important;
+}
 html {
   overflow: auto;
   overflow-x: hidden;
@@ -8,6 +10,14 @@ html {
 .lila{
   background-color: #6441A4!important;
   color: white!important;
+}
+.green{
+  background-color: #23d160!important;
+  color: white!important;
+}
+.prime{
+  background-color: #00d1b2!important;
+  color: black!important;
 }
 .dark{
   background-color: #363636!important;

@@ -22,6 +22,7 @@ function onload(){
 
 function loadPage(page){
   window.scrollTo(0, 0);
+  $('#content').empty()
   $('#content').load('html/'+page+'.html')
 }
 
@@ -110,7 +111,57 @@ socket.on('showNotification', function(type, msg){
   showNotification(type, msg);
 })
 
-socket.on('loginSuccessfull', function(usr){
+socket.on('getLogs', function(logs){
+  $('#logs').html(
+    '<li id=\'log-head\' style="width: 100%;">' +
+      '<div class="columns">' +
+        '<div class="column prime" style="border: solid white 1px;">' +
+          '<strong>Auslöser</strong>' +
+        '</div>' +
+        '<div class="column prime" style="border: solid white 1px;">' +
+          '<strong>Empfänger</strong>' +
+        '</div>' +
+        '<div class="column prime" style="border: solid white 1px;">' +
+          '<strong>Änderung</strong>' +
+        '</div>' +
+        '<div class="column prime" style="border: solid white 1px;">' +
+          '<strong>Art</strong>' +
+        '</div>' +
+      '</div>' +
+    '</li>'
+  )
+  for(i=0;i<logs.length;i++){
+    color = 'blue';
+    if(logs[i].type == 'setCoins' || logs[i].type == 'setTaler'){
+
+    }else{
+      if(logs[i].amount > 0){
+        color = 'green'
+      }else if(logs[i].amount < 0){
+        color = 'rot'
+      }
+    }
+    $('#logs').append(
+      '<li id=\'log-head\' style="width: 100%;">' +
+        '<div class="columns">' +
+          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            ''+logs[i].trigger_username+'' +
+          '</div>' +
+          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            ''+logs[i].receiver_username+'' +
+          '</div>' +
+          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            ''+logs[i].amount+' '+logs[i].currency+'' +
+          '</div>' +
+          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            ''+logs[i].type+'' +
+          '</div>' +
+        '</div>' +
+    '</li>')
+  }
+})
+
+socket.on('loginSuccessfull', function(usr, isMod){
   user = usr;
   Cookies.set('USR', user.name, { expires: 365})
   Cookies.set('UID', user.password, { expires: 365})
@@ -124,6 +175,9 @@ socket.on('loginSuccessfull', function(usr){
   $('#taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
   window.history.pushState('home', 'PokerZwiebel', '/');
+  if(isMod){
+    $('#logs-button').removeClass('hidden');
+  }
 })
 
 function showLogout(){

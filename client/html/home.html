@@ -17,10 +17,12 @@
   overflow-y: hidden!important;
   overflow-x: hidden!important;
 }
+
 #home-wraper {
   margin: 0;
   font-family: "Roboto Condensed", sans-serif;
 }
+
 .background {
   background-image: url("https://cdn.discordapp.com/attachments/309374608195452928/356478907244871682/DSC_0070.jpg");
   background-repeat: no-repeat;
@@ -30,6 +32,7 @@
   height: 100vh;
   position: relative;
 }
+
 .background_overlay {
   position: absolute;
   top: 0;
@@ -41,18 +44,22 @@
   -webkit-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .background_overlay:hover {
   background-color: transparent;
   mix-blend-mode: normal;
 }
+
 .background_overlay:hover .background_overlay__header {
   color: #FFF;
 }
+
 .background_overlay:hover .background_overlay__header:after,
 .background_overlay:hover .background_overlay__header:before {
   background-color: #FFF;
   width: 20%;
 }
+
 .background_overlay__inner {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -72,18 +79,21 @@
       -ms-flex-direction: column;
           flex-direction: column;
 }
+
 h1.background_overlay__header {
   font-size: 10vw;
   color: #000;
   display: inline-block;
   position: relative;
 }
+
 h2.background_overlay__header {
   font-size: 5vw;
   color: #000;
   display: inline-block;
   position: relative;
 }
+
 .background_overlay__header:after,
 .background_overlay__header:before {
   content: "";
@@ -96,15 +106,16 @@ h2.background_overlay__header {
   -webkit-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .background_overlay__header:after {
   left: auto;
   right: 50%;
 }
+
 .background_overlay__header:before {
   left: 50%;
   right: auto;
 }
-
 </style>
 <script>
   $(function () {

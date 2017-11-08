@@ -1,0 +1,78 @@
+<div class="columns">
+  <div class="column" style="padding-bottom:0px; padding-right: 0px;">
+    <div class="field">
+      <div class="control">
+        <input id="trigger-filter" class="input is-primary" type="text" placeholder="Filter Auslöser">
+      </div>
+    </div>
+  </div>
+  <div class="column" style="padding-bottom:0px; padding-left:0px;">
+    <div class="field">
+      <div class="control">
+        <input id="receiver-filter" class="input is-primary" type="text" placeholder="Filter Empfänger">
+      </div>
+    </div>
+  </div>
+  <div class="column has-text-centered">
+    <div class="columns">
+      <div class="column">
+      <label class="checkbox">
+        <input id="taler-filter" type="checkbox" checked>
+        Taler
+      </label>
+      </div>
+      <div class="column">
+      <label class="checkbox">
+        <input id="coins-filter" type="checkbox" checked>
+        Coins
+      </label>
+      </div>
+    </div>
+  </div>
+</div>
+<ul id="logs" class="has-text-centered">
+  <li id='log-head' style="width: 100%;">
+    <div class="columns">
+      <div class="column prime" style="border: solid white 1px;">
+        <strong>Auslöser</strong>
+      </div>
+      <div class="column prime" style="border: solid white 1px;">
+        <strong>Empfänger</strong>
+      </div>
+      <div class="column prime" style="border: solid white 1px;">
+        <strong>Änderung</strong>
+      </div>
+      <div class="column prime" style="border: solid white 1px;">
+        <strong>Art</strong>
+      </div>
+    </div>
+  </li>
+</ul>
+<script>
+onload()
+function onload(){
+  socket.emit('getAllLogs', usrCookie, pwCookie);
+}
+function changeFilter(){
+  filter = {
+    taler: $('#taler-filter').is(':checked'),
+    coins: $('#coins-filter').is(':checked'),
+    trigger_username: $('#trigger-filter').val(),
+    receiver_username: $('#receiver-filter').val()
+  }
+  socket.emit('getFilteredLogs', filter)
+}
+$('#trigger-filter').change(function () {
+  changeFilter();
+})
+$('#coins-filter').change(function () {
+  changeFilter();
+})
+$('#taler-filter').change(function () {
+  changeFilter();
+})
+$('#receiver-filter').change(function () {
+  changeFilter();
+})
+
+</script>

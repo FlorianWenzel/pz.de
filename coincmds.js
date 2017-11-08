@@ -14,7 +14,7 @@ module.exports = {
     }
     return;
   },
-  giveCoins: function(channel, users, twitchID, io){
+  rewardCoins: function(channel, users, twitchID, io){
     request({
         url: 'https://api.twitch.tv/kraken/streams/'+channel+'?client_id=' + twitchID,
         json: true
@@ -53,12 +53,12 @@ module.exports = {
       }
     })
   },
-  viewCoins: function (client, users, channel, userstate) {
+  viewCoins: function (client, users, channel, userstate, log) {
     if(users.findOne({ name:userstate.username})){
       client.say(channel, userstate.username + ' besitzt ' + users.findOne({ name:userstate.username}).coins.toString() + ' ZwiebelCoins!')
     }
   },
-  setCoins: function (client, users, channel, userstate, message, io) {
+  setCoins: function (client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!setcoins" || isNaN(msg[2]) || parseInt(msg[2])<=0){
       client.say(channel, 'Benutz !setcoins <User> <Wie viel>')
@@ -67,6 +67,7 @@ module.exports = {
       if(user){
         user.coins = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
+        log.addLog(logs, userstate.username, msg[1], 'coins', parseInt(msg[2]), 'setCoins')
         io.to(user.name).emit('updateCoins', user.coins)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelCoins auf ' + msg[2] + ' gesetzt!</div>');
       }else{
@@ -75,7 +76,7 @@ module.exports = {
       }
     }
   },
-  setTaler: function (client, users, channel, userstate, message, io) {
+  setTaler: function (client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!settaler" || isNaN(msg[2]) || parseInt(msg[2])<=0){
       client.say(channel, 'Benutz !settaler <User> <Wie viel>')
@@ -84,6 +85,7 @@ module.exports = {
       if(user){
         user.taler = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelTaler.')
+        log.addLog(logs, userstate.username, msg[1], 'taler', parseInt(msg[2]), 'setTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelTaler auf ' + msg[2] + ' gesetzt!</div>');
       }else{
@@ -92,7 +94,7 @@ module.exports = {
       }
     }
   },
-  giveTaler: function (client, users, channel, userstate, message, io) {
+  giveTaler: function (client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!givetaler" || isNaN(msg[2])){
       client.say(channel, 'Benutz !givetaler <User> <Wie viel>')
@@ -101,8 +103,27 @@ module.exports = {
       if(user){
         user.taler += parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelTaler erhalten!')
+        log.addLog(logs, userstate.username, msg[1], 'taler', parseInt(msg[2]), 'giveTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelTaler gutgeschrieben!</div>');
+      }else{
+          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          return;
+      }
+    }
+  },
+  giveCoins: function (client, users, channel, userstate, message, io, log) {
+    msg = message.split(" ")
+    if(msg.length != 3 || msg[0] != "!givecoins" || isNaN(msg[2])){
+      client.say(channel, 'Benutz !givecoins <User> <Wie viel>')
+    }else {
+      user = users.findOne({ name:msg[1].toLowerCase()});
+      if(user){
+        user.coins += parseInt(msg[2]);
+        client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelCoins erhalten!')
+        log.addLog(logs, userstate.username, msg[1], 'coins', parseInt(msg[2]), 'giveCoins')
+        io.to(user.name).emit('updateCoins', user.coins)
+        io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelCoins gutgeschrieben!</div>');
       }else{
           client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;

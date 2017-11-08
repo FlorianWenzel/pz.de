@@ -49,6 +49,12 @@
             ZwiebelBack
           </a>
           <div class="navbar is-primary" style="position:fixed; right: 0px;">
+            <a id="logs-button" class="navbar-item rot hidden" aria-hidden="true" onclick="loadPage('logs');">
+              <span class="icon">
+                <i id="logs-icon" class="fa fa-list is-large"></i>
+              </span>
+              <span id="logs-text">Logs</span>
+            </a>
             <div class="currency-display hidden navbar-item ">
               <figure class="image is-24x24" style="margin-right: 5px;">
                 <img title="ZwiebelCoin" src="./img/coin100x100.png" />
@@ -118,7 +124,7 @@
     </div>
     <!-- END MODAL -->
 
-    <footer id="footer" class="hero is-dark">
+    <footer id="footer" class="hero is-dark" style="width:100%;">
       <div class="container is-dark">
         <div class="content is-dark has-text-centered">
           <br />
