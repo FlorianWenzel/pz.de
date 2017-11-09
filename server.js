@@ -111,6 +111,7 @@ io.on('connection', function (socket) {
           coincmds.knowUser(users, username);
           user = users.findOne({name:username.toLowerCase()})
         }
+        console.log(user)
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())
         isMod = false;

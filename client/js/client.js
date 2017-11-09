@@ -208,6 +208,8 @@ socket.on('getLogs', function(logs, alllogs){
 
 socket.on('loginSuccessfull', function(usr, isMod){
   user = usr;
+  Cookies.remove('USR')
+  Cookies.remove('UID')
   Cookies.set('USR', user.name, { expires: 365})
   Cookies.set('UID', user.password, { expires: 365})
   $('#login-button-text').html(user.name)
