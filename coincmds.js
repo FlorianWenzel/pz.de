@@ -9,6 +9,9 @@ module.exports = {
         password: pwGen(30, false),
         loggedIntoWebsite: 0,
         coins: 0,
+        notifications: [],
+        gambleNet: 0,
+        coinsCollected: 0,
         taler: 0
       });
     }
@@ -44,7 +47,8 @@ module.exports = {
                 for(i = 0; i <viewer.length; i++){
                   user = users.findOne({ name:viewer[i]});
                   if(user){
-                    user.coins += 1
+                    user.coins ++;
+                    user.coinsCollected ++;
                     io.to(user.name).emit('updateCoins', user.coins)
                 }
               }

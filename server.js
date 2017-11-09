@@ -86,6 +86,7 @@ io.on('connection', function (socket) {
     }
     user.loggedIntoWebsite ++;
     socket.join(username.toLowerCase())
+    isMod = false;
     if(admins.includes(user.name)){isMod = true;}
     socket.emit('loginSuccessfull', user, isMod);
   })
@@ -132,11 +133,18 @@ io.on('connection', function (socket) {
   })
   socket.on('getAllLogs', function(u, p){
     if(!(admins.includes(users.findOne({name:u, password:p}).name))){console.log('yo'); return;}
-    socket.emit('getLogs', logs.where(function(){return true;}))
+    socket.emit('getLogs', logs.where(function(){return true;}).slice(0, 99))
+  })
+  socket.on('getMyLogs', function(u, p){
+    if(!(users.findOne({name:u, password:p}))){
+      return;
+    }
+    r = log.getFilteredLogs(logs, {trigger_username:'',receiver_username:u,coins:true,taler:true})
+    socket.emit('getLogs', r.slice(0,99))
   })
   socket.on('getFilteredLogs', function(filter){
     filteredlogs = log.getFilteredLogs(logs, filter);
-    socket.emit('getLogs', filteredlogs)
+    socket.emit('getLogs', filteredlogs.slice(0, 99), true)
   })
 });
 
@@ -223,6 +231,8 @@ client.on("chat", function(channel, userstate, message, self){
     coincmds.setTaler(client, users, channel, userstate, message, io, log);
   }else if(message.includes('!givetaler') && (userstate.mod || '#' + userstate.username == channel)){
     coincmds.giveTaler(client, users, channel, userstate, message, io, log);
+  }else if(message.includes('!givecoins') && (userstate.mod || '#' + userstate.username == channel)){
+    coincmds.giveCoins(client, users, channel, userstate, message, io, log);
   //GAMBLE
   }else if(message.includes("!gamble")){
     casino.gamble(client, users, channel, userstate, message, io);

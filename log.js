@@ -16,7 +16,6 @@ module.exports = {
     return logs.where({receiver_username: receiver_username});
   },
   getFilteredLogs: function(logs, filter){
-    console.log(filter)
     filteredlogs = logs.where(function(obj){
       if(!filter.taler && obj.currency == 'taler'){
         return false;

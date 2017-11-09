@@ -48,18 +48,12 @@
             </span>
             ZwiebelBack
           </a>
-          <div class="navbar is-primary" style="position:fixed; right: 0px;">
-            <a id="logs-button" class="navbar-item rot hidden" aria-hidden="true" onclick="loadPage('logs');">
-              <span class="icon">
-                <i id="logs-icon" class="fa fa-list is-large"></i>
-              </span>
-              <span id="logs-text">Logs</span>
-            </a>
+          <div class="navbar is-dark" style="position:fixed; right: 0px;">
             <div class="currency-display hidden navbar-item ">
               <figure class="image is-24x24" style="margin-right: 5px;">
                 <img title="ZwiebelCoin" src="./img/coin100x100.png" />
               </figure>
-              <span id="coins-amount" class="">
+              <span id="coins-amount" style="color:white">
                 1337
               </span>
             </div>
@@ -67,10 +61,22 @@
               <figure class="image is-24x24" style="margin-right: 5px;">
                 <img title="ZwiebelTaler" src="./img/taler100x100.png" />
               </figure>
-              <span id="taler-amount" class="">
+              <span id="taler-amount" style="color:white">
                 23
               </span>
             </div>
+            <a id="logs-button" class="navbar-item rot hidden" aria-hidden="true" onclick="loadPage('logs');">
+              <span class="icon">
+                <i id="logs-icon" class="fa fa-list is-large"></i>
+              </span>
+              <span id="logs-text">Alle Logs</span>
+            </a>
+            <a id="log-button" class="navbar-item prime hidden" aria-hidden="true" onclick="loadPage('mylog');">
+              <span class="icon">
+                <i id="log-icon" class="fa fa-th-list is-large"></i>
+              </span>
+              <span id="logs-text">Log</span>
+            </a>
             <a id="login-button-link" class="navbar-item lila" aria-hidden="true" onclick="redirectToTwitch();">
               <span class="icon">
                 <i id="login-button-icon" class="fa fa-twitch is-large"></i>

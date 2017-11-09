@@ -3,6 +3,8 @@ var usrCookie = Cookies.get('USR')
 var user;
 var notifications = [];
 var selfDestructions = [];
+var audioNotifiaction = new Audio('sounds/notification.mp3');
+var audioCoins = new Audio('sounds/coins.mp3');
 
 loadPage('home');
 socket = io.connect()
@@ -68,6 +70,9 @@ function convert(){
       clearInterval(i);
     }, 1000)
   }else{
+    audioCoins.pause();
+    audioCoins.currentTime = 0
+    audioCoins.play()
     socket.emit('convert', usrCookie, pwCookie);
   }
 }
@@ -77,6 +82,11 @@ function redirectToTwitch(){
 }
 
 function showNotification(type, msg){
+  if(type == 'danger' || type == 'info'){
+    audioNotifiaction.pause();
+    audioNotifiaction.currentTime = 0
+    audioNotifiaction.play()
+  }
   id = notifications.length;
   notifications.push(id);
   $('#notifications').append(
@@ -111,25 +121,43 @@ socket.on('showNotification', function(type, msg){
   showNotification(type, msg);
 })
 
-socket.on('getLogs', function(logs){
-  $('#logs').html(
-    '<li id=\'log-head\' style="width: 100%;">' +
-      '<div class="columns">' +
-        '<div class="column prime" style="border: solid white 1px;">' +
-          '<strong>Auslöser</strong>' +
+socket.on('getLogs', function(logs, alllogs){
+  if(alllogs){
+    $('#logs').html(
+      '<li id=\'log-head\'>' +
+        '<div class="columns">' +
+          '<div class="column prime">' +
+            '<strong>Auslöser</strong>' +
+          '</div>' +
+          '<div class="column prime">' +
+            '<strong>Empfänger</strong>' +
+          '</div>' +
+          '<div class="column prime">' +
+            '<strong>Änderung</strong>' +
+          '</div>' +
+          '<div class="column prime">' +
+            '<strong>Art</strong>' +
+          '</div>' +
         '</div>' +
-        '<div class="column prime" style="border: solid white 1px;">' +
-          '<strong>Empfänger</strong>' +
+      '</li>'
+    )
+  }else{
+    $('#logs').html(
+      '<li id=\'log-head\'>' +
+        '<div class="columns">' +
+          '<div class="column prime">' +
+            '<strong>Auslöser</strong>' +
+          '</div>' +
+          '<div class="column prime">' +
+            '<strong>Änderung</strong>' +
+          '</div>' +
+          '<div class="column prime">' +
+            '<strong>Art</strong>' +
+          '</div>' +
         '</div>' +
-        '<div class="column prime" style="border: solid white 1px;">' +
-          '<strong>Änderung</strong>' +
-        '</div>' +
-        '<div class="column prime" style="border: solid white 1px;">' +
-          '<strong>Art</strong>' +
-        '</div>' +
-      '</div>' +
-    '</li>'
-  )
+      '</li>'
+    )
+  }
   for(i=0;i<logs.length;i++){
     color = 'blue';
     if(logs[i].type == 'setCoins' || logs[i].type == 'setTaler'){
@@ -141,23 +169,40 @@ socket.on('getLogs', function(logs){
         color = 'rot'
       }
     }
-    $('#logs').append(
-      '<li id=\'log-head\' style="width: 100%;">' +
-        '<div class="columns">' +
-          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
-            ''+logs[i].trigger_username+'' +
+    if(alllogs){
+      $('#logs').append(
+        '<li id=\'log-head\'>' +
+          '<div class="columns">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].trigger_username+'' +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].receiver_username+'' +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].amount+' '+logs[i].currency+'' +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].type+'' +
+            '</div>' +
           '</div>' +
-          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
-            ''+logs[i].receiver_username+'' +
+      '</li>')
+    }else{
+      $('#logs').append(
+        '<li id=\'log-head\'>' +
+          '<div class="columns">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].trigger_username+'' +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].amount+' '+logs[i].currency+'' +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].type+'' +
+            '</div>' +
           '</div>' +
-          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
-            ''+logs[i].amount+' '+logs[i].currency+'' +
-          '</div>' +
-          '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
-            ''+logs[i].type+'' +
-          '</div>' +
-        '</div>' +
-    '</li>')
+      '</li>')
+    }
   }
 })
 
@@ -174,6 +219,7 @@ socket.on('loginSuccessfull', function(usr, isMod){
   $('#coins-amount').html(user.coins);
   $('#taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
+  $('#log-button').removeClass('hidden')
   window.history.pushState('home', 'PokerZwiebel', '/');
   if(isMod){
     $('#logs-button').removeClass('hidden');
