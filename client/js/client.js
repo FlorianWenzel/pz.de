@@ -206,7 +206,7 @@ socket.on('getLogs', function(logs, alllogs){
   }
 })
 
-socket.on('loginSuccessfull', function(usr, isMod){
+socket.on('loginSuccessful', function(usr, isMod){
   user = usr;
   Cookies.remove('USR')
   Cookies.remove('UID')
@@ -226,6 +226,13 @@ socket.on('loginSuccessfull', function(usr, isMod){
   if(isMod){
     $('#logs-button').removeClass('hidden');
   }
+})
+
+socket.on('loginUnsuccessful', function(){
+  Cookies.remove('USR')
+  Cookies.remove('UID')
+  code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
+  socket.emit('auth', code)
 })
 
 function showLogout(){

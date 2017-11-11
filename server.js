@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
     socket.join(username.toLowerCase())
     isMod = false;
     if(admins.includes(user.name)){isMod = true;}
-    socket.emit('loginSuccessfull', user, isMod);
+    socket.emit('loginSuccessful', user, isMod);
   })
   socket.on('auth', function (code){
     request.post({
@@ -111,14 +111,14 @@ io.on('connection', function (socket) {
           coincmds.knowUser(users, username);
           user = users.findOne({name:username.toLowerCase()})
         }
-        console.log(user)
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())
         isMod = false;
         if(admins.includes(user.name)){isMod = true;}
-        socket.emit('loginSuccessfull', user, isMod);
+        socket.emit('loginSuccessful', user, isMod);
       })
     })
+    db.saveDatabase();
   })
   socket.on('convert',function(usr, pw){
     user = users.findOne({name:usr, password:pw})
@@ -131,10 +131,13 @@ io.on('connection', function (socket) {
     log.addLog(logs, user.name, user.name, 'coins', -1000, 'convert')
     log.addLog(logs, user.name, user.name, 'taler', +1, 'convert')
     socket.emit('showNotification', 'success', 'Erfolgreich 1000 ZwiebelCoins in 1 ZwiebelTaler umgetauscht!')
+    db.saveDatabase();
   })
   socket.on('getAllLogs', function(u, p){
-    if(!(admins.includes(users.findOne({name:u, password:p}).name))){console.log('yo'); return;}
+    if(!(users.findOne({name:u, password:p}))){return;}
+    if(!(admins.includes(users.findOne({name:u, password:p}).name))){return;}
     socket.emit('getLogs', logs.where(function(){return true;}).slice(0, 99))
+    db.saveDatabase();
   })
   socket.on('getMyLogs', function(u, p){
     if(!(users.findOne({name:u, password:p}))){
@@ -151,12 +154,10 @@ io.on('connection', function (socket) {
 
 
 streamlabs.on('event', (eventData) => {
-  console.log(eventData)
   if (!eventData.for && eventData.type === 'donation') {
     //code to handle donation events
     user = users.findOne({name: eventData.message[0].from.toLowerCase()});
     if(!user){
-      console.log('user not found')
       return;
     }
     taler = Math.floor(10 * eventData.message[0].amount);
@@ -170,7 +171,6 @@ streamlabs.on('event', (eventData) => {
     //code to handle bit events
     user = users.findOne({name: eventData.message[0].name.toLowerCase()});
     if(!user){
-      console.log('user not found')
       return;
     }
     taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
@@ -189,7 +189,6 @@ streamlabs.on('event', (eventData) => {
         //code to handle subscription events
         user = users.findOne({name: eventData.message[0].name.toLowerCase()});
         if(!user){
-          console.log('user not found')
           return;
         }
         /*
@@ -202,6 +201,7 @@ streamlabs.on('event', (eventData) => {
         //default case
     }
   }
+  db.saveDatabase();
 });
 
 
