@@ -121,6 +121,12 @@ socket.on('showNotification', function(type, msg){
   showNotification(type, msg);
 })
 
+socket.on('getHomeStats', function(onions, minutes, msgs){
+  $('#onionCount').html(onions + ' Zwiebeln')
+  $('#minutesCount').html(minutes + ' geschaute Minuten')
+  $('#msgsCount').html(msgs + ' gesendete Nachrichten')
+})
+
 socket.on('getLogs', function(logs, alllogs){
   if(alllogs){
     $('#logs').html(

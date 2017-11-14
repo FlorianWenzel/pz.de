@@ -8,6 +8,25 @@
     </div>
   </section>
 </div>
+<div class="hero is-dark" id="stats">
+  <div class="columns">
+  <div class="column is-third has-text-centered">
+    <p id="onionCount" class="stat title">
+      1337 Zwiebeln
+    </p>
+  </div>
+  <div class="column is-third has-text-centered">
+    <p id="minutesCount" class="stat title">
+      1337 Geschaute Minuten
+    </p>
+  </div>
+  <div class="column is-third has-text-centered" >
+    <p id="msgsCount" class="stat title">
+      1337 gesendete Nachrichten
+    </p>
+  </div>
+  </div>
+</div>
 <style>
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:700');
 *,
@@ -18,18 +37,21 @@
   overflow-x: hidden!important;
 }
 
+#stats p, #stats{
+}
+
 #home-wraper {
   margin: 0;
   font-family: "Roboto Condensed", sans-serif;
 }
 
 .background {
-  background-image: url("https://cdn.discordapp.com/attachments/309374608195452928/356478907244871682/DSC_0070.jpg");
+  background-image: url("https://i.imgur.com/rT9d7uo.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   position: relative;
 }
 
@@ -118,6 +140,9 @@ h2.background_overlay__header {
 }
 </style>
 <script>
+  socket.emit('getHomeStats');
+  $('#stats').height($(window).height()-0.9*$(window).height()-$('#header').height())
+  $('.stat').css('lineHeight', ($(window).height()-0.9*$(window).height()-$('#header').height()) + 'px')
   $(function () {
     // Mobile friendly...
     var $hover = $(".background_overlay");

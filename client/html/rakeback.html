@@ -1,26 +1,22 @@
 <br />
 <div class="tile is-ancestor">
-  <div class="tile is-vertical is-8">
-    <div class="tile">
       <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-info">
-          <p class="title">ZwiebelMütze</p>
-          <p class="subtitle">200 ZwiebelTaler</p>
-          <figure class="image">
-            <img class="image" src="https://img1.etsystatic.com/119/0/11297648/il_570xN.1045785797_a3l7.jpg"/><br />
-          </figure>
-          <div class="button is-white">
-            Holen
-          </div>
-        </article>
-        <article class="tile is-child notification is-warning">
-          <p class="is-size-1">Plüschzwiebel</p>
+          <p class="is-size-1">ZwiebelMütze</p>
           <p class="is-size-2">200 ZwiebelTaler</p>
-          <figure class="image">
-            <img class="image" src="https://ae01.alicdn.com/kf/HTB1sPxQdm7PL1JjSZFHq6AciXXaq/1-ST-CKE-20-CM-ber-Spiel-Uhr-Overwatches-Spiel-Pl-schtiere-Zwiebel-Kleine-Tintenfisch-Gef.jpg_640x640.jpg"/><br />
-          </figure>
-          <div class="button is-white">
-            Holen
+          <div class="slider">
+            <figure>
+              <img src="https://i.imgur.com/BpWKWQp.jpg" alt>
+              <img src="https://i.imgur.com/O9vbt5h.jpg" alt>
+              <img src="https://i.imgur.com/BpWKWQp.jpg" alt>
+              <img src="https://i.imgur.com/O9vbt5h.jpg" alt>
+              <img src="https://i.imgur.com/BpWKWQp.jpg" alt>
+            </figure>
+          </div>
+          <div class="has-text-centered">
+            <button class="button is-danger is-medium" style="margin-top:1.25em;">
+              Will ich!
+            </button>
           </div>
         </article>
       </div>
@@ -45,33 +41,27 @@
           </div>
         </article>
       </div>
-    </div>
-    <div class="tile is-parent">
-      <article class="tile is-child notification is-success">
-        <p class="title">Zwiebelmütze</p>
-        <p class="subtitle">200 ZwiebelTaler</p>
-        <figure class="image">
-          <img class="image" src="https://image.spreadshirtmedia.net/image-server/v1/mp/products/P118022544T51A2MPC135186278PA82PT14X66Y3D16006070C13%3A69%3A21/views/1,width=800,height=800,appearanceId=2,backgroundColor=E8E8E8,version=1450277104/zwiebel-caps-muetzen-wintermuetze.jpg"/><br />
-        </figure>
-        <div class="button is-white">
-          Holen
-        </div>
-      </article>
-    </div>
-  </div>
-  <div class="tile is-parent">
-    <article class="tile is-child notification is-danger">
-      <p class="title">Zwiebel</p>
-      <p class="subtitle">200 ZwiebelTaler</p>
-      <figure class="image">
-        <img class="image" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Zwiebel_2008-3-3-.JPG"/><br />
-      </figure>
-      <div class="button is-white">
-        Holen
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification is-primary">
+          <p class="is-size-1">Plüschzwiebel</p>
+          <p class="is-size-2">200 ZwiebelTaler</p>
+          <div class="slider">
+            <figure class="image">
+              <img src="https://i.imgur.com/u2h6HQv.jpg" alt>
+              <img src="https://i.imgur.com/psYRmdy.jpg" alt>
+              <img src="https://i.imgur.com/iOt7aKG.jpg" alt>
+              <img src="https://i.imgur.com/u2h6HQv.jpg" alt>
+              <img src="https://i.imgur.com/psYRmdy.jpg" alt>
+            </figure>
+          </div>
+          <div class="has-text-centered">
+            <button class="button is-danger is-medium" style="margin-top:1.25em;">
+              Will ich!
+            </button>
+          </div>
+        </article>
       </div>
-    </article>
-  </div>
-</div>
+    </div>
 <script>
   refreshProgressBar();
   if(user){
@@ -82,4 +72,27 @@
 html{
   overflow-x: hidden;
 }
+@keyframes slidy {
+0% { left: 0%; }
+20% { left: 0%; }
+25% { left: -100%; }
+45% { left: -100%; }
+50% { left: -200%; }
+70% { left: -200%; }
+75% { left: -300%; }
+95% { left: -300%; }
+100% { left: -400%; }
+}
+div.slider { overflow: hidden; }
+div.slider figure img { width: 20%; float: left; }
+div.slider figure {
+  position: relative;
+  width: 500%;
+  margin: 0;
+  left: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 30s slidy infinite;
+}
+
 </style>

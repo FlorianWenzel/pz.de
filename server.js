@@ -38,6 +38,9 @@ function interval() {
   if(timer % 60 == 0){
     coincmds.rewardCoins(channel, users, account.twitchID, io)
   }
+  if(timer % 33){
+    refreshStats();
+  }
   db.saveDatabase();
   timer++;
 }
@@ -53,11 +56,24 @@ var db = new loki('./database.json',
 function loadHandler() {
     users = db.getCollection('users');
     logs = db.getCollection('logs');
+    misc = db.getCollection('misc');
+    if (!misc) {
+      misc = db.addCollection('misc');
+    }
     if (!users) {
         users = db.addCollection('users');
     }
     if (!logs) {
       logs = db.addCollection('logs');
+    }
+
+    msgCounter = misc.findOne({id:'msgCounter'});
+    if(!msgCounter){
+      misc.insert({
+        id:'msgCounter',
+        count:0
+      })
+      msgCounter = misc.findOne({id:'msgCounter'});
     }
 }
 
@@ -136,7 +152,7 @@ io.on('connection', function (socket) {
   socket.on('getAllLogs', function(u, p){
     if(!(users.findOne({name:u, password:p}))){return;}
     if(!(admins.includes(users.findOne({name:u, password:p}).name))){return;}
-    socket.emit('getLogs', logs.where(function(){return true;}).slice(0, 99))
+    socket.emit('getLogs', logs.where(function(){return true;}).slice(0, 99), true)
     db.saveDatabase();
   })
   socket.on('getMyLogs', function(u, p){
@@ -149,6 +165,9 @@ io.on('connection', function (socket) {
   socket.on('getFilteredLogs', function(filter){
     filteredlogs = log.getFilteredLogs(logs, filter);
     socket.emit('getLogs', filteredlogs.slice(0, 99), true)
+  })
+  socket.on('getHomeStats', function(){
+    socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
   })
 });
 
@@ -204,7 +223,32 @@ streamlabs.on('event', (eventData) => {
   db.saveDatabase();
 });
 
+function refreshStats(){
+  onions = misc.findOne({id:'onions'});
+  if(!onions){
+    misc.insert({
+      id:'onions',
+      count: 0
+    })
+    onions = misc.findOne({id:'onions'})
+  }
+  onions.count = users.where(function(){return true;}).length;
 
+  seenMinutes = misc.findOne({id:'seenMinutes'});
+  if(!seenMinutes){
+    misc.insert({
+      id:'seenMinutes',
+      count: 0
+    })
+    seenMinutes = misc.findOne({id:'seenMinutes'})
+  }
+  usrs = users.where(function(){return true;});
+  c = 0;
+  for(i=0;i<usrs.lenght;i++){
+    c += usrs[i].coinsCollected;
+  }
+  seenMinutes.count = c;
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,9 +263,11 @@ client.on("whisper", function (from, userstate, message, self) {
 })
 
 client.on("chat", function(channel, userstate, message, self){
-  if(self){
+  if(self || userstate.username  ==  channel){
     return;
   }
+  msgCounter.count ++;
+
   coincmds.knowUser(users, userstate.username)
   //COINS FUNCTIONS
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
