@@ -30,6 +30,7 @@ function loadPage(page){
 
 function refreshProgressBar(){
   coins = parseInt($('#coins-amount').html())
+  taler = parseInt($('#taler-amount').html())
   if(!$('#progressBar')){
     return;
   }
@@ -58,6 +59,56 @@ function refreshProgressBar(){
     $('#convertButton').addClass('is-danger')
     $('#convertButton').removeClass('is-success')
   }
+  if(taler > 200){
+    $('#muetzeButton').removeClass('is-danger')
+    $('#muetzeButton').addClass('is-success')
+    $('#plueschButton').removeClass('is-danger')
+    $('#plueschButton').addClass('is-success')
+  }
+}
+
+function buy(product){
+  if(taler < 200){
+    showNotification('danger', 'Zu wenig ZwiebelTaler!');
+    return;
+  }
+  $('#confirmButton').removeClass('is-loading')
+  $('#street').removeClass('is-danger')
+  $('#plz').removeClass('is-danger')
+  $('#city').removeClass('is-danger')
+  $('#print').removeClass('is-danger')
+  $('#modal').addClass('is-active')
+  $('#modal-header').html(product)
+
+  $('#confirmButton').bind('click', function() {
+    $('#street').removeClass('is-danger')
+    $('#plz').removeClass('is-danger')
+    $('#city').removeClass('is-danger')
+    $('#print').removeClass('is-danger')
+    missedSomething = false;
+    if(!$('#street').val()){
+      $('#street').addClass('is-danger')
+      missedSomething = true;
+    }
+    if(!$('#plz').val()){
+      $('#plz').addClass('is-danger')
+      missedSomething = true;
+    }
+    if(!$('#city').val()){
+      $('#city').addClass('is-danger')
+      missedSomething = true;
+    }
+    if(!$('#print').val()){
+      $('#print').addClass('is-danger')
+      missedSomething = true;
+    }
+
+    if(missedSomething){
+      return;
+    }
+    socket.emit('buy', usrCookie, pwCookie, product)
+    $('#confirmButton').addClass('is-loading')
+  });
 }
 
 function convert(){
@@ -115,6 +166,17 @@ socket.on('updateCoins', function(amount){
 
 socket.on('updateTaler', function(amount){
   $('#taler-amount').html(amount);
+  refreshProgressBar();
+})
+
+socket.on('confirmPurchase', function(product){
+  showNotification('success', 'Danke für deine Bestellung!')
+  $('#modal').removeClass('is-active')
+})
+
+socket.on('canceledPurchase', function(product){
+  showNotification('danger', 'Irgendwas lief schief, versuchs bitte später nochmal!')
+  $('#modal').removeClass('is-active')
 })
 
 socket.on('showNotification', function(type, msg){
@@ -122,10 +184,21 @@ socket.on('showNotification', function(type, msg){
 })
 
 socket.on('getHomeStats', function(onions, minutes, msgs){
-  $('#onionCount').html(onions + ' Zwiebeln')
-  $('#minutesCount').html(minutes + ' geschaute Minuten')
-  $('#msgsCount').html(msgs + ' gesendete Nachrichten')
+  increaseTo($('#onionCount'), onions)
+  increaseTo($('#minutesCount'), minutes)
+  increaseTo($('#msgsCount'), msgs)
 })
+
+function increaseTo(e, num){
+  let i = 0;
+  let inter = setInterval(function(){
+    i++;
+    e.html('<strong>' + Math.floor((num/20)*i) + '</strong>')
+    if(i >= 20){
+      clearInterval(inter);
+    }
+  }, 50)
+}
 
 socket.on('getLogs', function(logs, alllogs){
   if(alllogs){

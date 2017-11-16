@@ -58,9 +58,11 @@ module.exports = {
           if(playerCard.value > dealerCard.value){
             client.say(channel, beatiCard(playerCard) + ' > ' + beatiCard(dealerCard) +' => Gewonnen!')
             user.coins += parseInt(msg[1]);
+            user.gambleNet += parseInt(msg[1]);
           }else if(playerCard.value < dealerCard.value){
             client.say(channel, beatiCard(playerCard) + ' < ' + beatiCard(dealerCard) +' => Verloren!')
             user.coins -= parseInt(msg[1]);
+            user.gambleNet -= parseInt(msg[1]);
           }else{
             client.say(channel, beatiCard(playerCard) + ' = ' + beatiCard(dealerCard) +' => Unentschieden!')
           }
@@ -88,7 +90,8 @@ module.exports = {
       'TotinosRing'
     ]
 
-    user.coins -= parts[1];
+        user.coins -= parts[1];
+        user.gambleNet -= parts[1];
     results = [];
     for(i=0;i<4;i++){
       random = Math.floor(Math.random() * 25) + 1
@@ -116,6 +119,7 @@ module.exports = {
       }
       resultMessage += userstate.username + ' gewinnt ' + parts[1] * (multiplier+1) + ' (' + multiplier + 'x)!'
       user.coins += parseInt(parts[1]) * (multiplier+1);
+      user.gambleNet += parseInt(parts[1]) * (multiplier+1);
     }
     io.to(user.name).emit('updateCoins', user.coins)
     client.say(channel, resultMessage);

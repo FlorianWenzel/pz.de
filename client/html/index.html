@@ -42,12 +42,12 @@
             </span>
             Stream
           </a>
-          <a class="navbar-item" onclick="loadPage('zwiebelnation')">
+          <!--<a class="navbar-item" onclick="loadPage('zwiebelnation')">
             <span class="icon">
               <i class="fa fa-hashtag"></i>
             </span>
             ZwiebelNation
-          </a>
+          </a>-->
           <a class="navbar-item" onclick="loadPage('rakeback')">
             <span class="icon">
               <i class="fa fa-heart"></i>
@@ -109,24 +109,51 @@
       <div class="modal-background"></div>
       <div class="modal-content">
         <article class="message is-info">
-          <div class="message-header">
-            Zwiebel - Nation
-            <button onclick="modal('close')" class="delete"></button>
+          <div id="modal-header" class="message-header">
+            ZwiebelMütze
+            <button onclick="$('#modal').removeClass('is-active')" class="delete"></button>
           </div>
           <div id="modal-content" class="message-body">
             <div class="field">
               <div class="control">
-                <input class="input" type="text" placeholder="Benutzername">
+                Straße:
+                <input id="street" class="input" type="text" placeholder="Musterstraße 3">
+              </div>
+            </div>
+            <div class="field">
+              <div class="columns">
+                <div class="column">
+                  <div class="control">
+                    PLZ:
+                    <input id="plz" class="input" type="number" placeholder="1337">
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="control">
+                    Stadt:
+                    <input id="city" class="input" type="text" placeholder="Musterstadt">
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
               <div class="control">
-                <input class="input" type="password" placeholder="Passwort">
+                Aufdruck:
+                <input id="print" class="input" type="text" placeholder="in den Bildern: PokerZwiebel">
               </div>
             </div>
             <div class="field">
               <div class="control">
-                <a class="button is-primary">Einloggen</a> <a onclick="modal('register')" class="button is-primary">Registrieren</a>
+                Sontiges:
+                <textarea id="misc" class="textarea" rows="3" type="text" placeholder="Sonderwünsche? Hier rein!"></textarea>
+              </div>
+            </div>
+            <div class="field">
+              Da der ZwiebelMerch (von <a target="_blank" href="https://twitch.tv/sunshine_deluxe">sunshine_deluxe</a>) handgemacht wird dauert die Produktion etwas, bitte rechne mit 3-4 Wochen bis zum Versand!
+            </div>
+            <div class="field">
+              <div class="control has-text-centered">
+                <a id="confirmButton" class="button is-primary">Ok!</a> <a id="cancelButton" onclick="$('#modal').removeClass('is-active')" class="button is-danger">Doch nicht</a>
               </div>
             </div>
           </div>

@@ -36,6 +36,17 @@ html {
 .hidden {
   display: none!important;
 }
+.holz{
+  background-image: url('https://i.imgur.com/K3y68UMr.jpg');
+  color: white;
+}
+.white-text{
+  color:white;
+}
+.brown{
+  background-color: #5C4033!important;
+  color: white;
+}
 .unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

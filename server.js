@@ -16,6 +16,9 @@ const io_client = require('socket.io-client');
 const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken)
 const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
+const muetzePrice = 200;
+const plueschPrice = 200;
+
 
 var options = {
   options: {
@@ -144,8 +147,8 @@ io.on('connection', function (socket) {
     user.taler += 1;
     socket.emit('updateTaler', user.taler)
     socket.emit('updateCoins', user.coins)
-    log.addLog(logs, user.name, user.name, 'coins', -1000, 'convert')
-    log.addLog(logs, user.name, user.name, 'taler', +1, 'convert')
+    log.addLog(logs, user.name, user.name, 'ZwiebelCoins', -1000, 'Umgetauscht')
+    log.addLog(logs, user.name, user.name, 'ZwiebelTaler', +1, 'Umgetauscht')
     socket.emit('showNotification', 'success', 'Erfolgreich 1000 ZwiebelCoins in 1 ZwiebelTaler umgetauscht!')
     db.saveDatabase();
   })
@@ -168,6 +171,32 @@ io.on('connection', function (socket) {
   })
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
+  })
+  socket.on('buy', function(u, p, product){
+    user = users.findOne({name: u, password:p});
+    if(!user){return;}
+    switch (product) {
+      case 'PlüschZwiebel':
+          if(user.taler < plueschPrice){
+            return;
+          }else{
+            change = -plueschPrice;
+            user.taler -= plueschPrice;
+          }
+        break;
+      case 'ZwiebelMütze':
+          if(user.taler < muetzePrice){
+            return;
+          }else{
+            change = -muetzePrice;
+            user.taler -= muetzePrice;
+          }
+        break;
+    }
+    log.addLog(logs, user.name, user.name, 'ZwiebelTaler', change, 'Bestellung (' + product + ')')
+    socket.emit('updateTaler', user.taler);
+    socket.emit('updateCoins', user.coins);
+    socket.emit('confirmPurchase', product);
   })
 });
 

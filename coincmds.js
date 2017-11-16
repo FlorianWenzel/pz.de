@@ -71,7 +71,7 @@ module.exports = {
       if(user){
         user.coins = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
-        log.addLog(logs, userstate.username, msg[1], 'coins', parseInt(msg[2]), 'setCoins')
+        log.addLog(logs, userstate.username, msg[1], 'ZwiebelCoins', parseInt(msg[2]), 'setCoins')
         io.to(user.name).emit('updateCoins', user.coins)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelCoins auf ' + msg[2] + ' gesetzt!</div>');
       }else{
@@ -89,7 +89,7 @@ module.exports = {
       if(user){
         user.taler = parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelTaler.')
-        log.addLog(logs, userstate.username, msg[1], 'taler', parseInt(msg[2]), 'setTaler')
+        log.addLog(logs, userstate.username, msg[1], 'ZwiebelTaler', parseInt(msg[2]), 'setTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelTaler auf ' + msg[2] + ' gesetzt!</div>');
       }else{
@@ -107,7 +107,7 @@ module.exports = {
       if(user){
         user.taler += parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelTaler erhalten!')
-        log.addLog(logs, userstate.username, msg[1], 'taler', parseInt(msg[2]), 'giveTaler')
+        log.addLog(logs, userstate.username, msg[1], 'ZwiebelTaler', parseInt(msg[2]), 'giveTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelTaler gutgeschrieben!</div>');
       }else{
@@ -125,7 +125,7 @@ module.exports = {
       if(user){
         user.coins += parseInt(msg[2]);
         client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelCoins erhalten!')
-        log.addLog(logs, userstate.username, msg[1], 'coins', parseInt(msg[2]), 'giveCoins')
+        log.addLog(logs, userstate.username, msg[1], 'ZwiebelCoins', parseInt(msg[2]), 'giveCoins')
         io.to(user.name).emit('updateCoins', user.coins)
         io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelCoins gutgeschrieben!</div>');
       }else{
