@@ -79,37 +79,37 @@ function buy(product){
   $('#print').removeClass('is-danger')
   $('#modal').addClass('is-active')
   $('#modal-header').html(product)
-
-  $('#confirmButton').bind('click', function() {
-    $('#street').removeClass('is-danger')
-    $('#plz').removeClass('is-danger')
-    $('#city').removeClass('is-danger')
-    $('#print').removeClass('is-danger')
-    missedSomething = false;
-    if(!$('#street').val()){
-      $('#street').addClass('is-danger')
-      missedSomething = true;
-    }
-    if(!$('#plz').val()){
-      $('#plz').addClass('is-danger')
-      missedSomething = true;
-    }
-    if(!$('#city').val()){
-      $('#city').addClass('is-danger')
-      missedSomething = true;
-    }
-    if(!$('#print').val()){
-      $('#print').addClass('is-danger')
-      missedSomething = true;
-    }
-
-    if(missedSomething){
-      return;
-    }
-    socket.emit('buy', usrCookie, pwCookie, product)
-    $('#confirmButton').addClass('is-loading')
-  });
 }
+
+$('#confirmButton').bind('click', function() {
+  $('#street').removeClass('is-danger')
+  $('#plz').removeClass('is-danger')
+  $('#city').removeClass('is-danger')
+  $('#print').removeClass('is-danger')
+  missedSomething = false;
+  if(!$('#street').val()){
+    $('#street').addClass('is-danger')
+    missedSomething = true;
+  }
+  if(!$('#plz').val()){
+    $('#plz').addClass('is-danger')
+    missedSomething = true;
+  }
+  if(!$('#city').val()){
+    $('#city').addClass('is-danger')
+    missedSomething = true;
+  }
+  if(!$('#print').val()){
+    $('#print').addClass('is-danger')
+    missedSomething = true;
+  }
+
+  if(missedSomething){
+    return;
+  }
+  socket.emit('buy', usrCookie, pwCookie, product)
+  $('#confirmButton').addClass('is-loading')
+});
 
 function convert(){
   coins = parseInt($('#coins-amount').html())
