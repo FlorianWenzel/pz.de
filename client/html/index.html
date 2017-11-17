@@ -132,8 +132,14 @@
             </div>
             <div class="field">
               <div class="control">
-                Straße:
+                Straße + Hausnummer:
                 <input id="street" class="input" type="text" placeholder="Musterstraße 3">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                Adresszusatz (optional):
+                <input id="zusatz" class="input" type="text" placeholder="">
               </div>
             </div>
             <div class="field">
@@ -160,8 +166,28 @@
             </div>
             <div class="field">
               <div class="control">
-                Sontiges:
+                Sontiges (optional):
                 <textarea id="misc" class="textarea" rows="3" type="text" placeholder="Sonderwünsche? Hier rein!"></textarea>
+              </div>
+            </div>
+            <div class="field">
+              <div class="columns">
+                <div class="column">
+                  <input onclick="toggleTwitch();" class="tgl tgl-flip" id="contactTwitch" type="checkbox"/>
+                    Kontaktier mich über Twitch:
+                  <label class="tgl-btn" data-tg-off="Ne" data-tg-on="Klar!" for="contactTwitch"></label>
+                </div>
+                <div class="column">
+                  <input onclick="toggleMail();" class="tgl tgl-flip" id="contactMail" type="checkbox"/>
+                    Kontaktier mich per Mail:
+                  <label class="tgl-btn is-centered" data-tg-off="Ne" data-tg-on="Klar!" for="contactMail"></label>
+                </div>
+              </div>
+            </div>
+            <div class="field hidden" id="mail-wrap">
+              <div class="control">
+                Email:
+                <input id="email" class="input" type="email" placeholder="musterman@max.email">
               </div>
             </div>
             <div class="field">

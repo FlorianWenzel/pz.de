@@ -5,6 +5,8 @@ var notifications = [];
 var selfDestructions = [];
 var audioNotifiaction = new Audio('sounds/notification.mp3');
 var audioCoins = new Audio('sounds/coins.mp3');
+var contactPerMail = false;
+var contactPerTwitch = false;
 
 loadPage('home');
 socket = io.connect()
@@ -75,6 +77,7 @@ function buy(product){
   $('#confirmButton').removeClass('is-loading')
   $('#street').removeClass('is-danger')
   $('#plz').removeClass('is-danger')
+  $('#email').removeClass('is-danger')
   $('#city').removeClass('is-danger')
   $('#print').removeClass('is-danger')
   $('#vorname').removeClass('is-danger')
@@ -114,11 +117,15 @@ function buy(product){
       $('#name').addClass('is-danger')
       missedSomething = true;
     }
+    if(!$('#email').val() && contactPerMail){
+      $('#email').addClass('is-danger')
+      missedSomething = true;
+    }
 
     if(missedSomething){
       return;
     }
-    socket.emit('buy', usrCookie, pwCookie, product, $('#street').val(), $('#plz').val(), $('#city').val(), $('#print').val(), $('#misc').val(), $('#vorname').val(), $('#name').val())
+    socket.emit('buy', usrCookie, pwCookie, product, $('#street').val(), $('#plz').val(), $('#city').val(), $('#print').val(), $('#misc').val(), $('#vorname').val(), $('#name').val(), $('#zusatz').val(), contactPerMail, contactPerTwitch, $('#email').val())
     $('#confirmButton').addClass('is-loading')
   });
 }
@@ -160,6 +167,24 @@ function showNotification(type, msg){
       '</div>' +
     '</li>'
   )
+}
+
+function toggleMail(){
+  if(contactPerMail){
+    contactPerMail = false;
+    $('#mail-wrap').addClass('hidden')
+  }else{
+    contactPerMail = true;
+    $('#mail-wrap').removeClass('hidden')
+  }
+}
+
+function toggleTwitch(){
+  if(contactPerTwitch){
+    contactPerTwitch = false;
+  }else{
+    contactPerTwitch = true;
+  }
 }
 
 function deleteNotification(id){

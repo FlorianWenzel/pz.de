@@ -173,7 +173,7 @@ io.on('connection', function (socket) {
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
   })
-  socket.on('buy', function(u, p, product, street, plz, city, print, misc, vorname, name){
+  socket.on('buy', function(u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email){
     if(!u || !p || !product || !street || !plz || !city || !print || !vorname || !name){console.log('happend'); return;}
     user = users.findOne({name: u, password:p});
     if(!user){return;}
@@ -215,18 +215,24 @@ io.on('connection', function (socket) {
                 'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
                 'Product: ' + product + '<br>' +
                 'Straße: ' + street + ' <br>' +
+                'Zusatz: ' + zusatz + ' <br>' +
                 'PLZ: ' + plz + ' <br>' +
                 'Stadt: ' + city + ' <br>' +
                 'Aufdruck: ' + print + '<br>' +
+                'Kontakt Per Mail: ' + contactPerMail + 'Email: '+ email+'<br>' +
+                'Kontakt Per Twitch' + contactPerTwitch +
                 'Sonstiges: ' + misc +'<br>--------------',
           html: '<b>Neue Bestellung:</b> <br>' +
                 'Benutzername: ' + u + ' <br>' +
                 'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
                 'Product: ' + product + '<br>' +
                 'Straße: ' + street + ' <br>' +
+                'Zusatz: ' + zusatz + ' <br>' +
                 'PLZ: ' + plz + ' <br>' +
                 'Stadt: ' + city + ' <br>' +
                 'Aufdruck: ' + print + '<br>' +
+                'Kontakt Per Mail: ' + contactPerMail + ' Email: '+ email+'<br>' +
+                'Kontakt Per Twitch: ' + contactPerTwitch + '<br>' +
                 'Sonstiges: ' + misc +'<br>--------------'
       };
 
@@ -274,7 +280,11 @@ streamlabs.on('event', (eventData) => {
   if (eventData.for === 'twitch_account') {
     switch(eventData.type) {
       case 'follow':
-      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Follow ❤️!');
+        user = users.findOne({name: eventData.message[0].name.toLowerCase()});
+        if(!user){
+          return;
+        }
+        io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Follow ❤️!');
         break;
       case 'subscription':
         user = users.findOne({name: eventData.message[0].name.toLowerCase()});
