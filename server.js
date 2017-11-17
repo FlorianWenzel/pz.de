@@ -173,7 +173,8 @@ io.on('connection', function (socket) {
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
   })
-  socket.on('buy', function(u, p, product, street, plz, city, print, misc){
+  socket.on('buy', function(u, p, product, street, plz, city, print, misc, vorname, name){
+    if(!u || !p || !product || !street || !plz || !city || !print || !vorname || !name){console.log('happend'); return;}
     user = users.findOne({name: u, password:p});
     if(!user){return;}
     switch (product) {
@@ -211,6 +212,7 @@ io.on('connection', function (socket) {
           subject: 'Bestellung ' + product + ' von ' + u,
           text: '<b>Neue Bestellung:</b> <br>' +
                 'Benutzername: ' + u + ' <br>' +
+                'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
                 'Product: ' + product + '<br>' +
                 'Straße: ' + street + ' <br>' +
                 'PLZ: ' + plz + ' <br>' +
@@ -219,6 +221,7 @@ io.on('connection', function (socket) {
                 'Sonstiges: ' + misc +'<br>--------------',
           html: '<b>Neue Bestellung:</b> <br>' +
                 'Benutzername: ' + u + ' <br>' +
+                'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
                 'Product: ' + product + '<br>' +
                 'Straße: ' + street + ' <br>' +
                 'PLZ: ' + plz + ' <br>' +
@@ -339,7 +342,7 @@ function refreshStats(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 client.on("whisper", function (from, userstate, message, self) {
-  
+
 })
 
 client.on("chat", function(channel, userstate, message, self){
