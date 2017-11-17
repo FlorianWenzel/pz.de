@@ -18,6 +18,7 @@ const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
 const muetzePrice = 200;
 const plueschPrice = 200;
+const nodemailer = require('nodemailer');
 
 
 var options = {
@@ -172,7 +173,7 @@ io.on('connection', function (socket) {
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
   })
-  socket.on('buy', function(u, p, product){
+  socket.on('buy', function(u, p, product, street, plz, city, print, misc){
     user = users.findOne({name: u, password:p});
     if(!user){return;}
     switch (product) {
@@ -193,6 +194,45 @@ io.on('connection', function (socket) {
           }
         break;
     }
+    nodemailer.createTestAccount((err, acc) => {
+
+      let transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'pokerzwiebel@gmail.com',
+              pass: account.password
+          }
+      });
+      let mailOptions = {
+          from: '<PokerZwiebel@gmail.com>',
+          to: 'PokerZwiebel@gmail.com',
+          subject: 'Bestellung ' + product + ' von ' + u,
+          text: '<b>Neue Bestellung:</b> <br>' +
+                'Benutzername: ' + u + ' <br>' +
+                'Product: ' + product + '<br>' +
+                'Straße: ' + street + ' <br>' +
+                'PLZ: ' + plz + ' <br>' +
+                'Stadt: ' + city + ' <br>' +
+                'Aufdruck: ' + print + '<br>' +
+                'Sonstiges: ' + misc +'<br>--------------',
+          html: '<b>Neue Bestellung:</b> <br>' +
+                'Benutzername: ' + u + ' <br>' +
+                'Product: ' + product + '<br>' +
+                'Straße: ' + street + ' <br>' +
+                'PLZ: ' + plz + ' <br>' +
+                'Stadt: ' + city + ' <br>' +
+                'Aufdruck: ' + print + '<br>' +
+                'Sonstiges: ' + misc +'<br>--------------'
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+      });
+    });
     log.addLog(logs, user.name, user.name, 'ZwiebelTaler', change, 'Bestellung (' + product + ')')
     socket.emit('updateTaler', user.taler);
     socket.emit('updateCoins', user.coins);
@@ -224,26 +264,40 @@ streamlabs.on('event', (eventData) => {
     taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
     user.taler += taler;
     if(taler > 0){
-      io.to(user.name).emit('notificationDonation', taler);
+      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Bits ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
       io.to(user.name).emit('updateTaler', user.taler);
     }
   }
   if (eventData.for === 'twitch_account') {
     switch(eventData.type) {
       case 'follow':
-        //code to handle follow events
+      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Follow ❤️!');
         break;
       case 'subscription':
-        //code to handle subscription events
         user = users.findOne({name: eventData.message[0].name.toLowerCase()});
         if(!user){
           return;
         }
-        /*
-        user.taler += Math.floor(10 * eventData.message[0].amount);
-        io.to(user.name).emit('notificationDonation', Math.floor(10 * eventData.message[0].amount));
-        io.to(user.name).emit('updateTaler', user.taler);
-        */
+        switch (eventData.message[0].sub_plan) {
+          case 1000:
+            taler = 250;
+            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
+            io.to(user.name).emit('updateTaler', user.taler);
+            break;
+          case 2000:
+            taler = 500;
+            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
+            io.to(user.name).emit('updateTaler', user.taler);
+            break;
+          case 3000:
+            taler = 1250;
+            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
+            io.to(user.name).emit('updateTaler', user.taler);
+            break;
+          default:
+            taler = 250;
+        }
+        user.taler += taler
         break;
       default:
         //default case
@@ -285,10 +339,7 @@ function refreshStats(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 client.on("whisper", function (from, userstate, message, self) {
-  if(message.toLowerCase() == '!register' || message.toLowerCase() == '!password' || message.toLowerCase() == '!passwort'){
-    coincmds.knowUser(users, userstate.username)
-    client.whisper( from, 'Hi! Dein Benutzername ist: ' + userstate.username + ' und dein Passwort: ' + users.findOne({name:userstate.username}).password)
-  }
+  
 })
 
 client.on("chat", function(channel, userstate, message, self){
