@@ -252,7 +252,6 @@ io.on('connection', function (socket) {
 
 streamlabs.on('event', (eventData) => {
   if (!eventData.for && eventData.type === 'donation') {
-    //code to handle donation events
     user = users.findOne({name: eventData.message[0].from.toLowerCase()});
     if(!user){
       return;
@@ -260,12 +259,12 @@ streamlabs.on('event', (eventData) => {
     taler = Math.floor(10 * eventData.message[0].amount);
     user.taler += taler;
     if(taler > 0){
+      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Donation')
       io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Donation ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
       io.to(user.name).emit('updateTaler', user.taler);
     }
   }
   if(eventData.type === 'bits'){
-    //code to handle bit events
     user = users.findOne({name: eventData.message[0].name.toLowerCase()});
     if(!user){
       return;
@@ -273,6 +272,7 @@ streamlabs.on('event', (eventData) => {
     taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
     user.taler += taler;
     if(taler > 0){
+      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Bits')
       io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Bits ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
       io.to(user.name).emit('updateTaler', user.taler);
     }
@@ -294,26 +294,23 @@ streamlabs.on('event', (eventData) => {
         switch (eventData.message[0].sub_plan) {
           case 1000:
             taler = 250;
-            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
             io.to(user.name).emit('updateTaler', user.taler);
             break;
           case 2000:
             taler = 500;
-            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
             io.to(user.name).emit('updateTaler', user.taler);
             break;
           case 3000:
             taler = 1250;
-            io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
             io.to(user.name).emit('updateTaler', user.taler);
             break;
           default:
             taler = 250;
         }
+        log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Sub')
+        io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
         user.taler += taler
         break;
-      default:
-        //default case
     }
   }
   db.saveDatabase();

@@ -328,6 +328,8 @@ socket.on('loginSuccessful', function(usr, isMod){
   Cookies.remove('UID')
   Cookies.set('USR', user.name, { expires: 365})
   Cookies.set('UID', user.password, { expires: 365})
+  pwCookie = user.password;
+  usrCookie = user.name;
   $('#login-button-text').html(user.name)
   $("#login-button-link").attr("onclick","showLogout();");
   $("#login-button-link").removeClass("lila");

@@ -17,10 +17,10 @@ module.exports = {
   },
   getFilteredLogs: function(logs, filter){
     filteredlogs = logs.where(function(obj){
-      if(!filter.taler && obj.currency == 'taler'){
+      if(!filter.taler && obj.currency == 'ZwiebelTaler'){
         return false;
       }
-      if(!filter.coins && obj.currency == 'coins'){
+      if(!filter.coins && obj.currency == 'ZwiebelCoins'){
         return false;
       }
       if(!(filter.receiver_username == '') && !obj.receiver_username.includes(filter.receiver_username)){
