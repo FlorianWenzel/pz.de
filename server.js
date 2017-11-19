@@ -164,6 +164,20 @@ io.on('connection', function (socket) {
       return;
     }
     r = log.getFilteredLogs(logs, {trigger_username:'',receiver_username:u,coins:true,taler:true})
+    r.unshift({
+      trigger_username: u,
+      receiver_username: u,
+      currency: 'ZwiebelCoins',
+      amount: users.findOne({name:u, password:p}).gambleNet,
+      type: '!gamble bzw !slots'
+    })
+    r.unshift({
+      trigger_username: u,
+      receiver_username: u,
+      currency: 'ZwiebelCoins',
+      amount: users.findOne({name:u, password:p}).coinsCollected,
+      type: 'duch Zuschauen gesammelt'
+    })
     socket.emit('getLogs', r.slice(0,99))
   })
   socket.on('getFilteredLogs', function(filter){
