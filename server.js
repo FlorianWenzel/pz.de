@@ -42,8 +42,8 @@ function interval() {
   if(timer % 60 == 0){
     coincmds.rewardCoins(channel, users, account.twitchID, io)
   }
-  if(timer % 33){
-    refreshStats();
+  if(timer % 33 == 0){
+    refreshStats(users);
   }
   db.saveDatabase();
   timer++;
@@ -316,7 +316,7 @@ streamlabs.on('event', (eventData) => {
   db.saveDatabase();
 });
 
-function refreshStats(){
+function refreshStats(users){
   onions = misc.findOne({id:'onions'});
   if(!onions){
     misc.insert({
@@ -337,7 +337,7 @@ function refreshStats(){
   }
   users = users.where(function(){return true;});
   c = 0;
-  for(i=0;i<users.lenght;i++){
+  for(i=0;i<users.length;i++){
     c += users[i].coinsCollected;
   }
   seenMinutes.count = c;
