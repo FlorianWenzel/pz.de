@@ -335,10 +335,10 @@ function refreshStats(){
     })
     seenMinutes = misc.findOne({id:'seenMinutes'})
   }
-  usrs = users.where(function(){return true;});
+  users = users.where(function(){return true;});
   c = 0;
-  for(i=0;i<usrs.lenght;i++){
-    c += usrs[i].coinsCollected;
+  for(i=0;i<users.lenght;i++){
+    c += users[i].coinsCollected;
   }
   seenMinutes.count = c;
 }
