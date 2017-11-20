@@ -61,6 +61,10 @@ function loadHandler() {
     users = db.getCollection('users');
     logs = db.getCollection('logs');
     misc = db.getCollection('misc');
+    streamlabsIDs = db.getCollection('streamlabsIDs');
+    if(!streamlabsIDs){
+      streamlabsIDs = db.addCollection('streamlabsIDs')
+    }
     if (!misc) {
       misc = db.addCollection('misc');
     }
@@ -265,6 +269,13 @@ io.on('connection', function (socket) {
 
 
 streamlabs.on('event', (eventData) => {
+  if(streamlabsIDs.findOne({id: eventData.message[0]._id})){
+    return;
+  }else{
+    streamlabsIDs.insert({
+      id: eventData.message[0]._id
+    })
+  }
   if (!eventData.for && eventData.type === 'donation') {
     user = users.findOne({name: eventData.message[0].from.toLowerCase()});
     if(!user){
