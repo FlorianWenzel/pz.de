@@ -330,6 +330,7 @@ streamlabs.on('event', (eventData) => {
             io.to(user.name).emit('updateTaler', user.taler);
             break;
           default:
+            log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData.message[0].sub_plan, 'Sub')
             taler = 250;
         }
         log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Sub')
@@ -387,13 +388,13 @@ client.on("chat", function(channel, userstate, message, self){
   //COINS FUNCTIONS
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
     coincmds.viewCoins(client, users, channel, userstate);
-  }else if(message.includes('!setcoins') && (userstate.mod || '#' + userstate.username == channel)){
+  }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
     coincmds.setCoins(client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!settaler') && (userstate.mod || '#' + userstate.username == channel)){
+  }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
     coincmds.setTaler(client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!givetaler') && (userstate.mod || '#' + userstate.username == channel)){
+  }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
     coincmds.giveTaler(client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!givecoins') && (userstate.mod || '#' + userstate.username == channel)){
+  }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
     coincmds.giveCoins(client, users, channel, userstate, message, io, log);
   //GAMBLE
   }else if(message.includes("!gamble")){
