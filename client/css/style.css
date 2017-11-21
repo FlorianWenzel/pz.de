@@ -23,6 +23,10 @@ html {
   background-color: #363636!important;
   color: white!important;
 }
+.dark strong{
+  background-color: #363636!important;
+  color: white!important;
+}
 .rot{
   transition: background-color 200ms linear;
   background-color:  #ff3860!important;
@@ -55,6 +59,9 @@ html {
     -ms-user-select: none;
     user-select: none;
 }
+.columns{
+  margin: 0px!important;
+}
 .selectable {
   -webkit-touch-callout: all;
   -webkit-user-select: all;
@@ -64,7 +71,9 @@ html {
   user-select: all;
 }
 #content {
-  margin-top: 3.25rem;
+  padding-top: 3.25em;
+  top: 0px;
+  left: 0px;
 }
 #footer {
   z-index: 100;

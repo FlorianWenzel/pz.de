@@ -20,7 +20,6 @@ const muetzePrice = 200;
 const plueschPrice = 200;
 const nodemailer = require('nodemailer');
 
-
 var options = {
   options: {
     debug: false
@@ -168,21 +167,7 @@ io.on('connection', function (socket) {
       return;
     }
     r = log.getFilteredLogs(logs, {trigger_username:'',receiver_username:u,coins:true,taler:true})
-    r.unshift({
-      trigger_username: u,
-      receiver_username: u,
-      currency: 'ZwiebelCoins',
-      amount: users.findOne({name:u, password:p}).gambleNet,
-      type: '!gamble bzw !slots'
-    })
-    r.unshift({
-      trigger_username: u,
-      receiver_username: u,
-      currency: 'ZwiebelCoins',
-      amount: users.findOne({name:u, password:p}).coinsCollected,
-      type: 'duch Zuschauen gesammelt'
-    })
-    socket.emit('getLogs', r.slice(0,99))
+    socket.emit('getLogs', r.slice(0,99), false, users.findOne({name:u, password:p}).gambleNet, users.findOne({name:u, password:p}).coinsCollected)
   })
   socket.on('getFilteredLogs', function(filter){
     filteredlogs = log.getFilteredLogs(logs, filter);
@@ -330,7 +315,7 @@ streamlabs.on('event', (eventData) => {
             io.to(user.name).emit('updateTaler', user.taler);
             break;
           default:
-            log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData.message[0].sub_plan, 'Sub')
+            log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData, 'Sub')
             taler = 250;
         }
         log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Sub')

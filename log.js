@@ -1,10 +1,23 @@
 module.exports = {
   addLog: function(logs, trigger_username, receiver_username, currency, amount, type){
+    date = new Date().getDate()+'.'+(new Date().getMonth() + 1) + '.'+new Date().getFullYear();
+    if(type == 'Umgetauscht'){
+      if(logs.findOne({trigger_username: trigger_username, receiver_username:receiver_username, currency: currency, time: date, type:type})){
+        if(currency == 'ZwiebelCoins'){
+          logs.findOne({trigger_username: trigger_username, receiver_username:receiver_username, currency: currency, time: date, type:type}).amount -= 1000;
+        }
+        if(currency == 'ZwiebelTaler'){
+          logs.findOne({trigger_username: trigger_username, receiver_username:receiver_username, currency: currency, time: date, type:type}).amount += 1;
+        }
+        return;
+      }
+    }
     logs.insert({
       trigger_username: trigger_username.toLowerCase(),
       receiver_username: receiver_username.toLowerCase(),
       currency: currency,
       amount: amount,
+      time: date,
       type: type
     });
     return;

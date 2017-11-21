@@ -237,11 +237,14 @@ function increaseTo(e, num){
   }, 50)
 }
 
-socket.on('getLogs', function(logs, alllogs){
+socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   if(alllogs){
     $('#logs').html(
       '<li id=\'log-head\'>' +
         '<div class="columns">' +
+          '<div class="column prime">' +
+            '<strong>Datum</strong>' +
+          '</div>' +
           '<div class="column prime">' +
             '<strong>Auslöser</strong>' +
           '</div>' +
@@ -258,9 +261,18 @@ socket.on('getLogs', function(logs, alllogs){
       '</li>'
     )
   }else{
+    $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
+    $('#coinsCollected').html(coinsCollected + ' ZwiebelCoins')
+    if(gambleNet<0){
+      $('#gambleNetHead').addClass('is-danger')
+      $('#gambleNetHead').removeClass('is-success')
+    }
     $('#logs').html(
       '<li id=\'log-head\'>' +
         '<div class="columns">' +
+          '<div class="column prime">' +
+            '<strong>Datum</strong>' +
+          '</div>' +
           '<div class="column prime">' +
             '<strong>Auslöser</strong>' +
           '</div>' +
@@ -290,6 +302,9 @@ socket.on('getLogs', function(logs, alllogs){
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
             '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].time +
+            '</div>' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
             '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
@@ -307,6 +322,9 @@ socket.on('getLogs', function(logs, alllogs){
       $('#logs').append(
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+              ''+logs[i].time.toString()+'' +
+            '</div>' +
             '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
