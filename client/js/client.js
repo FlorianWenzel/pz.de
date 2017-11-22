@@ -134,9 +134,9 @@ function convert(){
   coins = parseInt($('#coins-amount').html())
   if(coins < 1000){
     showNotification('danger', 'Zu wenig ZwiebelCoins!')
-    $( "#convertButton" ).addClass( "shake" )
+    $("#convertButton").addClass("shake")
     i = setInterval(function(){
-      $( "#convertButton" ).removeClass( "shake" )
+      $("#convertButton").removeClass("shake")
       clearInterval(i);
     }, 1000)
   }else{
@@ -151,7 +151,7 @@ function redirectToTwitch(){
   window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=&force_verify=true'
 }
 
-function showNotification(type, msg){
+function showNotification(type, msg, dies){
   if(type == 'danger' || type == 'info'){
     audioNotifiaction.pause();
     audioNotifiaction.currentTime = 0
@@ -161,12 +161,26 @@ function showNotification(type, msg){
   notifications.push(id);
   $('#notifications').append(
     '<li id="notification-' + id + '" class="notification-li fly-in">' +
-      '<div class="notification is-'+type+'">' +
+      '<div class="notification is-' + type + '">' +
         '<button onclick="deleteNotification('+id+')" class="delete"></button>' +
         msg +
       '</div>' +
     '</li>'
   )
+  if(dies){
+    selfDestructions.push(setTimeout(function(){
+      deleteNotification(id);
+    }, 1000))
+  }
+}
+
+function deleteNotification(id){
+  $( "#notification-"+id ).animate({
+  opacity: 0.25,
+  left: "+=50",
+  height: "toggle"
+}, 150, function() {
+    $('#notification-'+id).remove()});
 }
 
 function toggleMail(){
@@ -185,15 +199,6 @@ function toggleTwitch(){
   }else{
     contactPerTwitch = true;
   }
-}
-
-function deleteNotification(id){
-  $( "#notification-"+id ).animate({
-  opacity: 0.25,
-  left: "+=50",
-  height: "toggle"
-}, 150, function() {
-    $('#notification-'+id).remove()});
 }
 
 socket.on('updateCoins', function(amount){

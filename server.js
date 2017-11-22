@@ -254,9 +254,9 @@ io.on('connection', function (socket) {
 
 
 streamlabs.on('event', (eventData) => {
-  if(streamlabsIDs.findOne({id: eventData.message[0]._id})){
+  if(eventData.message[0]._id && streamlabsIDs.findOne({id: eventData.message[0]._id})){
     return;
-  }else{
+  }else if(eventData.message[0]._id){
     streamlabsIDs.insert({
       id: eventData.message[0]._id
     })
@@ -303,6 +303,10 @@ streamlabs.on('event', (eventData) => {
         }
         switch (eventData.message[0].sub_plan) {
           case 1000:
+            taler = 250;
+            io.to(user.name).emit('updateTaler', user.taler);
+            break;
+          case 'Prime':
             taler = 250;
             io.to(user.name).emit('updateTaler', user.taler);
             break;
