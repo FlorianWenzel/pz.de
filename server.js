@@ -254,7 +254,7 @@ io.on('connection', function (socket) {
 
 
 streamlabs.on('event', (eventData) => {
-  if(eventData.message[0]._id && streamlabsIDs.findOne({id: eventData.message[0]._id})){
+  if(eventData && eventData.message && eventData.message[0] && eventData.message[0]._id && streamlabsIDs.findOne({id: eventData.message[0]._id})){
     return;
   }else if(eventData.message[0]._id){
     streamlabsIDs.insert({
