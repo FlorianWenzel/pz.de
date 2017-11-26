@@ -302,27 +302,30 @@ streamlabs.on('event', (eventData) => {
           return;
         }
         switch (eventData.message[0].sub_plan) {
-          case 1000:
-            taler = 250;
+          case '1000':
+            taler = 25;
             io.to(user.name).emit('updateTaler', user.taler);
+            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '4.99$ Sub')
             break;
           case 'Prime':
-            taler = 250;
+            taler = 25;
             io.to(user.name).emit('updateTaler', user.taler);
+            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Prime Sub')
             break;
-          case 2000:
-            taler = 500;
+          case '2000':
+            taler = 50;
             io.to(user.name).emit('updateTaler', user.taler);
+            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '9.99$ Sub')
             break;
-          case 3000:
-            taler = 1250;
+          case '3000':
+            taler = 125;
             io.to(user.name).emit('updateTaler', user.taler);
+            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '24.99$ Sub')
             break;
           default:
             log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData, 'Sub')
-            taler = 250;
+            taler = 25;
         }
-        log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Sub')
         io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
         user.taler += taler
         break;
