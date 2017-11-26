@@ -13,7 +13,7 @@ const channel = account.channel;
 const pwgen = require('password-generator');
 const request = require('request');
 const io_client = require('socket.io-client');
-const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken)
+const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken);
 const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
 const muetzePrice = 200;
@@ -324,7 +324,7 @@ streamlabs.on('event', (eventData) => {
             break;
           default:
             log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData, 'Sub')
-            taler = 25;
+            taler = 0;
         }
         io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
         user.taler += taler
