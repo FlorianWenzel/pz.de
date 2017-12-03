@@ -36,7 +36,27 @@
           <a class="navbar-item" onclick="loadPage('home')">
             <img src="./img/logo-white.png" alt="">
           </a>
-          <a class="navbar-item" onclick="loadPage('stream')">
+            <nav class="is-hidden-desktop has-text-centered" role="navigation">
+              <a class="toggle" href="#"><span>&#9776;</span></a>
+              <ul class="menu">
+                <li>
+                   <a class="dark" onclick="loadPage('stream')">
+                      Stream
+                   </a>
+                </li>
+                <li>
+                  <a class="dark" onclick="loadPage('rakeback')">
+                    ZwiebelBack
+                  </a>
+                </li>
+                <li>
+                  <a class="log-button hidden" aria-hidden="true" onclick="loadPage('mylog');">
+                    <span class="logs-text">Verlauf</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          <a class="navbar-item is-hidden-touch" onclick="loadPage('stream')">
             <span class="icon">
               <i class="fa fa-television"></i>
             </span>
@@ -48,13 +68,13 @@
             </span>
             ZwiebelNation
           </a>-->
-          <a class="navbar-item" onclick="loadPage('rakeback')">
+          <a class="navbar-item is-hidden-touch" onclick="loadPage('rakeback')">
             <span class="icon">
               <i class="fa fa-heart"></i>
             </span>
             ZwiebelBack
           </a>
-          <div class="navbar is-dark" style="position:fixed; right: 0px;">
+          <div class="navbar is-hidden-touch is-dark" style="position:fixed; right: 0px;">
             <div class="currency-display hidden navbar-item ">
               <figure class="image is-24x24" >
                 <img title="ZwiebelCoin" src="./img/copper.svg" />
@@ -71,13 +91,13 @@
                 23
               </span>
             </div>
-            <a id="logs-button" class="navbar-item rot hidden" aria-hidden="true" onclick="loadPage('logs');">
+            <a id="logs-button" class="navbar-item is-hidden-touch rot hidden" aria-hidden="true" onclick="loadPage('logs');">
               <span class="icon">
                 <i id="logs-icon" class="fa fa-list is-large"></i>
               </span>
               <span id="logs-text">Alle Logs</span>
             </a>
-            <a id="log-button" class="navbar-item prime hidden" aria-hidden="true" onclick="loadPage('mylog');">
+            <a class="navbar-item log-button prime hidden is-hidden-touch" aria-hidden="true" onclick="loadPage('mylog');">
                 <figure class="image is-24x24">
                   <img title="ZwiebelCoin" src="./img/black.svg" />
                 </figure>

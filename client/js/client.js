@@ -24,6 +24,13 @@ function onload(){
   }
 }
 
+$("document").ready (function() {
+  $(".toggle").click(function() {
+    $( ".menu" ).stop().slideToggle( "slow" );
+  });
+
+});
+
 function loadPage(page){
   window.scrollTo(0, 0);
   $('#content').empty()
@@ -362,7 +369,7 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('#coins-amount').html(user.coins);
   $('#taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
-  $('#log-button').removeClass('hidden')
+  $('.log-button').removeClass('hidden')
   window.history.pushState('home', 'PokerZwiebel', '/');
   if(isMod){
     $('#logs-button').removeClass('hidden');

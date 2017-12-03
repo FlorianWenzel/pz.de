@@ -233,3 +233,29 @@ html {
   -webkit-transform: rotateY(20deg);
           transform: rotateY(20deg);
 }
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/*********************************************/
+
+nav[role="navigation"] {
+  background: #363636;
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
+nav[role="navigation"] a {font-size:2em; color: #fff; text-decoration: none; padding: 0 15px; line-height: 35px;}
+nav[role="navigation"] li {width: 100%; height: auto; text-align: center; background: #363636; border-bottom: 1px solid #fff;padding: 10px 0;}
+nav[role="navigation"] span {font-size: 35px;}
+.menu {display: none;}
