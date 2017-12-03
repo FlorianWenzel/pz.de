@@ -1,67 +1,66 @@
-<br />
-<div class="tile is-ancestor">
-      <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification holz is-info unselectable">
-          <p class="is-size-1">ZwiebelMütze</p>
-          <p class="is-size-2">200 ZwiebelTaler</p>
-          <div class="slider">
-            <figure>
-              <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/O9vbt5h.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/EDpR51u.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
-            </figure>
-          </div>
-          <div class="has-text-centered">
-            <button id="muetzeButton" onclick="buy('ZwiebelMütze')" class="button is-danger is-medium" style="margin-top:1.25em;">
-              Will ich!
-            </button>
-          </div>
-        </article>
+<div class="columns is-ancestor">
+  <div class="column is-one-third-tablet">
+    <article class="notification holz is-info unselectable">
+      <p class="is-size-1">ZwiebelMütze</p>
+      <p class="is-size-2">200 ZwiebelTaler</p>
+      <div class="slider">
+        <figure>
+          <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/O9vbt5h.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/EDpR51u.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/BpWKWQp.jpg" draggable="false" alt>
+        </figure>
       </div>
-      <div class="tile is-parent">
-        <article class="tile is-child notification is-dark brown unselectable" stlye="position: relative;">
-          <p class="title">Und so funktioniert's:
-          </p>
-          <p class="content" style="margin-bottom: 3rem;">
-            <br />
-            Durch deine Unterstützung des Streams, also Donos, Subs und Bits sammelst du ZwiebelTaler, diese kannst du hier gegen ZwiebelMerch eintauschen!<br /><br />
-            Fürs Streamschauen gibt's ZwiebelCoins, eine pro Minute, diese kannst du hier in ZwiebelTaler umtauschen! <br />
-            <strong>1000 ZwiebelCoins entsprechen 1 ZwiebelTaler</strong>
-          </p>
-          <div id="convertArea" class="hidden">
-            <progress id="progressBar" class="progress is-danger" style="margin-bottom:0px;" value="0" max="100">90%</progress>
-            <p id="progressText" class="content has-text-centered">
-              10/1000<br />
-            </p>
-            <div class="has-text-centered">
-              <button id="convertButton" onclick="convert();" class="button is-danger">Umtauschen!</button>
-            </div>
-          </div>
-        </article>
+      <div class="has-text-centered">
+        <button id="muetzeButton" onclick="buy('ZwiebelMütze')" class="button is-danger is-medium" style="margin-top:1.25em;">
+          Will ich!
+        </button>
       </div>
-      <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification is-dark holz unselectable">
-          <p class="is-size-1">Plüschzwiebel</p>
-          <p class="is-size-2">200 ZwiebelTaler</p>
-          <div class="slider">
-            <figure class="image">
-              <img src="https://i.imgur.com/u2h6HQv.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/psYRmdy.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/iOt7aKG.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/u2h6HQv.jpg" draggable="false" alt>
-              <img src="https://i.imgur.com/psYRmdy.jpg" draggable="false" alt>
-            </figure>
-          </div>
-          <div class="has-text-centered">
-            <button id="plueschButton" onclick="buy('PlüschZwiebel')" class="button is-danger is-medium" style="margin-top:1.25em;">
-              Will ich!
-            </button>
-          </div>
-        </article>
+    </article>
+  </div>
+  <div class="column is-one-third-tablet">
+    <article class="notification is-dark brown unselectable" stlye="position: relative;">
+      <p class="title">Und so funktioniert's:
+      </p>
+      <p class="content" style="margin-bottom: 3rem;">
+        <br />
+        Durch deine Unterstützung des Streams, also Donos, Subs und Bits sammelst du ZwiebelTaler, diese kannst du hier gegen ZwiebelMerch eintauschen!<br /><br />
+        Fürs Streamschauen gibt's ZwiebelCoins, eine pro Minute, diese kannst du hier in ZwiebelTaler umtauschen! <br />
+        <strong>1000 ZwiebelCoins entsprechen 1 ZwiebelTaler</strong>
+      </p>
+      <div id="convertArea" class="hidden">
+        <progress id="progressBar" class="progress is-danger" style="margin-bottom:0px;" value="0" max="100">90%</progress>
+        <p id="progressText" class="content has-text-centered">
+          10/1000<br />
+        </p>
+        <div class="has-text-centered">
+          <button id="convertButton" onclick="convert();" class="button is-danger">Umtauschen!</button>
+        </div>
       </div>
-    </div>
+    </article>
+  </div>
+  <div class="column is-one-third-tablet">
+    <article class="notification is-dark holz unselectable">
+      <p class="is-size-1">Plüschzwiebel</p>
+      <p class="is-size-2">200 ZwiebelTaler</p>
+      <div class="slider">
+        <figure class="image">
+          <img src="https://i.imgur.com/u2h6HQv.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/psYRmdy.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/iOt7aKG.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/u2h6HQv.jpg" draggable="false" alt>
+          <img src="https://i.imgur.com/psYRmdy.jpg" draggable="false" alt>
+        </figure>
+      </div>
+      <div class="has-text-centered">
+        <button id="plueschButton" onclick="buy('PlüschZwiebel')" class="button is-danger is-medium" style="margin-top:1.25em;">
+          Will ich!
+        </button>
+      </div>
+    </article>
+  </div>
+</div>
 <script>
   refreshProgressBar();
   if(user){

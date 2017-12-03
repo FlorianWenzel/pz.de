@@ -31,42 +31,66 @@
 
   <body>
     <header id="header" class="unselectable">
-      <nav class="navbar is-dark">
+      <nav class="is-hidden-desktop has-text-centered" role="navigation">
+        <a class="toggle" href="#">
+          <a class="toggle m-icon -menu" href="#">
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </a>
+        <ul class="menu">
+          <li>
+            <a onclick="toggleMobileMenu(); loadPage('home')">
+              <img src="./img/logo-white.png" alt="">
+            </a>
+          </li>
+          <li>
+             <a class="dark" onclick="toggleMobileMenu(); loadPage('stream')">
+                Stream
+             </a>
+          </li>
+          <li>
+            <a class="dark" onclick="toggleMobileMenu(); loadPage('rakeback')">
+              ZwiebelBack
+            </a>
+          </li>
+          <li class="log-button hidden">
+            <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('mylog');">
+              <span class="logs-text">Verlauf</span>
+            </a>
+          </li>
+          <li class="currency-display hidden">
+            <div class="currency-display hidden has-icon-left" style="width: 50vw; float: left;">
+                <figure class="icon" >
+                  <img title="ZwiebelCoin" src="./img/copper.svg" />
+                </figure>
+                <span class="coins-amount" style="color:white">
+                  1337
+                </span>
+            </div>
+            <div class="currency-display hidden has-icon-left" style="width: 50vw; float: right;">
+              <figure class="icon" >
+                <img title="ZwiebelTaler" src="./img/gold.svg" />
+              </figure>
+              <span class="taler-amount" style="color:white">
+                23
+              </span>
+            </div>
+          </li>
+          <li class="login-button-link navbar-item lila" aria-hidden="true" onclick="redirectToTwitch();">
+            <span class="icon">
+              <i class="login-button-icon fa fa-twitch is-large"></i>
+            </span>
+            <span class="login-button-text">Einloggen</span>
+          </li>
+        </ul>
+      </nav>
+      <nav class="navbar is-hidden-touch is-dark">
         <div class="navbar-brand">
           <a class="navbar-item is-hidden-touch" onclick="loadPage('home')">
             <img src="./img/logo-white.png" alt="">
           </a>
-            <nav class="is-hidden-desktop has-text-centered" role="navigation">
-              <a class="toggle" href="#">
-                <a class="toggle m-icon -menu" href="#">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </a>
-              </a>
-              <ul class="menu">
-                <li>
-                  <a onclick="toggleMobileMenu(); loadPage('home')">
-                    <img src="./img/logo-white.png" alt="">
-                  </a>
-                </li>
-                <li>
-                   <a class="dark" onclick="toggleMobileMenu(); loadPage('stream')">
-                      Stream
-                   </a>
-                </li>
-                <li>
-                  <a class="dark" onclick="toggleMobileMenu(); loadPage('rakeback')">
-                    ZwiebelBack
-                  </a>
-                </li>
-                <li>
-                  <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('mylog');">
-                    <span class="logs-text">Verlauf</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
           <a class="navbar-item is-hidden-touch" onclick="loadPage('stream')">
             <span class="icon">
               <i class="fa fa-television"></i>
@@ -85,7 +109,7 @@
             </span>
             ZwiebelBack
           </a>
-          <div class="navbar is-hidden-touch is-dark" style="position:fixed; right: 0px;">
+          <div class="navbar is-hidden-touch is-dark" style="position:absolute; right: 0px;">
             <div class="currency-display hidden navbar-item ">
               <figure class="image is-24x24" >
                 <img title="ZwiebelCoin" src="./img/copper.svg" />
