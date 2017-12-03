@@ -33,24 +33,35 @@
     <header id="header" class="unselectable">
       <nav class="navbar is-dark">
         <div class="navbar-brand">
-          <a class="navbar-item" onclick="loadPage('home')">
+          <a class="navbar-item is-hidden-touch" onclick="loadPage('home')">
             <img src="./img/logo-white.png" alt="">
           </a>
             <nav class="is-hidden-desktop has-text-centered" role="navigation">
-              <a class="toggle" href="#"><span>&#9776;</span></a>
+              <a class="toggle" href="#">
+                <a class="toggle m-icon -menu" href="#">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </a>
+              </a>
               <ul class="menu">
                 <li>
-                   <a class="dark" onclick="loadPage('stream')">
+                  <a onclick="toggleMobileMenu(); loadPage('home')">
+                    <img src="./img/logo-white.png" alt="">
+                  </a>
+                </li>
+                <li>
+                   <a class="dark" onclick="toggleMobileMenu(); loadPage('stream')">
                       Stream
                    </a>
                 </li>
                 <li>
-                  <a class="dark" onclick="loadPage('rakeback')">
+                  <a class="dark" onclick="toggleMobileMenu(); loadPage('rakeback')">
                     ZwiebelBack
                   </a>
                 </li>
                 <li>
-                  <a class="log-button hidden" aria-hidden="true" onclick="loadPage('mylog');">
+                  <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('mylog');">
                     <span class="logs-text">Verlauf</span>
                   </a>
                 </li>

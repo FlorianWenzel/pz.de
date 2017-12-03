@@ -24,12 +24,16 @@ function onload(){
   }
 }
 
-$("document").ready (function() {
+$(document).ready (function() {
   $(".toggle").click(function() {
-    $( ".menu" ).stop().slideToggle( "slow" );
+    toggleMobileMenu();
   });
-
 });
+
+function toggleMobileMenu(){
+  $( ".menu" ).stop().slideToggle( "slow" );
+  $('.m-icon').toggleClass('active');
+}
 
 function loadPage(page){
   window.scrollTo(0, 0);
