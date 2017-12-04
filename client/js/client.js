@@ -42,6 +42,7 @@ function loadPage(page){
 }
 
 function refreshProgressBar(){
+  if(!user){return;}
   coins = user.coins;
   taler = user.taler;
   if(!$('#progressBar')){
@@ -81,6 +82,10 @@ function refreshProgressBar(){
 }
 
 function buy(product){
+  if(!user){
+    showNotification('danger', 'Bitte log dich erst ein!');
+    return;
+  }
   if(taler < 200){
     showNotification('danger', 'Zu wenig ZwiebelTaler!');
     return;

@@ -46,28 +46,28 @@ module.exports = {
   gamble: function (client, users, channel, userstate, message, io) {
     msg = message.split(" ")
     if(msg.length != 2 || msg[0] != "!gamble" || isNaN(msg[1]) || parseInt(msg[1])<0){
-      //client.say(channel, 'Benutz !gamble <Einsatz> um zu gamblen!')
+      client.say(channel, 'Benutz !gamble <Einsatz> um zu gamblen!')
     }else {
       user = users.findOne({ name:userstate.username});
       if(user.coins < parseInt(msg[1])){
-        //client.say(channel, 'Sorry du hast zu wenig ZwiebelCoins!')
+        client.say(channel, 'Sorry du hast zu wenig ZwiebelCoins!')
       }else{
           user.gambleCooldown = new Date().getTime();
           playerCard = randomCard();
           dealerCard = randomCard();
           if(playerCard.value > dealerCard.value){
-            //client.say(channel, beatiCard(playerCard) + ' > ' + beatiCard(dealerCard) +' => Gewonnen!')
+            client.say(channel, beatiCard(playerCard) + ' > ' + beatiCard(dealerCard) +' => Gewonnen!')
             user.coins += parseInt(msg[1]);
             user.gambleNet += parseInt(msg[1]);
           }else if(playerCard.value < dealerCard.value){
-            //client.say(channel, beatiCard(playerCard) + ' < ' + beatiCard(dealerCard) +' => Verloren!')
+            client.say(channel, beatiCard(playerCard) + ' < ' + beatiCard(dealerCard) +' => Verloren!')
             user.coins -= parseInt(msg[1]);
             user.gambleNet -= parseInt(msg[1]);
           }else{
-            //client.say(channel, beatiCard(playerCard) + ' = ' + beatiCard(dealerCard) +' => Unentschieden!')
+            client.say(channel, beatiCard(playerCard) + ' = ' + beatiCard(dealerCard) +' => Unentschieden!')
           }
           chips = user.coins;
-          //client.say(channel, userstate.username + ' hat jetzt ' + chips.toString() + ' ZwiebelCoins')
+          client.say(channel, userstate.username + ' hat jetzt ' + chips.toString() + ' ZwiebelCoins')
           deadCards = [];
           io.to(user.name).emit('updateCoins', user.coins)
       }
@@ -77,11 +77,11 @@ module.exports = {
     parts = message.split(' ')
     user = users.findOne({name:userstate.username})
     if(parts.length != 2 || isNaN(parts[1]) || parts[1] < 1){
-      //client.say(channel, 'Benutz !slots <einsatz>')
+      client.say(channel, 'Benutz !slots <einsatz>')
       return;
     }
     if(user.coins < parts[1]){
-      //client.say(channel, 'Zu wenig ZwiebelCoins, sorry :(')
+      client.say(channel, 'Zu wenig ZwiebelCoins, sorry :(')
       return;
     }
     slotSymbols = [
@@ -122,6 +122,6 @@ module.exports = {
       user.gambleNet += parseInt(parts[1]) * (multiplier+1);
     }
     io.to(user.name).emit('updateCoins', user.coins)
-    //client.say(channel, resultMessage);
+    client.say(channel, resultMessage);
   }
 };
