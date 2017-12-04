@@ -42,8 +42,8 @@ function loadPage(page){
 }
 
 function refreshProgressBar(){
-  coins = parseInt($('.coins-amount').html())
-  taler = parseInt($('.taler-amount').html())
+  coins = user.coins;
+  taler = user.taler;
   if(!$('#progressBar')){
     return;
   }
@@ -213,11 +213,13 @@ function toggleTwitch(){
 }
 
 socket.on('updateCoins', function(amount){
+  user.coins = amount;
   $('.coins-amount').html(amount);
   refreshProgressBar();
 })
 
 socket.on('updateTaler', function(amount){
+  user.taler = amount;
   $('.taler-amount').html(amount);
   refreshProgressBar();
 })
@@ -376,7 +378,7 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('.log-button').removeClass('hidden')
   window.history.pushState('home', 'PokerZwiebel', '/');
   if(isMod){
-    $('#logs-button').removeClass('hidden');
+    $('.logs-button').removeClass('hidden');
   }
 })
 
