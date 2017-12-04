@@ -371,7 +371,7 @@ client.on("whisper", function (from, userstate, message, self) {
 })
 
 client.on("chat", function(channel, userstate, message, self){
-  if(self || userstate.username  ==  channel){
+  if(self || userstate.username  ==  account.nick){
     return;
   }
   msgCounter.count ++;
