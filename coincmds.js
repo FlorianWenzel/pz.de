@@ -133,6 +133,22 @@ module.exports = {
           return;
       }
     }
+  },
+  giessen: function (client, io, username, message, misc, users, channel) {
+    msg = message.split(" ");
+    if(isNaN(msg[1]) || msg.length != 2 || parseInt(msg[1]) < 1){
+      client.say(channel, 'Syntaxfehler :(')
+      return;
+    }
+    if(users.findOne({name:username}).coins < parseInt(msg[1])){
+      client.say(channel, 'Du hast zu wenig Zwiebelcoins.')
+      return;
+    }else{
+      users.findOne({name:username}).coins -= parseInt(msg[1])
+    }
+    misc.findOne({id:'zwiebelbeetCounter'}).value += parseInt(msg[1])
+    client.say(channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')
+    io.sockets.emit('increaseOnions', (misc.findOne({id:'zwiebelbeetCounter'}).value % 10000), parseInt(msg[1]), username);
   }
   };
 

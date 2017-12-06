@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Zwiebelbeet</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <iframe src="http://www.dxj.de/smp/index.php?s=bohlen/1" width="0px" height="0px" frameBorder="0" id="frame">your browser dosnt support iframes</iframe>
+        <div class="wrapper">
+            <img id="onion" src="./img/onion.png"><br>
+            <div id="sun" class="hide">
+            	<div id="rings">
+            		<div></div>
+            		<div></div>
+            		<div></div>
+            		<div></div>
+            	</div>
+            </div>
+            <img id="rain" class="hide" src="./img/rain.gif"><br>
+            <div id="balkenbg">
+              <div id="balken">
+                <div id="count">0</div>
+              </div>
+            </div><br><br>
+            <span id="username"></span>
+            </div>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/client.js"></script>
+        <link rel="stylesheet" href="./css/style.css"></style>
+    </body>
+</html>
+<script>
+function spinit(all, amount, username){
+  if(all > 10000){
+    all = 10000
+  }
+  $('#balken').width(all/100*4);
+  $('#count').html(all + '/10000')
+  $('#username').html(username + ' hat ' + amount + ' Zwiebeln gegossen!')
+  $('#username').addClass('fadeinout')
+  $('#rain').addClass('fadeinout')
+  $('#rain').removeClass('hide')
+  $('#onion').addClass('spinit')
+  $("#onion")
+  .on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",
+   function(e){
+      $('#onion').removeClass('spinit')
+   });
+   $('#username')
+   .on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",
+    function(e){
+      $('#username').removeClass('fadeinout')
+      $('#rain').removeClass('fadeinout')
+      $('#rain').addClass('hide')
+      $('#username').html(' ')
+    });
+}
+</script>

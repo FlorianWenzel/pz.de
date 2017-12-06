@@ -84,6 +84,26 @@ function loadHandler() {
     }
 }
 
+var beet = express();
+var beetServer = http.createServer(beet);
+var beetIo = socketio(beetServer);
+
+beetIo.on('connection', onConnection);
+
+beet.use(express.static(__dirname + '/beet'));
+beetServer.listen(8080, () => console.log('Zwiebelbeet listening on port 8080!'));
+
+function onConnection(sock) {
+  if(!misc.findOne({id:'zwiebelbeetCounter'})){
+    misc.insert({
+      id: 'zwiebelbeetCounter',
+      value: 0
+    });
+    db.saveDatabase()
+  }
+  sock.emit('increaseOnions',(misc.findOne({id:'zwiebelbeetCounter'}).value % 10000), (misc.findOne({id:'zwiebelbeetCounter'}).value), 'Eine höhere Macht');
+}
+
 var client = new tmi.client(options);
 client.connect();
 
@@ -393,5 +413,7 @@ client.on("chat", function(channel, userstate, message, self){
     casino.gamble(client, users, channel, userstate, message, io);
   }else if(message.includes('!slots ') || message.includes('!slot ') || message.includes('!s ')){
     casino.slots(client, users, channel, userstate, message, io);
+  }else if(message.includes('!gießen') || message.includes('!giessen') || message.includes('!giesen')){
+    coincmds.giessen(client, beetIo,  userstate.username, message, misc, users, channel)
   }
 })

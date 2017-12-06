@@ -1,0 +1,231 @@
+
+body	background: #fbffb9;
+}
+body, html{
+	height: 100%;
+}
+/* code for the sun  */
+#sun{
+	position: absolute;
+	top: 25%;
+	left: 45%;
+	margin: -150px 0 0 -150px;
+	width: 100px;
+	height: 100px;
+}
+#sun *, #sun *:before, #sun *:after{
+	position: absolute;
+}
+
+/* code for the rings */
+#rings{
+	top: 50%;
+	left: 50%;
+	z-index: 1;
+}
+#rings div:before, #rings div:after{
+	content: "";
+	z-index: 2;
+	top: 0;
+	left: 0;
+	height: inherit;
+	width: inherit;
+	background: inherit;
+}
+#rings div:before{
+	transform: rotate(60deg);
+}
+#rings div:after{
+	transform: rotate(-60deg);
+}
+#rings div:nth-child(even){
+	animation: rotateR 12s infinite linear;
+}
+#rings div:nth-child(odd){
+	animation: rotateL 12s infinite linear;
+	transform: rotate(15deg);
+}
+#rings div:nth-child(1){
+	animation-duration: 8s;
+	backgrond: rgba(255, 230, 84, 0.5);
+	width: 100px;
+	height: 100px;
+	margin: -50px 0 0 -50px;
+}
+#rings div:nth-child(2){
+	animation-duration: 9s;
+	background: rgba(255, 185, 6, 0.5);
+	width: 95px;
+	height: 95px;
+	margin: -42.5px 0 0 -42.5px;
+}
+#rings div:nth-child(3){
+	animation-duration: 5s;
+	background: rgba(255, 130, 5, 0.5);
+	width: 90px;
+	height: 90px;
+	margin: -45px 0 0 -45px;
+}
+#ringsv idiv:nth-child(4){
+	animation-duration: 3s;
+	background: rgba(255, 90, 0, 0.5);
+	width: 85px;
+	height: 170px;
+	margin: -42.5px 0 0 -42.5px;
+}
+
+/* animations */
+@keyframes rotateR{
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(360deg);
+	}
+}
+@keyframes rotateL{
+	from{
+		transform: rotate(360deg);
+	}
+	to{
+		transform: rotate(0deg);
+	}
+}
+
+body{
+	background: #fbff419;
+}
+
+
+
+
+
+
+
+/*SUN FIN*/
+
+#onion{
+  height: 300px;
+  margin: 20px;
+  left: 25%;
+}
+#frame {
+  left: 100000px;
+  display: none;
+  opacity: 0;
+}
+.wrapper{
+  text-align: center;
+}
+#balkenbg{
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: white;
+  width: 400px;
+  height:40px;
+  margin-left: auto;
+  margin-right: auto;
+  animation-name: changecolor;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+#balken{
+  text-align: center;
+  border-width: 0;
+  top: 0px;
+  position: relative;
+  height:34px;
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+
+  background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+  animation-name: rainbow;
+  background-size: 1800% 1800%;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+#count{
+  position: absolute;
+  top: -11px;
+  width: 400px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: black;
+  font-size: 50px;
+}
+#username{
+  color: white;
+  font-size: 46px;
+}
+#rain{
+  height: 300px;
+  margin: 20px;
+  position: absolute;
+  top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+.show{
+  display: block;
+}
+.hide{
+  display: none;
+}
+.fadeinout{
+  animation-name: afadeinout;
+  animation-duration: 5000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+.spinit {
+    animation-name: spin;
+    animation-duration: 500ms;
+    animation-iteration-count: 5;
+    animation-timing-function: linear;
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+@keyframes afadeinout {
+    0% {
+         opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+       opacity: 0;
+    }
+}
+@keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes changecolor {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: white;
+  }
+  100% {
+    background-color: white;
+  }
+}
