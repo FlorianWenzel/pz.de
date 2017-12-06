@@ -408,8 +408,13 @@ client.on("chat", function(channel, userstate, message, self){
     coincmds.giveTaler(client, users, channel, userstate, message, io, log);
   }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
     coincmds.giveCoins(client, users, channel, userstate, message, io, log);
+  }else if(message.includes('!bohlen') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+      msg = message.split(' ')
+      if(!(msg.length != 2 || isNaN(msg[1]))){
+        beetIo.emit('bohlen', msg[1])
+      }
+    }else if(message.includes("!gamble")){
   //GAMBLE
-  }else if(message.includes("!gamble")){
     casino.gamble(client, users, channel, userstate, message, io);
   }else if(message.includes('!slots ') || message.includes('!slot ') || message.includes('!s ')){
     casino.slots(client, users, channel, userstate, message, io);
