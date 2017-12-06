@@ -413,7 +413,12 @@ client.on("chat", function(channel, userstate, message, self){
       if(!(msg.length != 2 || isNaN(msg[1]))){
         beetIo.emit('bohlen', msg[1])
       }
-    }else if(message.includes("!gamble")){
+  }else if(message.includes('!reif') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+      msg = message.split(' ')
+      if(!(msg.length != 2 || isNaN(msg[1]))){
+        beetIo.emit('reif', msg[1])
+      }
+  }else if(message.includes("!gamble")){
   //GAMBLE
     casino.gamble(client, users, channel, userstate, message, io);
   }else if(message.includes('!slots ') || message.includes('!slot ') || message.includes('!s ')){
