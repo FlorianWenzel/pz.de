@@ -9,6 +9,8 @@ module.exports = {
         password: pwGen(30, false),
         loggedIntoWebsite: 0,
         coins: 0,
+        onionsWatered: 0,
+        messagesSent: 0,
         notifications: [],
         gambleNet: 0,
         coinsCollected: 0,
@@ -145,6 +147,11 @@ module.exports = {
       return;
     }else{
       users.findOne({name:username}).coins -= parseInt(msg[1])
+      if(users.findOne({name:username}).onionsWatered){
+        users.findOne({name:username}).onionsWatered += parseInt(msg[1])
+      }else{
+        users.findOne({name:username}).onionsWatered = parseInt(msg[1])
+      }
     }
     misc.findOne({id:'zwiebelbeetCounter'}).value += parseInt(msg[1])
     client.say(channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')

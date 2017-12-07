@@ -397,6 +397,11 @@ client.on("chat", function(channel, userstate, message, self){
   msgCounter.count ++;
 
   coincmds.knowUser(users, userstate.username)
+  if(users.findOne({name:userstate.username}).messagesSent){
+    users.findOne({name:userstate.username}).messagesSent ++;
+  }else{
+    users.findOne({name:userstate.username}).messagesSent = 1;
+  }
   //COINS FUNCTIONS
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
     coincmds.viewCoins(client, users, channel, userstate);
