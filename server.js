@@ -388,15 +388,15 @@ function refreshStats(users){
 
 client.on("whisper", function (from, userstate, message, self) {
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
-    coincmds.viewCoins('whisper', client, users, channel, userstate);
+    coincmds.viewCoins('whisper', client, users, userstate.username, userstate);
   }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setCoins('whisper', client, users, channel, userstate, message, io, log);
+    coincmds.setCoins('whisper', client, users, userstate.username, userstate, message, io, log);
   }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setTaler('whisper', client, users, channel, userstate, message, io, log);
+    coincmds.setTaler('whisper', client, users, userstate.username, userstate, message, io, log);
   }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveTaler('whisper', client, users, channel, userstate, message, io, log);
+    coincmds.giveTaler('whisper', client, users, userstate.username, userstate, message, io, log);
   }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveCoins('whisper', client, users, channel, userstate, message, io, log);
+    coincmds.giveCoins('whisper', client, users, userstate.username, userstate, message, io, log);
   }else if (message.includes('!sunshine')) {
     beetIo.emit('sunshine');
   }
