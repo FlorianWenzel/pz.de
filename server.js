@@ -425,5 +425,7 @@ client.on("chat", function(channel, userstate, message, self){
     casino.slots(client, users, channel, userstate, message, io);
   }else if(message.includes('!gießen') || message.includes('!giessen') || message.includes('!giesen')){
     coincmds.giessen(client, beetIo,  userstate.username, message, misc, users, channel)
+  }else if (message.includes('!sunshine')) {
+    beetIo.emit('sunshine');
   }
 })
