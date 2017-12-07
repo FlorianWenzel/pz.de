@@ -387,7 +387,19 @@ function refreshStats(users){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 client.on("whisper", function (from, userstate, message, self) {
-
+  if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
+    coincmds.viewCoins('whisper', client, users, channel, userstate);
+  }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+    coincmds.setCoins('whisper', client, users, channel, userstate, message, io, log);
+  }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+    coincmds.setTaler('whisper', client, users, channel, userstate, message, io, log);
+  }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+    coincmds.giveTaler('whisper', client, users, channel, userstate, message, io, log);
+  }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+    coincmds.giveCoins('whisper', client, users, channel, userstate, message, io, log);
+  }else if (message.includes('!sunshine')) {
+    beetIo.emit('sunshine');
+  }
 })
 
 client.on("chat", function(channel, userstate, message, self){
@@ -404,15 +416,15 @@ client.on("chat", function(channel, userstate, message, self){
   }
   //COINS FUNCTIONS
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
-    coincmds.viewCoins(client, users, channel, userstate);
+    coincmds.viewCoins('twitchChat', client, users, channel, userstate);
   }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setCoins(client, users, channel, userstate, message, io, log);
+    coincmds.setCoins('twitchChat', client, users, channel, userstate, message, io, log);
   }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setTaler(client, users, channel, userstate, message, io, log);
+    coincmds.setTaler('twitchChat', client, users, channel, userstate, message, io, log);
   }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveTaler(client, users, channel, userstate, message, io, log);
+    coincmds.giveTaler('twitchChat', client, users, channel, userstate, message, io, log);
   }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveCoins(client, users, channel, userstate, message, io, log);
+    coincmds.giveCoins('twitchChat', client, users, channel, userstate, message, io, log);
   }else if(message.includes('!bohlen') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
       msg = message.split(' ')
       if(!(msg.length != 2 || isNaN(msg[1]))){

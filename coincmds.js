@@ -59,79 +59,79 @@ module.exports = {
       }
     })
   },
-  viewCoins: function (client, users, channel, userstate, log) {
+  viewCoins: function (type, client, users, channel, userstate, log) {
     if(users.findOne({ name:userstate.username})){
-      client.say(channel, userstate.username + ' besitzt ' + users.findOne({ name:userstate.username}).coins.toString() + ' ZwiebelCoins!')
+      say(client, type, channel, userstate.username + ' besitzt ' + users.findOne({ name:userstate.username}).coins.toString() + ' ZwiebelCoins!')
     }
   },
-  setCoins: function (client, users, channel, userstate, message, io, log) {
+  setCoins: function (type, client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!setcoins" || isNaN(msg[2]) || parseInt(msg[2])<=0){
-      client.say(channel, 'Benutz !setcoins <User> <Wie viel>')
+      say(client, type, channel, 'Benutz !setcoins <User> <Wie viel>')
     }else {
       user = users.findOne({ name:msg[1].toLowerCase()});
       if(user){
         user.coins = parseInt(msg[2]);
-        client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
+        say(client, type, channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelCoins.')
         log.addLog(logs, userstate.username, msg[1], 'ZwiebelCoins', parseInt(msg[2]), 'setCoins')
         io.to(user.name).emit('updateCoins', user.coins)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelCoins auf ' + msg[2] + ' gesetzt!</div>');
       }else{
-          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          say(client, type, channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;
       }
     }
   },
-  setTaler: function (client, users, channel, userstate, message, io, log) {
+  setTaler: function (type, client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!settaler" || isNaN(msg[2]) || parseInt(msg[2])<=0){
-      client.say(channel, 'Benutz !settaler <User> <Wie viel>')
+      say(client, type, channel, 'Benutz !settaler <User> <Wie viel>')
     }else {
       user = users.findOne({ name:msg[1].toLowerCase()});
       if(user){
         user.taler = parseInt(msg[2]);
-        client.say(channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelTaler.')
+        say(client, type, channel, msg[1] + ' hat '+msg[2]+' nun ZwiebelTaler.')
         log.addLog(logs, userstate.username, msg[1], 'ZwiebelTaler', parseInt(msg[2]), 'setTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'info', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat deine ZwiebelTaler auf ' + msg[2] + ' gesetzt!</div>');
       }else{
-          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          say(client, type, channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;
       }
     }
   },
-  giveTaler: function (client, users, channel, userstate, message, io, log) {
+  giveTaler: function (type, client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!givetaler" || isNaN(msg[2])){
-      client.say(channel, 'Benutz !givetaler <User> <Wie viel>')
+      say(client, type, channel, 'Benutz !givetaler <User> <Wie viel>')
     }else {
       user = users.findOne({ name:msg[1].toLowerCase()});
       if(user){
         user.taler += parseInt(msg[2]);
-        client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelTaler erhalten!')
+        say(client, type, channel, msg[1] + ' hat '+msg[2]+' ZwiebelTaler erhalten!')
         log.addLog(logs, userstate.username, msg[1], 'ZwiebelTaler', parseInt(msg[2]), 'giveTaler')
         io.to(user.name).emit('updateTaler', user.taler)
         io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelTaler gutgeschrieben!</div>');
       }else{
-          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          say(client, type, channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;
       }
     }
   },
-  giveCoins: function (client, users, channel, userstate, message, io, log) {
+  giveCoins: function (type, client, users, channel, userstate, message, io, log) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!givecoins" || isNaN(msg[2])){
-      client.say(channel, 'Benutz !givecoins <User> <Wie viel>')
+      say(client, type, channel, 'Benutz !givecoins <User> <Wie viel>')
     }else {
       user = users.findOne({ name:msg[1].toLowerCase()});
       if(user){
         user.coins += parseInt(msg[2]);
-        client.say(channel, msg[1] + ' hat '+msg[2]+' ZwiebelCoins erhalten!')
+        say(client, type, channel, msg[1] + ' hat '+msg[2]+' ZwiebelCoins erhalten!')
         log.addLog(logs, userstate.username, msg[1], 'ZwiebelCoins', parseInt(msg[2]), 'giveCoins')
         io.to(user.name).emit('updateCoins', user.coins)
         io.to(user.name).emit('showNotification', 'success', '<div class="field is-grouped is-grouped-multiline">' + getUserTag('warning', 'mod', 'dark', userstate.username) + 'hat dir ' + msg[2] + ' ZwiebelCoins gutgeschrieben!</div>');
       }else{
-          client.say(channel, 'Ich kenne keinen ' + msg[1]+ '.')
+          say(client, type, channel, 'Ich kenne keinen ' + msg[1]+ '.')
           return;
       }
     }
@@ -139,11 +139,11 @@ module.exports = {
   giessen: function (client, io, username, message, misc, users, channel) {
     msg = message.split(" ");
     if(isNaN(msg[1]) || msg.length != 2 || parseInt(msg[1]) < 1){
-      client.say(channel, 'Syntaxfehler :(')
+      say('twitchChat', channel, 'Syntaxfehler :(')
       return;
     }
     if(users.findOne({name:username}).coins < parseInt(msg[1])){
-      client.say(channel, 'Du hast zu wenig Zwiebelcoins.')
+      say('twitchChat', channel, 'Du hast zu wenig Zwiebelcoins.')
       return;
     }else{
       users.findOne({name:username}).coins -= parseInt(msg[1])
@@ -154,10 +154,21 @@ module.exports = {
       }
     }
     misc.findOne({id:'zwiebelbeetCounter'}).value += parseInt(msg[1])
-    client.say(channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')
+    say('twitchChat', channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')
     io.sockets.emit('increaseOnions', (misc.findOne({id:'zwiebelbeetCounter'}).value % 10000), parseInt(msg[1]), username);
   }
   };
+
+  function say(client, type, channel, msg){
+    switch (type) {
+      case 'whisper':
+        client.whisper(channel, msg);
+        break;
+      case 'twitchChat':
+        client.say(channel, msg);
+        break;
+    }
+  }
 
   function getUserTag(typePrefix, prefix, typeSuffix, suffix) {
     return '<div style="padding-right: 4px;" class="control"><div class="tags has-addons"><span class="tag is-'+typePrefix+'">'+prefix+'</span><span class="tag is-'+typeSuffix+'">'+suffix+'</span></div></div>'
