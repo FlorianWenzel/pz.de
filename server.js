@@ -115,7 +115,7 @@ app.get('*', function(req, res){
   res.sendFile(__dirname + '/client/html/index.html');
 });
 var io = socketio(server);
-server.listen(3000);
+server.listen(3000, () => console.log('Zwiebelpage listening on port 3000!'));
 io.on('connection', function (socket) {
   socket.on('autoLogin', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
