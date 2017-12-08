@@ -139,11 +139,11 @@ module.exports = {
   giessen: function (client, io, username, message, misc, users, channel) {
     msg = message.split(" ");
     if(isNaN(msg[1]) || msg.length != 2 || parseInt(msg[1]) < 1){
-      say('twitchChat', channel, 'Syntaxfehler :(')
+      say(client, 'twitchChat', channel, 'Syntaxfehler :(')
       return;
     }
     if(users.findOne({name:username}).coins < parseInt(msg[1])){
-      say('twitchChat', channel, 'Du hast zu wenig Zwiebelcoins.')
+      say(client, 'twitchChat', channel, 'Du hast zu wenig Zwiebelcoins.')
       return;
     }else{
       users.findOne({name:username}).coins -= parseInt(msg[1])
@@ -154,7 +154,7 @@ module.exports = {
       }
     }
     misc.findOne({id:'zwiebelbeetCounter'}).value += parseInt(msg[1])
-    say('twitchChat', channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')
+    say(client, 'twitchChat', channel, username + ' hat ' + msg[1] + " Zwiebeln gegossen (jetzt:" +misc.findOne({id:'zwiebelbeetCounter'}).value % 10000  + '/10000)')
     io.sockets.emit('increaseOnions', (misc.findOne({id:'zwiebelbeetCounter'}).value % 10000), parseInt(msg[1]), username);
   }
   };
