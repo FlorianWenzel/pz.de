@@ -163,6 +163,9 @@ io.on('connection', function (socket) {
     })
     db.saveDatabase();
   })
+  socket.on('getGiessenStats', function(){
+    socket.emit('getGiessenStats', misc.findOne({id:'totalWateredOnions'}).count, misc.findOne({id:'topGiesser'}).value)
+  })
   socket.on('convert',function(usr, pw){
     user = users.findOne({name:usr, password:pw})
     if(!user){return;}
@@ -379,6 +382,49 @@ function refreshStats(users){
     c += users[i].coinsCollected;
   }
   seenMinutes.count = c;
+
+  totalWateredOnions = misc.findOne({id:'totalWateredOnions'});
+  if(!totalWateredOnions){
+    misc.insert({
+      id:'totalWateredOnions',
+      count: 0
+    })
+    totalWateredOnions = misc.findOne({id:'totalWateredOnions'})
+  }
+  c = 0;
+  for(i=0;i<users.length;i++){
+    if(users[i].onionsWatered){
+      c += users[i].onionsWatered;
+    }
+  }
+  totalWateredOnions.count = c;
+
+  topGiesser = misc.findOne({id:'topGiesser'});
+  if(!topGiesser){
+    misc.insert({
+      id:'topGiesser',
+      value: 0
+    })
+    topGiesser = misc.findOne({id:'topGiesser'})
+  }
+  r = [];
+  r = users.sort(function(a, b){
+    if(!a.onionsWatered && !b.onionsWatered){return 0;}
+    if(!a.onionsWatered){return 1;}
+    if(!b.onionsWatered){return -1;}
+    if(a.onionsWatered == b.onionsWatered){return 0;}
+    return a.onionsWatered < b.onionsWatered;
+  })
+  r = r.slice(0, 10)
+  res = [];
+  for(i=0;i<r.length;i++){
+    if(!r[i].onionsWatered){continue;}
+    res[i] = {
+      name: r[i].name,
+      count: r[i].onionsWatered
+    }
+  }
+  topGiesser.value = res;
 }
 
 

@@ -48,22 +48,42 @@
             </a>
           </li>
           <li>
-             <a class="dark" onclick="toggleMobileMenu(); loadPage('stream')">
+             <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('stream')">
+               <span class="icon is-large">
+                 <i class="fa fa-tv"></i>
+               </span>
                 Stream
              </a>
           </li>
           <li>
-            <a class="dark" onclick="toggleMobileMenu(); loadPage('rakeback')">
+            <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('rakeback')">
+              <span class="icon is-large">
+                <i class="fa fa-heart"></i>
+              </span>
               ZwiebelBack
             </a>
           </li>
           <li>
-            <a class="dark" onclick="toggleMobileMenu(); loadPage('challenge')">
+            <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('challenge')">
+              <span class="icon is-large">
+                <i class="fa fa-line-chart"></i>
+              </span>
               Challenge
+            </a>
+          </li>
+          <li>
+            <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('giessen')">
+              <span class="icon is-large">
+                <i class="fa fa-tint"></i>
+              </span>
+              Gießen
             </a>
           </li>
           <li class="log-button log-button-m hidden">
             <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('mylog');">
+                <figure class="icon" >
+                  <img title="ZwiebelCoin" src="./img/black.svg" style="color:white;" />
+                </figure>
               <span class="logs-text">Verlauf</span>
             </a>
           </li>
@@ -121,6 +141,12 @@
               <i class="fa fa-line-chart"></i>
             </span>
             Challenge
+          </a>
+          <a class="navbar-item is-hidden-touch" onclick="loadPage('giessen')">
+            <span class="icon">
+              <i class="fa fa-tint"></i>
+            </span>
+            Gießen
           </a>
           <div class="navbar is-hidden-touch is-dark" style="position:absolute; right: 0px;">
             <div class="currency-display hidden navbar-item ">

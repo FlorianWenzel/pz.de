@@ -1,0 +1,44 @@
+<section class="hero is-white">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        !Gießen Statistiken
+      </h1>
+      <h2 class="subtitle">
+        Die größten Gießer der ZwiebelNation
+      </h2>
+    </div>
+  </div>
+</section>
+<div class="ct-chart">
+</div>
+<script>
+socket.emit('getGiessenStats');
+socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
+  console.log(totalWateredOnions);
+  console.log(topGiesser)
+  labels = [];
+  series = [];
+  for(i=0;i<topGiesser.length;i++){
+    console.log('a')
+    labels.push(topGiesser[i].name)
+    series.push(topGiesser[i].count)
+  }
+  console.log(labels)
+  new Chartist.Bar('.ct-chart', {
+    labels: labels,
+    series: [
+      series
+    ]
+  }, {
+    seriesBarDistance: 0,
+    reverseData: true,
+    horizontalBars: true,
+    axisY: {
+      offset: 70
+    }
+  });
+})
+
+
+</script>
