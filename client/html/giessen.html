@@ -1,4 +1,4 @@
-<section class="hero is-white">
+<section class="hero is-dark is-medium">
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
@@ -10,21 +10,27 @@
     </div>
   </div>
 </section>
-<div class="ct-chart">
+<div class="ct-chart dark">
 </div>
+<style>
+.ct-chart-bar, .ct-label, line.ct-grid{
+  fill: white!important;
+  color: white!important;
+  stroke: grey!important;
+}
+.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+    stroke: #0CC162;
+}
+</style>
 <script>
 socket.emit('getGiessenStats');
 socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
-  console.log(totalWateredOnions);
-  console.log(topGiesser)
   labels = [];
   series = [];
   for(i=0;i<topGiesser.length;i++){
-    console.log('a')
     labels.push(topGiesser[i].name)
     series.push(topGiesser[i].count)
   }
-  console.log(labels)
   new Chartist.Bar('.ct-chart', {
     labels: labels,
     series: [
