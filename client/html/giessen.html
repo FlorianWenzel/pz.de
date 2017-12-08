@@ -40,6 +40,9 @@ socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
     seriesBarDistance: 0,
     reverseData: true,
     horizontalBars: true,
+    axisX: {
+     onlyInteger: true
+    },
     axisY: {
       offset: 70
     }
