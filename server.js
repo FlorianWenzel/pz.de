@@ -166,6 +166,9 @@ io.on('connection', function (socket) {
   socket.on('getGiessenStats', function(){
     socket.emit('getGiessenStats', misc.findOne({id:'totalWateredOnions'}).count, misc.findOne({id:'topGiesser'}).value)
   })
+  socket.on('getChatterStats', function(){
+    socket.emit('getChatterStats', misc.findOne({id:'msgCounter'}).count, misc.findOne({id:'topChatter'}).value)
+  })
   socket.on('convert',function(usr, pw){
     user = users.findOne({name:usr, password:pw})
     if(!user){return;}
@@ -410,8 +413,8 @@ function refreshStats(users){
   r = users.where(function(obj){return obj.onionsWatered > 0;});
   r.sort(function(a, b){
     if(a.onionsWatered == b.onionsWatered){return 0;}
-    if(a.onionsWatered > b.onionsWatered){return 1;}
-    if(a.onionsWatered < b.onionsWatered){return -1;}
+    if(a.onionsWatered > b.onionsWatered){return -1;}
+    if(a.onionsWatered < b.onionsWatered){return 1;}
   })
   r = r.slice(0, 25)
   res = [];
@@ -423,6 +426,31 @@ function refreshStats(users){
     }
   }
   topGiesser.value = res;
+
+  topChatter = misc.findOne({id:'topChatter'});
+  if(!topChatter){
+    misc.insert({
+      id:'topChatter',
+      value: 0
+    })
+    topChatter = misc.findOne({id:'topChatter'})
+  }
+  r = users.where(function(obj){return obj.messagesSent > 0;});
+  r.sort(function(a, b){
+    if(a.messagesSent == b.messagesSent){return 0;}
+    if(a.messagesSent > b.messagesSent){return -1;}
+    if(a.messagesSent < b.messagesSent){return 1;}
+  })
+  r = r.slice(0, 25)
+  res = [];
+  for(i=0;i<r.length;i++){
+    if(!r[i].messagesSent){continue;}
+    res[i] = {
+      name: r[i].name,
+      count: r[i].messagesSent
+    }
+  }
+  topChatter.value = res;
 }
 
 
