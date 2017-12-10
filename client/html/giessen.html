@@ -2,10 +2,10 @@
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-        !Gießen Statistiken
+        Die größten Gießer der #ZwiebelNation!
       </h1>
       <h2 class="subtitle">
-        Die größten Gießer der ZwiebelNation
+        Insgesamt gegossene Zwiebeln: <span id="totalWateredOnions"></span>
       </h2>
     </div>
   </div>
@@ -13,18 +13,22 @@
 <div class="ct-chart dark">
 </div>
 <style>
-.ct-chart-bar, .ct-label, line.ct-grid{
+.ct-chart-bar, .ct-label{
   fill: white!important;
   color: white!important;
-  stroke: grey!important;
+}
+line.ct-grid{
+  stroke: white!important;
+  opacity: .5;
 }
 .ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
-    stroke: #0CC162;
+    stroke: #209cee;
 }
 </style>
 <script>
 socket.emit('getGiessenStats');
 socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
+  $('#totalWateredOnions').html(totalWateredOnions)
   labels = [];
   series = [];
   for(i=0;i<topGiesser.length;i++){
@@ -38,16 +42,18 @@ socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
     ]
   }, {
     seriesBarDistance: 0,
-    reverseData: true,
     horizontalBars: true,
     axisX: {
-     onlyInteger: true
+     onlyInteger: true,
+     offset: 15
     },
     axisY: {
-      offset: 70
+      offset: 150
+    },
+    chartPadding: {
+      right: 50
     }
   });
 })
-
 
 </script>

@@ -376,10 +376,10 @@ function refreshStats(users){
     })
     seenMinutes = misc.findOne({id:'seenMinutes'})
   }
-  users = users.where(function(){return true;});
+  userList = users.where(function(){return true;});
   c = 0;
   for(i=0;i<users.length;i++){
-    c += users[i].coinsCollected;
+    c += userList[i].coinsCollected;
   }
   seenMinutes.count = c;
 
@@ -392,9 +392,9 @@ function refreshStats(users){
     totalWateredOnions = misc.findOne({id:'totalWateredOnions'})
   }
   c = 0;
-  for(i=0;i<users.length;i++){
-    if(users[i].onionsWatered){
-      c += users[i].onionsWatered;
+  for(i=0;i<userList.length;i++){
+    if(userList[i].onionsWatered){
+      c += userList[i].onionsWatered;
     }
   }
   totalWateredOnions.count = c;
@@ -407,15 +407,13 @@ function refreshStats(users){
     })
     topGiesser = misc.findOne({id:'topGiesser'})
   }
-  r = [];
-  r = users.sort(function(a, b){
-    if(!a.onionsWatered && !b.onionsWatered){return 0;}
-    if(!a.onionsWatered){return 1;}
-    if(!b.onionsWatered){return -1;}
+  r = users.where(function(obj){return obj.onionsWatered > 0;});
+  r.sort(function(a, b){
     if(a.onionsWatered == b.onionsWatered){return 0;}
-    return a.onionsWatered < b.onionsWatered;
+    if(a.onionsWatered > b.onionsWatered){return 1;}
+    if(a.onionsWatered < b.onionsWatered){return -1;}
   })
-  r = r.slice(0, 10)
+  r = r.slice(0, 25)
   res = [];
   for(i=0;i<r.length;i++){
     if(!r[i].onionsWatered){continue;}
