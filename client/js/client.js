@@ -399,7 +399,7 @@ socket.on('getChallengeStats', function(data){
   labels = [];
   series = [];
   for(i=0;i<data.length;i++){
-    labels.push(data[i].label)
+    labels.push(i+1)
     series.push(data[i].net)
   }
   new Chartist.Line('#challenge', {
@@ -408,9 +408,13 @@ socket.on('getChallengeStats', function(data){
       series
     ]
   }, {
+    showPoint: true,
+    referenceValue: 100,
+    height: '500px',
     showArea: true,
     axisY: {
-      onlyInteger: true
+      onlyInteger: true,
+      low: 0
     },
     plugins: [
       Chartist.plugins.ctThreshold({
