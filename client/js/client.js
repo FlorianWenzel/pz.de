@@ -394,6 +394,94 @@ socket.on('loginUnsuccessful', function(){
   socket.emit('auth', code)
 })
 
+
+socket.on('getChallengeStats', function(data){
+  labels = [];
+  series = [];
+  for(i=0;i<data.length;i++){
+    labels.push(data[i].label)
+    series.push(data[i].net)
+  }
+  new Chartist.Line('#challenge', {
+    labels: labels,
+    series: [
+      series
+    ]
+  }, {
+    showArea: true,
+    axisY: {
+      onlyInteger: true
+    },
+    plugins: [
+      Chartist.plugins.ctThreshold({
+        threshold: 100
+      })
+    ]
+  });
+})
+
+socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
+  $('#totalWateredOnions').html(totalWateredOnions)
+  labels = [];
+  series = [];
+  for(i=0;i<topGiesser.length;i++){
+    labels.push(topGiesser[i].name)
+    series.push(topGiesser[i].count)
+  }
+  new Chartist.Bar('#giesser', {
+    labels: labels,
+    series: [
+      series
+    ]
+  }, {
+    seriesBarDistance: 0,
+    reverseData: true,
+    horizontalBars: true,
+    axisX: {
+     onlyInteger: true,
+     offset: 15
+    },
+    axisY: {
+      offset: 150
+    },
+    height: topGiesser.length*30+'px',
+    chartPadding: {
+      right: 50
+    }
+  });
+})
+
+socket.on('getChatterStats', function(totalMessagesSent, topChatter){
+  $('#totalMessagesSent').html(totalMessagesSent)
+  labels = [];
+  series = [];
+  for(i=0;i<topChatter.length;i++){
+    labels.push(topChatter[i].name)
+    series.push(topChatter[i].count)
+  }
+  new Chartist.Bar('#chatter', {
+    labels: labels,
+    series: [
+      series
+    ]
+  }, {
+    seriesBarDistance: 0,
+    reverseData: true,
+    horizontalBars: true,
+    axisX: {
+     onlyInteger: true,
+     offset: 15
+    },
+    axisY: {
+      offset: 150
+    },
+    height: topChatter.length*30+'px',
+    chartPadding: {
+      right: 50
+    }
+  });
+})
+
 function showLogout(){
   $('.login-button-text').html('Abmelden')
   $(".login-button-link").addClass("rot");

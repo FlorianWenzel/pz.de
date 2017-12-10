@@ -82,6 +82,14 @@ function loadHandler() {
       })
       msgCounter = misc.findOne({id:'msgCounter'});
     }
+    sessions = misc.findOne({id:'sessions'});
+    if(!sessions){
+      misc.insert({
+        id:'sessions',
+        data: []
+      })
+      sessions = misc.findOne({id:'sessions'});
+    }
 }
 
 var beet = express();
@@ -168,6 +176,9 @@ io.on('connection', function (socket) {
   })
   socket.on('getChatterStats', function(){
     socket.emit('getChatterStats', misc.findOne({id:'msgCounter'}).count, misc.findOne({id:'topChatter'}).value)
+  })
+  socket.on('getChallengeStats', function(){
+    socket.emit('getChallengeStats', misc.findOne({id:'sessions'}).data)
   })
   socket.on('convert',function(usr, pw){
     user = users.findOne({name:usr, password:pw})
@@ -461,16 +472,33 @@ function refreshStats(users){
 client.on("whisper", function (from, userstate, message, self) {
   if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
     coincmds.viewCoins('whisper', client, users, userstate.username, userstate);
-  }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+  }else if(message.includes('!setcoins') && admins.includes(userstate.username)){
     coincmds.setCoins('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+  }else if(message.includes('!settaler') && admins.includes(userstate.username) ){
     coincmds.setTaler('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+  }else if(message.includes('!givetaler') && admins.includes(userstate.username)){
     coincmds.giveTaler('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
+  }else if(message.includes('!givecoins') && admins.includes(userstate.username)){
     coincmds.giveCoins('whisper', client, users, userstate.username, userstate, message, io, log);
   }else if (message.includes('!sunshine')) {
     beetIo.emit('sunshine');
+  }else if (message.includes('!addSession') && (admins.includes(userstate.username))){
+    msg = message.split(' ');
+    if(msg.length != 3){
+      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 63');
+      return
+    }
+    msg[2] = msg[2].replace(',', '.')
+    if(isNaN(msg[2])){
+      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 63');
+      return;
+    }
+    sessions = misc.findOne({id:'sessions'});
+    sessions.data.push({label:msg[1], net:msg[2]});
+    client.whisper(from, 'Session hinzugefügt.')
+  }else if(message == '!delSession' && admins.includes(userstate.username)){
+    if(sessions.data.length < 1){return;}
+    sessions.data.pop()
   }
 })
 

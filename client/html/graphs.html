@@ -1,18 +1,32 @@
-<section class="hero is-dark is-medium">
+<section class="hero is-dark is-small">
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-        Die größten Gießer der #ZwiebelNation!
+        Cashgame Challenge
       </h1>
       <h2 class="subtitle">
+        <a style="color: #209cee" target="_blank" href="https://i.imgur.com/zkkG3ki.jpg">Bankroll Challenge</a> (in $)
+      </h2>
+    </div>
+  </div>
+</section>
+<div id="challenge" class="dark">
+</div>
+<section class="hero lila  is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title lila">
+        Die größten Gießer der #ZwiebelNation!
+      </h1>
+      <h2 class="subtitle lila">
         Insgesamt gegossene Zwiebeln: <span id="totalWateredOnions"></span>
       </h2>
     </div>
   </div>
 </section>
-<div id="giesser" class="dark">
+<div id="giesser" class="lila">
 </div>
-<section class="hero is-primary is-medium">
+<section class="hero is-dark  is-small">
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
@@ -24,9 +38,26 @@
     </div>
   </div>
 </section>
-<div id="chatter" class="prime">
+<div id="chatter" class="dark">
 </div>
 <style>
+.ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
+  stroke: green;
+}
+
+.ct-line.ct-threshold-below, .ct-point.ct-threshold-below, .ct-bar.ct-threshold-below {
+  stroke: red;
+}
+
+.ct-area.ct-threshold-above {
+  fill: green;
+}
+
+.ct-area.ct-threshold-below {
+  fill: red;
+}
+.ct-series-a .ct-area, .ct-series-a .ct-slice-donut-solid, .ct-series-a .ct-slice-pie{
+}
 .ct-chart-bar, .ct-label{
   fill: white!important;
   color: white!important;
@@ -35,72 +66,12 @@ line.ct-grid{
   stroke: white!important;
   opacity: .5;
 }
-.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+.ct-series-a .ct-bar{
     stroke: #209cee;
 }
 </style>
 <script>
 socket.emit('getGiessenStats');
 socket.emit('getChatterStats');
-socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
-  $('#totalWateredOnions').html(totalWateredOnions)
-  labels = [];
-  series = [];
-  for(i=0;i<topGiesser.length;i++){
-    labels.push(topGiesser[i].name)
-    series.push(topGiesser[i].count)
-  }
-  new Chartist.Bar('#giesser', {
-    labels: labels,
-    series: [
-      series
-    ]
-  }, {
-    seriesBarDistance: 0,
-    reverseData: true,
-    horizontalBars: true,
-    axisX: {
-     onlyInteger: true,
-     offset: 15
-    },
-    axisY: {
-      offset: 150
-    },
-    height: topGiesser.length*20+'px',
-    chartPadding: {
-      right: 50
-    }
-  });
-})
-
-socket.on('getChatterStats', function(totalMessagesSent, topChatter){
-  $('#totalMessagesSent').html(totalMessagesSent)
-  labels = [];
-  series = [];
-  for(i=0;i<topChatter.length;i++){
-    labels.push(topChatter[i].name)
-    series.push(topChatter[i].count)
-  }
-  new Chartist.Bar('#chatter', {
-    labels: labels,
-    series: [
-      series
-    ]
-  }, {
-    seriesBarDistance: 0,
-    reverseData: true,
-    horizontalBars: true,
-    axisX: {
-     onlyInteger: true,
-     offset: 15
-    },
-    axisY: {
-      offset: 150
-    },
-    height: topChatter.length*20+'px',
-    chartPadding: {
-      right: 50
-    }
-  });
-})
+socket.emit('getChallengeStats');
 </script>
