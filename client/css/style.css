@@ -3,6 +3,12 @@ html {
   overflow-x: hidden;
   background-color: white;
 }
+#element::-webkit-scrollbar {
+    display: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}
 .embed-container {
   position: relative;
   padding-bottom: 47.5%;
