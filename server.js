@@ -485,20 +485,26 @@ client.on("whisper", function (from, userstate, message, self) {
   }else if (message.includes('!addSession') && (admins.includes(userstate.username))){
     msg = message.split(' ');
     if(msg.length != 3){
-      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 63');
+      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 -12');
       return
     }
     msg[2] = msg[2].replace(',', '.')
     if(isNaN(msg[2])){
-      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 63');
+      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 -12');
       return;
     }
     sessions = misc.findOne({id:'sessions'});
-    sessions.data.push({label:msg[1], net:msg[2]});
+    newNet = 100;
+    if(sessions.data.length > 0){
+      newNet = sessions.data[sessions.data.length-1].net;
+    }
+    console.log(newNet)
+    sessions.data.push({label:msg[1], net:(parseInt(newNet) + parseInt(msg[2]))});
     client.whisper(from, 'Session hinzugefügt.')
   }else if(message == '!delSession' && admins.includes(userstate.username)){
     if(sessions.data.length < 1){return;}
     sessions.data.pop()
+    client.whisper(from, 'Letzte Session gelöscht.');
   }
 })
 

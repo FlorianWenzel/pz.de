@@ -399,8 +399,12 @@ socket.on('getChallengeStats', function(data){
   labels = [];
   series = [];
   for(i=0;i<data.length;i++){
-    labels.push(i+1)
-    series.push(data[i].net)
+    if(i==0){
+      labels.push('Bankroll')
+    }else{
+      labels.push(i)
+    }
+    series.push(data[i].net - 100)
   }
   new Chartist.Line('#challenge', {
     labels: labels,
@@ -414,11 +418,14 @@ socket.on('getChallengeStats', function(data){
     showArea: true,
     axisY: {
       onlyInteger: true,
-      low: 0
+      labelInterpolationFnc: function(value) {
+        return value + 100 + '$'
+      },
+      low: -100
     },
     plugins: [
       Chartist.plugins.ctThreshold({
-        threshold: 100
+        threshold: 0
       })
     ]
   });
