@@ -1,7 +1,10 @@
-html {
+html, body{
   overflow: auto;
   overflow-x: hidden;
-  background-color: white;
+  background-color: #363636;
+}
+html,body{
+  min-height: 100vh;
 }
 #element::-webkit-scrollbar {
     display: none;
@@ -98,6 +101,7 @@ html {
 }
 #footer {
   z-index: 100;
+  bottom: 0px!important;
   left: 0px;
   width: 100vw;
   border-top: solid 1px #00d1b2;
