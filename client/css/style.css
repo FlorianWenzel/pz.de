@@ -1,7 +1,8 @@
-html {
+html, body {
   overflow: auto;
   overflow-x: hidden;
-  background-color: white;
+  background-color: #363636;
+  min-height: 100vh;
 }
 #element::-webkit-scrollbar {
     display: none;

@@ -498,7 +498,6 @@ client.on("whisper", function (from, userstate, message, self) {
     if(sessions.data.length > 0){
       newNet = sessions.data[sessions.data.length-1].net;
     }
-    console.log(newNet)
     sessions.data.push({label:msg[1], net:(parseInt(newNet) + parseInt(msg[2]))});
     client.whisper(from, 'Session hinzugefügt.')
   }else if(message == '!delSession' && admins.includes(userstate.username)){

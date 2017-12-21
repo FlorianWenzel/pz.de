@@ -3,9 +3,15 @@
 
 <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
 <script type="text/javascript">
+$('#content').css('margin-bottom', '0px')
   new Twitch.Embed("twitch-embed", {
     width: $(window).width(),
     height: $(window).height()-em(3.25),
     channel: "pokerzwiebel"
   });
 </script>
+<style>
+#footer{
+  display: none;
+}
+</style>
