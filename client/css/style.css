@@ -1,7 +1,9 @@
+<<<<<<< HEAD
 html, body {
   overflow: auto;
   overflow-x: hidden;
   background-color: #363636;
+
   min-height: 100vh;
 }
 #element::-webkit-scrollbar {
