@@ -24,11 +24,20 @@ function onload(){
   }
 }
 
+$( window ).resize(function() {
+  fitContentToNavbar();
+});
+
 $(document).ready (function() {
   $(".toggle").click(function() {
     toggleMobileMenu();
   });
+  fitContentToNavbar();
 });
+
+function fitContentToNavbar(){
+  $('#content').css('padding-top', $('#header').height())
+}
 
 function toggleMobileMenu(){
   $( ".menu" ).stop().slideToggle( "slow" );
@@ -324,19 +333,19 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       $('#logs').append(
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].time +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].receiver_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].amount+' '+logs[i].currency+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].type+'' +
             '</div>' +
           '</div>' +
@@ -345,16 +354,16 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       $('#logs').append(
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].time.toString()+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].amount+' '+logs[i].currency+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid white 1px;">' +
+            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
               ''+logs[i].type+'' +
             '</div>' +
           '</div>' +
