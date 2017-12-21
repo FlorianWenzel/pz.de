@@ -99,6 +99,7 @@ html, body {
 }
 #footer {
   z-index: 100;
+  bottom: 0px!important;
   left: 0px;
   width: 100vw;
   border-top: solid 1px #00d1b2;
