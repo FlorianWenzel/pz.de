@@ -306,7 +306,7 @@ streamlabs.on('event', (eventData) => {
     taler = Math.floor(10 * eventData.message[0].amount);
     user.taler += taler;
     if(taler > 0){
-      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, eventData.message[0].amount.toString() + ' ' + eventData.message[0].currency + ' Donation')
+      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, (Math.floor(eventData.message[0].amount*100)/100).toString().replace('.', ',') + ' ' + eventData.message[0].currency + ' Donation')
       io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Donation ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
       io.to(user.name).emit('updateTaler', user.taler);
     }
