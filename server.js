@@ -334,6 +334,9 @@ streamlabs.on('event', (eventData) => {
         io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Follow ❤️!');
         break;
       case 'subscription':
+        if(eventData.message[0].repeat){
+          return;
+        }
         user = users.findOne({name: eventData.message[0].name.toLowerCase()});
         if(!user){
           return;
