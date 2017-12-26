@@ -301,6 +301,8 @@ streamlabs.on('event', (eventData) => {
   if (!eventData.for && eventData.type === 'donation') {
     user = users.findOne({name: eventData.message[0].from.toLowerCase()});
     if(!user){
+      taler = Math.floor(10 * eventData.message[0].amount);
+      log.addLog(logs, eventData.message[0].from.toLowerCase(), '404: ' + eventData.message[0].from.toLowerCase(), 'ZwiebelTaler', taler, (Math.floor(eventData.message[0].amount*100)/100).toString().replace('.', ',') + ' ' + eventData.message[0].currency + ' Donation')
       return;
     }
     taler = Math.floor(10 * eventData.message[0].amount);
