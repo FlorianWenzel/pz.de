@@ -8,11 +8,11 @@ var audioCoins = new Audio('sounds/coins.mp3');
 var contactPerMail = false;
 var contactPerTwitch = false;
 
-loadPage('home');
 socket = io.connect()
-onload()
 
+onload()
 function onload(){
+  loadPage('home');
   //AUTO-LOGIN
   if(pwCookie && usrCookie){
     socket.emit('autoLogin', usrCookie, pwCookie);
@@ -272,25 +272,23 @@ function increaseTo(e, num){
 socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   if(alllogs){
     $('#logs').html(
-      '<li id=\'log-head\'>' +
-        '<div class="columns">' +
-          '<div class="column prime">' +
-            '<strong>Datum</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Auslöser</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Empfänger</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Änderung</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Art</strong>' +
-          '</div>' +
+      '<div class="columns">' +
+        '<div class="column dark">' +
+          '<strong>Datum</strong>' +
         '</div>' +
-      '</li>'
+        '<div class="column dark">' +
+          '<strong>Auslöser</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Empfänger</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Änderung</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Art</strong>' +
+        '</div>' +
+      '</div>'
     )
   }else{
     $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
@@ -300,52 +298,50 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       $('#gambleNetHead').removeClass('is-success')
     }
     $('#logs').html(
-      '<li id=\'log-head\'>' +
-        '<div class="columns">' +
-          '<div class="column prime">' +
-            '<strong>Datum</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Auslöser</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Änderung</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Art</strong>' +
-          '</div>' +
+      '<div class="columns">' +
+        '<div class="column dark">' +
+          '<strong>Datum</strong>' +
         '</div>' +
-      '</li>'
+        '<div class="column dark">' +
+          '<strong>Änderung</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Art</strong>' +
+        '</div>' +
+      '</div>'
     )
   }
   for(i=0;i<logs.length;i++){
-    color = 'blue';
+    amountColor = 'blue-text';
+    amountPrefix = '';
     if(logs[i].type == 'setCoins' || logs[i].type == 'setTaler'){
 
     }else{
       if(logs[i].amount > 0){
-        color = 'green'
+        amountColor = 'green-text'
+        amountPrefix = '+';
       }else if(logs[i].amount < 0){
-        color = 'rot'
+        amountColor = 'red-text'
       }
     }
+    if(i%2==0){color = 'light-grey'}else{color = 'dark'}
     if(alllogs){
       $('#logs').append(
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].time +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].receiver_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].amount+' '+logs[i].currency+'' +
+            '<div class="column '+color+'">' +
+              '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].type+'' +
             '</div>' +
           '</div>' +
@@ -353,20 +349,17 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
     }else{
       $('#logs').append(
         '<li id=\'log-head\'>' +
-          '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].time.toString()+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].trigger_username+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].amount+' '+logs[i].currency+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].type+'' +
-            '</div>' +
+        '<div class="columns">' +
+          '<div class="column '+color+'">' +
+            ''+logs[i].time +
           '</div>' +
+          '<div class="column '+color+'">' +
+            '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
+          '</div>' +
+          '<div class="column '+color+'">' +
+            ''+logs[i].type+'' +
+          '</div>' +
+        '</div>' +
       '</li>')
     }
   }
