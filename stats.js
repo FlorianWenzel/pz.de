@@ -25,6 +25,37 @@ module.exports = {
     }
     seenMinutes.count = c;
 
+    gambleStats = misc.findOne({id:'gambleStats'});
+    userList = users.where(function(obj){if(obj.name != 'pokerzwiebel'){return true;}})
+
+    if(!gambleStats){
+      misc.insert({
+        id:'gambleStats',
+        global: 0,
+        most: []
+      })
+      gambleStats = misc.findOne({id:'gambleStats'})
+    }
+    c = 0;
+    for(i=0;i<userList.length;i++){
+      if(userList[i].gambleNet){
+        c += userList[i].gambleNet;
+      }
+    }
+    gambleStats.global = c;
+    usrs = users.where(function(obj){if(obj.name != 'pokerzwiebel'){return true;}})
+    usrs = usrs.sort(function(a, b){
+      if(Math.abs(a.gambleNet) == Math.abs(b.gambleNet)){return 0;}
+      if(Math.abs(a.gambleNet) > Math.abs(b.gambleNet)){return -1;}
+      if(Math.abs(a.gambleNet) < Math.abs(b.gambleNet)){return 1;}
+    })
+    max = 25;
+    gambleStats.most = [];
+    if(usrs.length < max){ max = usrs.length; }
+    for ( i = 0; i < max; i++ ) {
+      gambleStats.most.push({name: usrs[i].name, amount: usrs[i].gambleNet})
+    }
+
     totalWateredOnions = misc.findOne({id:'totalWateredOnions'});
     if(!totalWateredOnions){
       misc.insert({

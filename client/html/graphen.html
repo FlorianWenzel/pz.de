@@ -40,6 +40,20 @@
 </section>
 <div id="chatter" class="dark">
 </div>
+<section class="hero lila  is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title lila">
+        Gamble Stats
+      </h1>
+      <h2 class="subtitle lila">
+        Alle (!gamble und !slots) zusammengerechnet: <span id="totalGambleAmount"></span>
+      </h2>
+    </div>
+  </div>
+</section>
+<div id="gambleStats" class="lila">
+</div>
 <style>
 .ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
   stroke: #59922b;
@@ -74,4 +88,5 @@ line.ct-grid{
 socket.emit('getGiessenStats');
 socket.emit('getChatterStats');
 socket.emit('getChallengeStats');
+socket.emit('getGambleStats');
 </script>

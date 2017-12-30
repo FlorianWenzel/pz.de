@@ -481,6 +481,51 @@ socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
   });
 })
 
+socket.on('getGambleStats', function(gambleStats){
+  $('#totalGambleAmount').html(gambleStats.global)
+  labels = [];
+  series = [];
+  most = gambleStats.most;
+  for(i=0;i<most.length;i++){
+    labels.push(most[i].name)
+    series.push(most[i].amount)
+  }
+  var data = {
+    labels: labels,
+    series: [
+      series
+    ]
+  };
+
+  var options = {
+    horizontalBars: true,
+    seriesBarDistance: 10,
+    reverseData: true,
+    height: '500px',
+    axisX: {
+     onlyInteger: true,
+     offset: 15
+    },
+    axisY: {
+      offset: 150
+    },
+  };
+
+  var responsiveOptions = [
+    ['screen and (max-width: 640px)', {
+      seriesBarDistance: 5,
+      axisX: {
+        labelInterpolationFnc: function (value) {
+          return value[0];
+        }
+      }
+    }]
+
+  ];
+
+  new Chartist.Bar('#gambleStats', data, options, responsiveOptions);
+})
+
 socket.on('getChatterStats', function(totalMessagesSent, topChatter){
   $('#totalMessagesSent').html(totalMessagesSent)
   labels = [];

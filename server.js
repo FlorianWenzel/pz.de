@@ -180,6 +180,9 @@ io.on('connection', function (socket) {
   socket.on('getGiessenStats', function(){
     socket.emit('getGiessenStats', misc.findOne({id:'totalWateredOnions'}).count, misc.findOne({id:'topGiesser'}).value)
   })
+  socket.on('getGambleStats', function(){
+    socket.emit('getGambleStats', misc.findOne({id:'gambleStats'}))
+  })
   socket.on('getChatterStats', function(){
     socket.emit('getChatterStats', misc.findOne({id:'msgCounter'}).count, misc.findOne({id:'topChatter'}).value)
   })
