@@ -87,7 +87,7 @@ html, body {
   display: none!important;
 }
 .holz{
-  background-image: url('https://i.imgur.com/K3y68UMr.jpg');
+  background-image: url('https://i.imgur.com/K3y68UMr.jpg')!important;
   color: white;
 }
 .white-text{
