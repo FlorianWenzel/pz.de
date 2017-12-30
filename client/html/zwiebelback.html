@@ -1,0 +1,293 @@
+<article class="notification is-dark unselectable" stlye="position: relative;">
+  <p class="title has-text-centered">Und so funktioniert's:
+  </p>
+  <p class="content" style="margin-bottom: 3rem;">
+    <br />
+    Durch deine Unterstützung des Streams, also Donos, Subs und Bits sammelst du ZwiebelTaler, diese kannst du hier gegen ZwiebelMerch eintauschen!<br /><br />
+    Fürs Streamschauen gibt's ZwiebelCoins, eine pro Minute, diese kannst du hier in ZwiebelTaler umtauschen! <br />
+    <strong>1000 ZwiebelCoins entsprechen 1 ZwiebelTaler</strong>
+  </p>
+  <div id="convertArea" class="hidden">
+    <progress id="progressBar" class="progress is-danger" style="margin-bottom:0px;" value="0" max="100">90%</progress>
+    <p id="progressText" class="content has-text-centered">
+      10/1000<br />
+    </p>
+    <div class="has-text-centered">
+      <button id="convertButton" onclick="convert();" class="button is-danger">Umtauschen!</button>
+    </div>
+  </div>
+</article>
+<div class="tile is-vertical">
+  <div class="tile">
+    <div class="tile is-parent">
+      <article class="tile is-child notification lila">
+        <div class="unselectable" style="width: 100%;">
+          <p class="has-text-centered is-size-1">ZwiebelMütze</p>
+          <p class="has-text-centered is-size-2">200 ZwiebelTaler</p>
+          <div id="slider">
+            <a class="control_next">></a>
+            <a class="control_prev"><</a>
+            <ul>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/BpWKWQp.jpg" />
+              </li>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/O9vbt5h.jpg" />
+              </li>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/EDpR51u.jpg" />
+              </li>
+            </ul>
+          </div>
+          <div class="has-text-centered">
+            <button id="muetzeButton" onclick="buy('ZwiebelMütze')" class="button is-danger is-medium" style="margin-top:1.25em;">
+              Will ich!
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child notification lila">
+        <div class="lila unselectable" style="width: 100%;">
+          <p class="has-text-centered is-size-1">Plüschzwiebel</p>
+          <p class="has-text-centered is-size-2">200 ZwiebelTaler</p>
+          <div id="slider2">
+            <a class="control_next2">></a>
+            <a class="control_prev2"><</a>
+            <ul>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/u2h6HQv.jpg" />
+              </li>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/psYRmdy.jpg" />
+              </li>
+              <li class="holz">
+                <span class="helper"></span>
+                <img class="img" src="https://i.imgur.com/iOt7aKG.jpg" />
+              </li>
+            </ul>
+          </div>
+          <div class="has-text-centered">
+            <button id="plueschButton" onclick="buy('PlüschZwiebel')" class="button is-danger is-medium" style="margin-top:1.25em;">
+              Will ich!
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+<script>
+refreshProgressBar();
+if(user){
+  $('#convertArea').removeClass('hidden')
+}
+jQuery(document).ready(function ($) {
+	var slideCount = $('#slider ul li').length;
+	var slideWidth = $('#slider ul li').width();
+	var slideHeight = $('#slider ul li').height();
+	var sliderUlWidth = slideCount * slideWidth;
+
+  var slideCount2 = $('#slider2 ul li').length;
+	var slideWidth2 = $('#slider2 ul li').width();
+	var slideHeight2 = $('#slider2 ul li').height();
+	var sliderUlWidth2 = slideCount2 * slideWidth2;
+
+	$('#slider').css({ width: slideWidth, height: slideHeight });
+
+	$('#slider ul').css({ width: sliderUlWidth, marginLeft: - slideWidth });
+
+  $('#slider ul li:last-child').prependTo('#slider ul');
+
+	$('#slider2').css({ width: slideWidth2, height: slideHeight2 });
+
+	$('#slider2 ul').css({ width: sliderUlWidth2, marginLeft: - slideWidth2 });
+
+  $('#slider2 ul li:last-child').prependTo('#slider2 ul');
+
+    function moveLeft() {
+        $('#slider ul').animate({
+            left: + slideWidth
+        }, 200, function () {
+            $('#slider ul li:last-child').prependTo('#slider ul');
+            $('#slider ul').css('left', '');
+        });
+    };
+    function moveLeft2() {
+        $('#slider2 ul').animate({
+            left: + slideWidth
+        }, 200, function () {
+            $('#slider2 ul li:last-child').prependTo('#slider2 ul');
+            $('#slider2 ul').css('left', '');
+        });
+    };
+
+    function moveRight() {
+        $('#slider ul').animate({
+            left: - slideWidth
+        }, 200, function () {
+            $('#slider ul li:first-child').appendTo('#slider ul');
+            $('#slider ul').css('left', '');
+        });
+    };
+    function moveRight2() {
+        $('#slider2 ul').animate({
+            left: - slideWidth
+        }, 200, function () {
+            $('#slider2 ul li:first-child').appendTo('#slider2 ul');
+            $('#slider2 ul').css('left', '');
+        });
+    };
+
+    $('a.control_prev').click(function () {
+        moveLeft();
+    });
+    $('a.control_prev2').click(function () {
+        moveLeft2();
+    });
+    $('a.control_next').click(function () {
+        moveRight();
+    });
+    $('a.control_next2').click(function () {
+        moveRight2();
+    });
+});
+
+</script>
+<style>
+.img{
+  background: #3A6F9A;
+  vertical-align: middle;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+#slider {
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto 0 auto;
+  border-radius: 4px;
+}
+
+#slider ul {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 200px;
+  list-style: none;
+}
+
+#slider ul li {
+  position: relative;
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 375px;
+  height: 500px;
+  background: #ccc;
+  text-align: center;
+  line-height: 500px;
+}
+
+#slider2 {
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto 0 auto;
+  border-radius: 4px;
+}
+
+#slider2 ul {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 200px;
+  list-style: none;
+}
+
+#slider2 ul li {
+  position: relative;
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 375px;
+  height: 500px;
+  background: #ccc;
+  text-align: center;
+  line-height: 500px;
+}
+
+a.control_prev, a.control_next {
+  position: absolute;
+  top: 40%;
+  z-index: 19;
+  display: block;
+  padding: 4% 3%;
+  width: auto;
+  height: auto;
+  background: #2a2a2a;
+  color: #fff;
+  text-decoration: none!important;
+  font-weight: 600;
+  font-size: 18px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+a.control_prev:hover, a.control_next:hover {
+  opacity: 1;
+  -webkit-transition: all 0.2s ease;
+}
+
+a.control_prev {
+  border-radius: 0 2px 2px 0;
+}
+
+a.control_next {
+  right: 0;
+  border-radius: 2px 0 0 2px;
+}
+
+a.control_prev2, a.control_next2 {
+  position: absolute;
+  top: 40%;
+  z-index: 19;
+  display: block;
+  padding: 4% 3%;
+  width: auto;
+  height: auto;
+  background: #2a2a2a;
+  color: #fff;
+  text-decoration: none!important;
+  font-weight: 600;
+  font-size: 18px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+a.control_prev2:hover, a.control_next2:hover {
+  opacity: 1;
+  -webkit-transition: all 0.2s ease;
+}
+
+a.control_prev2 {
+  border-radius: 0 2px 2px 0;
+}
+
+a.control_next2 {
+  right: 0;
+  border-radius: 2px 0 0 2px;
+}
+
+</style>
