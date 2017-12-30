@@ -54,8 +54,6 @@ function toggleMobileMenu(){
 
 function loadPage(page){
   window.scrollTo(0, 0);
-  console.log(window.location.pathname)
-  console.log(window.location.href)
   $('#content').empty()
   $('#content').load('html/'+page+'.html', null, function(response, status, xhr){
     if(page != 'home'){
