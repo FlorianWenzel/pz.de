@@ -501,7 +501,7 @@ socket.on('getGambleStats', function(gambleStats){
     horizontalBars: true,
     seriesBarDistance: 10,
     reverseData: true,
-    height: '500px',
+    height: '750px',
     axisX: {
      onlyInteger: true,
      offset: 15
