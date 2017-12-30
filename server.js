@@ -8,6 +8,11 @@ const tmi = require('tmi.js');
 const https = require('https');
 const account = require('./account.js');
 const coincmds = require('./coincmds.js');
+const stats = require('./stats.js');
+const shop = require('./shop.js');
+const twitchchat = require('./twitchchat');
+const streamlab = require('./streamlabs.js');
+const whisper = require('./whisper.js');
 const casino = require('./gamble.js');
 const channel = account.channel;
 const pwgen = require('password-generator');
@@ -16,11 +21,9 @@ const io_client = require('socket.io-client');
 const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken);
 const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
-const muetzePrice = 200;
-const plueschPrice = 200;
 const nodemailer = require('nodemailer');
 
-var options = {
+var client = new tmi.client({
   options: {
     debug: false
   },
@@ -33,7 +36,8 @@ var options = {
     password: account.pw
   },
   channels: [channel]
-}
+});
+client.connect();
 
 var timer = 0;
 setInterval(interval, (1000))
@@ -42,7 +46,7 @@ function interval() {
     coincmds.rewardCoins(channel, users, account.twitchID, io)
   }
   if(timer % 33 == 0){
-    refreshStats(users);
+    stats.refreshStats(users, misc);
   }
   db.saveDatabase();
   timer++;
@@ -92,16 +96,11 @@ function loadHandler() {
     }
 }
 
+//+BEET+//
 var beet = express();
 var beetServer = http.createServer(beet);
 var beetIo = socketio(beetServer);
-
-beetIo.on('connection', onConnection);
-
-beet.use(express.static(__dirname + '/beet'));
-beetServer.listen(8080, () => console.log('Zwiebelbeet listening on port 8080!'));
-
-function onConnection(sock) {
+beetIo.on('connection', function(sock){
   if(!misc.findOne({id:'zwiebelbeetCounter'})){
     misc.insert({
       id: 'zwiebelbeetCounter',
@@ -110,11 +109,13 @@ function onConnection(sock) {
     db.saveDatabase()
   }
   sock.emit('increaseOnions',(misc.findOne({id:'zwiebelbeetCounter'}).value % 10000), (misc.findOne({id:'zwiebelbeetCounter'}).value), 'Eine höhere Macht');
-}
 
-var client = new tmi.client(options);
-client.connect();
+});
+beet.use(express.static(__dirname + '/beet'));
+beetServer.listen(8080, () => console.log('Zwiebelbeet listening on port 8080!'));
+//-BEET-//
 
+//+WEBSITE-EXPRESS+//
 server = http.createServer(app)
 app.use(express.static(__dirname + '/client'));
 
@@ -124,8 +125,11 @@ app.get('/', function(req, res){
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/client/html/index.html');
 });
-var io = socketio(server);
 server.listen(3000, () => console.log('Zwiebelpage listening on port 3000!'));
+//-WEBSITE-EXPRESS-//
+
+//+WEBSITE-SOCKETIO+//
+var io = socketio(server);
 io.on('connection', function (socket) {
   socket.on('autoLogin', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
@@ -215,346 +219,24 @@ io.on('connection', function (socket) {
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)
   })
-  socket.on('buy', function(u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email){
-    if(!u || !p || !product || !street || !plz || !city || !print || !vorname || !name){console.log('happend'); return;}
-    user = users.findOne({name: u, password:p});
-    if(!user){return;}
-    switch (product) {
-      case 'PlüschZwiebel':
-          if(user.taler < plueschPrice){
-            return;
-          }else{
-            change = -plueschPrice;
-            user.taler -= plueschPrice;
-          }
-        break;
-      case 'ZwiebelMütze':
-          if(user.taler < muetzePrice){
-            return;
-          }else{
-            change = -muetzePrice;
-            user.taler -= muetzePrice;
-          }
-        break;
-    }
-    nodemailer.createTestAccount((err, acc) => {
-
-      let transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 465,
-          secure: true,
-          auth: {
-              user: 'pokerzwiebel@gmail.com',
-              pass: account.password
-          }
-      });
-      let mailOptions = {
-          from: '<PokerZwiebel@gmail.com>',
-          to: 'PokerZwiebel@gmail.com',
-          subject: 'Bestellung ' + product + ' von ' + u,
-          text: '<b>Neue Bestellung:</b> <br>' +
-                'Benutzername: ' + u + ' <br>' +
-                'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
-                'Product: ' + product + '<br>' +
-                'Straße: ' + street + ' <br>' +
-                'Zusatz: ' + zusatz + ' <br>' +
-                'PLZ: ' + plz + ' <br>' +
-                'Stadt: ' + city + ' <br>' +
-                'Aufdruck: ' + print + '<br>' +
-                'Kontakt Per Mail: ' + contactPerMail + 'Email: '+ email+'<br>' +
-                'Kontakt Per Twitch' + contactPerTwitch +
-                'Sonstiges: ' + misc +'<br>--------------',
-          html: '<b>Neue Bestellung:</b> <br>' +
-                'Benutzername: ' + u + ' <br>' +
-                'Vorname: ' + vorname + ' Nachname: ' + name + '<br>' +
-                'Product: ' + product + '<br>' +
-                'Straße: ' + street + ' <br>' +
-                'Zusatz: ' + zusatz + ' <br>' +
-                'PLZ: ' + plz + ' <br>' +
-                'Stadt: ' + city + ' <br>' +
-                'Aufdruck: ' + print + '<br>' +
-                'Kontakt Per Mail: ' + contactPerMail + ' Email: '+ email+'<br>' +
-                'Kontakt Per Twitch: ' + contactPerTwitch + '<br>' +
-                'Sonstiges: ' + misc +'<br>--------------'
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-              return console.log(error);
-          }
-      });
-    });
-    log.addLog(logs, user.name, user.name, 'ZwiebelTaler', change, 'Bestellung (' + product + ')')
-    socket.emit('updateTaler', user.taler);
-    socket.emit('updateCoins', user.coins);
-    socket.emit('confirmPurchase', product);
-  })
+  socket.on('buy', function (u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email) {
+    shop.buy(users, nodemailer, log, socket, account, u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email)
+  });
 });
+//-WEBSITE-SOCKETIO-//
 
-
+//+STREAMLABS+//
 streamlabs.on('event', (eventData) => {
-  if(eventData && eventData.message && eventData.message[0] && eventData.message[0]._id && streamlabsIDs.findOne({id: eventData.message[0]._id})){
-    return;
-  }else if(eventData && eventData.message && eventData.message[0] && eventData.message[0]._id){
-    streamlabsIDs.insert({
-      id: eventData.message[0]._id
-    })
-  }
-  if (!eventData.for && eventData.type === 'donation') {
-    user = users.findOne({name: eventData.message[0].from.toLowerCase()});
-    if(!user){
-      taler = Math.floor(10 * eventData.message[0].amount);
-      log.addLog(logs, eventData.message[0].from.toLowerCase(), '404: ' + eventData.message[0].from.toLowerCase(), 'ZwiebelTaler', taler, (Math.floor(eventData.message[0].amount*100)/100).toString().replace('.', ',') + ' ' + eventData.message[0].currency + ' Donation')
-      return;
-    }
-    taler = Math.floor(10 * eventData.message[0].amount);
-    user.taler += taler;
-    if(taler > 0){
-      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, (Math.floor(eventData.message[0].amount*100)/100).toString().replace('.', ',') + ' ' + eventData.message[0].currency + ' Donation')
-      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Donation ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
-      io.to(user.name).emit('updateTaler', user.taler);
-    }
-  }
-  if(eventData.type === 'bits'){
-    user = users.findOne({name: eventData.message[0].name.toLowerCase()});
-    if(!user){
-      return;
-    }
-    taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
-    user.taler += taler;
-    if(taler > 0){
-      log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, eventData.message[0].amount + 'Bits')
-      io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Bits ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
-      io.to(user.name).emit('updateTaler', user.taler);
-    }
-  }
-  if (eventData.for === 'twitch_account') {
-    switch(eventData.type) {
-      case 'follow':
-        user = users.findOne({name: eventData.message[0].name.toLowerCase()});
-        if(!user){
-          return;
-        }
-        io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Follow ❤️!');
-        break;
-      case 'subscription':
-        if(eventData.message[0].repeat){
-          return;
-        }
-        user = users.findOne({name: eventData.message[0].name.toLowerCase()});
-        if(!user){
-          return;
-        }
-        switch (eventData.message[0].sub_plan) {
-          case '1000':
-            taler = 25;
-            io.to(user.name).emit('updateTaler', user.taler);
-            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '4.99$ Sub')
-            break;
-          case 'Prime':
-            taler = 25;
-            io.to(user.name).emit('updateTaler', user.taler);
-            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, 'Prime Sub')
-            break;
-          case '2000':
-            taler = 50;
-            io.to(user.name).emit('updateTaler', user.taler);
-            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '9.99$ Sub')
-            break;
-          case '3000':
-            taler = 125;
-            io.to(user.name).emit('updateTaler', user.taler);
-            log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, '24.99$ Sub')
-            break;
-          default:
-            log.addLog(logs, user.name, 'Unbekannter Sub', 'Error', eventData, 'Sub')
-            taler = 0;
-        }
-        io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deinen Sub ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
-        user.taler += taler
-        break;
-    }
-  }
-  db.saveDatabase();
+  streamlab.on(eventData, io, users, log)
 });
+//-STREAMLABS-//
 
-function refreshStats(users){
-  onions = misc.findOne({id:'onions'});
-  if(!onions){
-    misc.insert({
-      id:'onions',
-      count: 0
-    })
-    onions = misc.findOne({id:'onions'})
-  }
-  onions.count = users.where(function(){return true;}).length;
-
-  seenMinutes = misc.findOne({id:'seenMinutes'});
-  if(!seenMinutes){
-    misc.insert({
-      id:'seenMinutes',
-      count: 0
-    })
-    seenMinutes = misc.findOne({id:'seenMinutes'})
-  }
-  userList = users.where(function(){return true;});
-  c = 0;
-  for(i=0;i<users.length;i++){
-    c += userList[i].coinsCollected;
-  }
-  seenMinutes.count = c;
-
-  totalWateredOnions = misc.findOne({id:'totalWateredOnions'});
-  if(!totalWateredOnions){
-    misc.insert({
-      id:'totalWateredOnions',
-      count: 0
-    })
-    totalWateredOnions = misc.findOne({id:'totalWateredOnions'})
-  }
-  c = 0;
-  for(i=0;i<userList.length;i++){
-    if(userList[i].onionsWatered){
-      c += userList[i].onionsWatered;
-    }
-  }
-  totalWateredOnions.count = c;
-
-  topGiesser = misc.findOne({id:'topGiesser'});
-  if(!topGiesser){
-    misc.insert({
-      id:'topGiesser',
-      value: 0
-    })
-    topGiesser = misc.findOne({id:'topGiesser'})
-  }
-  r = users.where(function(obj){return obj.onionsWatered > 0;});
-  r.sort(function(a, b){
-    if(a.onionsWatered == b.onionsWatered){return 0;}
-    if(a.onionsWatered > b.onionsWatered){return -1;}
-    if(a.onionsWatered < b.onionsWatered){return 1;}
-  })
-  r = r.slice(0, 25)
-  res = [];
-  for(i=0;i<r.length;i++){
-    if(!r[i].onionsWatered){continue;}
-    res[i] = {
-      name: r[i].name,
-      count: r[i].onionsWatered
-    }
-  }
-  topGiesser.value = res;
-
-  topChatter = misc.findOne({id:'topChatter'});
-  if(!topChatter){
-    misc.insert({
-      id:'topChatter',
-      value: 0
-    })
-    topChatter = misc.findOne({id:'topChatter'})
-  }
-  r = users.where(function(obj){return obj.messagesSent > 0;});
-  r.sort(function(a, b){
-    if(a.messagesSent == b.messagesSent){return 0;}
-    if(a.messagesSent > b.messagesSent){return -1;}
-    if(a.messagesSent < b.messagesSent){return 1;}
-  })
-  r = r.slice(0, 25)
-  res = [];
-  for(i=0;i<r.length;i++){
-    if(!r[i].messagesSent){continue;}
-    res[i] = {
-      name: r[i].name,
-      count: r[i].messagesSent
-    }
-  }
-  topChatter.value = res;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////TWITCH////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//+TWITCH+//
 client.on("whisper", function (from, userstate, message, self) {
-  if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
-    coincmds.viewCoins('whisper', client, users, userstate.username, userstate);
-  }else if(message.includes('!setcoins') && admins.includes(userstate.username)){
-    coincmds.setCoins('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!settaler') && admins.includes(userstate.username) ){
-    coincmds.setTaler('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!givetaler') && admins.includes(userstate.username)){
-    coincmds.giveTaler('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if(message.includes('!givecoins') && admins.includes(userstate.username)){
-    coincmds.giveCoins('whisper', client, users, userstate.username, userstate, message, io, log);
-  }else if (message.includes('!sunshine')) {
-    beetIo.emit('sunshine');
-  }else if (message.includes('!addSession') && (admins.includes(userstate.username))){
-    msg = message.split(' ');
-    if(msg.length != 3){
-      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 -12');
-      return
-    }
-    msg[2] = msg[2].replace(',', '.')
-    if(isNaN(msg[2])){
-      client.whisper(from, 'Ne. Benutz so: !addSession 1.12.19 -12');
-      return;
-    }
-    sessions = misc.findOne({id:'sessions'});
-    newNet = 100;
-    if(sessions.data.length > 0){
-      newNet = sessions.data[sessions.data.length-1].net;
-    }
-    sessions.data.push({label:msg[1], net:(parseInt(newNet) + parseInt(msg[2]))});
-    client.whisper(from, 'Session hinzugefügt.')
-  }else if(message == '!delSession' && admins.includes(userstate.username)){
-    if(sessions.data.length < 1){return;}
-    sessions.data.pop()
-    client.whisper(from, 'Letzte Session gelöscht.');
-  }
+  whisper.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self)
 })
 
 client.on("chat", function(channel, userstate, message, self){
-  if(self || userstate.username  ==  account.nick){
-    return;
-  }
-  msgCounter.count ++;
-
-  coincmds.knowUser(users, userstate.username)
-  if(users.findOne({name:userstate.username}).messagesSent){
-    users.findOne({name:userstate.username}).messagesSent ++;
-  }else{
-    users.findOne({name:userstate.username}).messagesSent = 1;
-  }
-  //COINS FUNCTIONS
-  if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
-    coincmds.viewCoins('twitchChat', client, users, channel, userstate);
-  }else if(message.includes('!setcoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setCoins('twitchChat', client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!settaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.setTaler('twitchChat', client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!givetaler') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveTaler('twitchChat', client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!givecoins') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-    coincmds.giveCoins('twitchChat', client, users, channel, userstate, message, io, log);
-  }else if(message.includes('!bohlen') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-      msg = message.split(' ')
-      if(!(msg.length != 2 || isNaN(msg[1]))){
-        beetIo.emit('bohlen', msg[1])
-      }
-  }else if(message.includes('!reif') && (admins.includes(userstate.username) || '#' + userstate.username == channel)){
-      msg = message.split(' ')
-      if(!(msg.length != 2 || isNaN(msg[1]))){
-        beetIo.emit('reif', msg[1])
-      }
-  }else if(message.includes("!gamble")){
-  //GAMBLE
-    casino.gamble(client, users, channel, userstate, message, io);
-  }else if(message.includes('!slots ') || message.includes('!slot ') || message.includes('!s ')){
-    casino.slots(client, users, channel, userstate, message, io);
-  }else if(message.includes('!gießen') || message.includes('!giessen') || message.includes('!giesen')){
-    coincmds.giessen(client, beetIo,  userstate.username, message, misc, users, channel)
-  }else if (message.includes('!sunshine')) {
-    beetIo.emit('sunshine');
-  }
+  twitchchat.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self)
 })
+//-TWITCH-//
