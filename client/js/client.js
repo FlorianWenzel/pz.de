@@ -12,16 +12,24 @@ socket = io.connect()
 
 onload()
 function onload(){
-  loadPage('home');
   //AUTO-LOGIN
   if(pwCookie && usrCookie){
     socket.emit('autoLogin', usrCookie, pwCookie);
-    return;
   }
   if(document.location.href.includes('/login')){
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
     socket.emit('auth', code)
   }
+  if(document.location.href.includes('/')){
+
+    code = (document.location.href.split('/')[3])
+    if(code){
+      loadPage(code)
+    }else{
+      loadPage('home')
+    }
+  }
+
 }
 
 $( window ).resize(function() {
@@ -47,7 +55,13 @@ function toggleMobileMenu(){
 function loadPage(page){
   window.scrollTo(0, 0);
   $('#content').empty()
-  $('#content').load('html/'+page+'.html')
+  $('#content').load('html/'+page+'.html', null, function(response, status, xhr){
+    if(page != 'home'){
+      window.history.pushState({}, null, '/'+page);
+    }else{
+      window.history.pushState({}, null, '/');
+    }
+  })
 }
 
 function refreshProgressBar(){
@@ -383,7 +397,6 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('.taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
   $('.log-button').removeClass('hidden')
-  window.history.pushState('home', 'PokerZwiebel', '/');
   if(isMod){
     $('.logs-button').removeClass('hidden');
   }
