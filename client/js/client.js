@@ -19,6 +19,7 @@ function onload(){
   if(document.location.href.includes('/login')){
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
     socket.emit('auth', code)
+    return;
   }
   if(document.location.href.includes('/')){
 
@@ -399,6 +400,9 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('.log-button').removeClass('hidden')
   if(isMod){
     $('.logs-button').removeClass('hidden');
+  }
+  if(window.location.pathname.includes('/login')){
+    loadPage('home');
   }
 })
 
