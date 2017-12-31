@@ -260,7 +260,7 @@ discord.on('message', msg => {
     if(!isLinkedTwitch(msg.author, msg)){
       return;
     }
-    msg.reply('@' + msg.author.username + ' ZwiebelCoins: ' + users.findOne({discord:user.id}).coins)
+    msg.reply('@' + msg.author.username + ' ZwiebelCoins: ' + users.findOne({discord:msg.author.id}).coins)
   }
 });
 
