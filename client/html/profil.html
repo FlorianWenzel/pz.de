@@ -1,0 +1,37 @@
+<section class="hero is-dark">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Einstellungen
+      </h1>
+      <h2 class="subtitle">
+      </h2>
+    </div>
+  </div>
+</section>
+<section class="content has-text-centered">
+  <div class="field is-dark">
+    <label class="label dark">Discord ID:</label>
+    <div id="discordIDcontrol" class="control" style="margin-left: 3rem; margin-right: 3rem;">
+      <input id="discordID" class="input" type="text" placeholder="306701337169266662">
+    </div>
+    <br />
+    <div class="control has-text-centered">
+      <button onclick="linkDiscord();" class="button is-centered is-primary">Verknüpfen</button>
+    </div>
+  </div>
+</section>
+<script>
+socket.emit('getProfile', usrCookie, pwCookie)
+function linkDiscord(){
+  id = $('#discordID').val();
+  if(isNaN(id)){
+    $('#discordID').addClass('is-danger')
+    showNotification('danger', 'Bitte gib eine gültige ID ein!')
+    return;
+  }
+  $('#discordID').removeClass('is-danger')
+  socket.emit('setDiscord', usrCookie, pwCookie, id);
+  showNotification('success', 'Verknüpfung Erfolgreich!')
+}
+</script>

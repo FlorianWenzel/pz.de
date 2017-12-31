@@ -273,6 +273,11 @@ socket.on('getHomeStats', function(onions, minutes, msgs){
   increaseTo($('#msgsCount'), msgs)
 })
 
+socket.on('getProfile', function(discordID){
+  $('#discordID').val(discordID)
+  $('#discordID').addClass('is-success')
+})
+
 function increaseTo(e, num){
   let i = 0;
   let inter = setInterval(function(){
@@ -558,6 +563,7 @@ socket.on('getChatterStats', function(totalMessagesSent, topChatter){
 })
 
 function showLogout(){
+  loadPage('profil')
   $('.login-button-text').html('Abmelden')
   $(".login-button-link").addClass("rot");
   $(".login-button-link").attr("onclick","logout();");

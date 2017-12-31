@@ -112,7 +112,7 @@ beetIo.on('connection', function(sock){
 
 });
 beet.use(express.static(__dirname + '/beet'));
-beetServer.listen(8080, () => console.log('Zwiebelbeet listening on port 8080!'));
+beetServer.listen(8080, () => console.log('Zwiebelbeet listening on port 8080'));
 //-BEET-//
 
 //+WEBSITE-EXPRESS+//
@@ -125,7 +125,7 @@ app.get('/', function(req, res){
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/client/html/index.html');
 });
-server.listen(3000, () => console.log('Zwiebelpage listening on port 3000!'));
+server.listen(3000, () => console.log('Zwiebelpage listening on port 3000'));
 //-WEBSITE-EXPRESS-//
 
 //+WEBSITE-SOCKETIO+//
@@ -146,6 +146,18 @@ io.on('connection', function (socket) {
     isMod = false;
     if(admins.includes(user.name)){isMod = true;}
     socket.emit('loginSuccessful', user, isMod);
+  })
+  socket.on('setDiscord', function(u, p, id){
+    user = users.findOne({name: u, password:p})
+    if(!user){return;}
+    user.discord = id;
+  })
+  socket.on('getProfile', function(u, p){
+    user = users.findOne({name: u, password:p})
+    if(!user){return;}
+    if(user.discord){
+      socket.emit('getProfile', user.discord)
+    }
   })
   socket.on('auth', function (code){
     request.post({
@@ -233,6 +245,35 @@ streamlabs.on('event', (eventData) => {
   streamlab.on(eventData, io, users, log)
 });
 //-STREAMLABS-//
+
+//DISCORD//
+
+const discordjs = require("discord.js");
+const discord = new discordjs.Client();
+
+discord.on('ready', () => {
+  console.log(`Logged into Discord as ${discord.user.tag}`);
+});
+
+discord.on('message', msg => {
+  if (msg.content === '!coins') {
+    if(!isLinkedTwitch(msg.author, msg)){
+      return;
+    }
+    msg.reply('@' + msg.author.username + ' ZwiebelCoins: ' + users.findOne({discord:user.id}).coins)
+  }
+});
+
+function isLinkedTwitch(usr, msg){
+  user = users.findOne({discord:usr.id})
+  if(user){
+    return true;
+  }
+  msg.reply('Bitte verknüpf erst deinen Discord Account auf http://pokerzwiebel.de/profil. Füg dazu diese ID ein: ' + msg.author.id)
+  return false;
+}
+
+discord.login(account.discord);
 
 //+TWITCH+//
 client.on("whisper", function (from, userstate, message, self) {
