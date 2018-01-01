@@ -277,7 +277,7 @@ discord.login(account.discord);
 
 //+TWITCH+//
 client.on("whisper", function (from, userstate, message, self) {
-  whisper.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self)
+  whisper.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self, admins)
 })
 
 client.on("chat", function(channel, userstate, message, self){

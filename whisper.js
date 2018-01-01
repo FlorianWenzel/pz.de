@@ -1,15 +1,15 @@
 module.exports = {
-  on: function(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self){
+  on: function(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self, admins){
     if(message.includes("!coins") || message.includes("!chips") || message == "!c"){
       coincmds.viewCoins('whisper', client, users, userstate.username, userstate);
     }else if(message.includes('!setcoins') && admins.includes(userstate.username)){
-      coincmds.setCoins('whisper', client, users, userstate.username, userstate, message, io, log);
+      coincmds.setCoins('whisper', client, users, userstate.username, userstate, message, io, log, admins);
     }else if(message.includes('!settaler') && admins.includes(userstate.username) ){
-      coincmds.setTaler('whisper', client, users, userstate.username, userstate, message, io, log);
+      coincmds.setTaler('whisper', client, users, userstate.username, userstate, message, io, log, admins);
     }else if(message.includes('!givetaler') && admins.includes(userstate.username)){
-      coincmds.giveTaler('whisper', client, users, userstate.username, userstate, message, io, log);
+      coincmds.giveTaler('whisper', client, users, userstate.username, userstate, message, io, log, admins);
     }else if(message.includes('!givecoins') && admins.includes(userstate.username)){
-      coincmds.giveCoins('whisper', client, users, userstate.username, userstate, message, io, log);
+      coincmds.giveCoins('whisper', client, users, userstate.username, userstate, message, io, log, admins);
     }else if (message.includes('!sunshine')) {
       beetIo.emit('sunshine');
     }else if (message.includes('!addSession') && (admins.includes(userstate.username))){

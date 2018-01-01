@@ -64,7 +64,7 @@ module.exports = {
       say(client, type, channel, userstate.username + ' besitzt ' + users.findOne({ name:userstate.username}).coins.toString() + ' ZwiebelCoins!')
     }
   },
-  setCoins: function (type, client, users, channel, userstate, message, io, log) {
+  setCoins: function (type, client, users, channel, userstate, message, io, log, admins) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!setcoins" || isNaN(msg[2]) || parseInt(msg[2])<=0){
       say(client, type, channel, 'Benutz !setcoins <User> <Wie viel>')
@@ -82,7 +82,7 @@ module.exports = {
       }
     }
   },
-  setTaler: function (type, client, users, channel, userstate, message, io, log) {
+  setTaler: function (type, client, users, channel, userstate, message, io, log, admins) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!settaler" || isNaN(msg[2]) || parseInt(msg[2])<=0){
       say(client, type, channel, 'Benutz !settaler <User> <Wie viel>')
@@ -100,7 +100,7 @@ module.exports = {
       }
     }
   },
-  giveTaler: function (type, client, users, channel, userstate, message, io, log) {
+  giveTaler: function (type, client, users, channel, userstate, message, io, log, admins) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!givetaler" || isNaN(msg[2])){
       say(client, type, channel, 'Benutz !givetaler <User> <Wie viel>')
@@ -118,7 +118,7 @@ module.exports = {
       }
     }
   },
-  giveCoins: function (type, client, users, channel, userstate, message, io, log) {
+  giveCoins: function (type, client, users, channel, userstate, message, io, log, admins) {
     msg = message.split(" ")
     if(msg.length != 3 || msg[0] != "!givecoins" || isNaN(msg[2])){
       say(client, type, channel, 'Benutz !givecoins <User> <Wie viel>')
