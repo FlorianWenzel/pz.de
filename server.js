@@ -180,6 +180,27 @@ io.on('connection', function (socket) {
           coincmds.knowUser(users, username);
           user = users.findOne({name:username.toLowerCase()})
         }
+        if(!user.taler){
+          user.taler = 0;
+        }
+        if(!user.coinsCollected){
+          user.coinsCollected = 0;
+        }
+        if(!user.gambleNet){
+          user.gambleNet = 0;
+        }
+        if(!user.notifications){
+          user.notifications = [];
+        }
+        if(!user.loggedIntoWebsite){
+          user.loggedIntoWebsite = 0;
+        }
+        if(!user.password){
+          user.password = pwgen(30, false)
+        }
+        if(!user.gambleNet){
+          user.gambleNet = pwgen(30, false)
+        }
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())
         isMod = false;
