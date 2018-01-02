@@ -8,20 +8,29 @@ var audioCoins = new Audio('sounds/coins.mp3');
 var contactPerMail = false;
 var contactPerTwitch = false;
 
-loadPage('home');
 socket = io.connect()
-onload()
 
+onload()
 function onload(){
   //AUTO-LOGIN
   if(pwCookie && usrCookie){
     socket.emit('autoLogin', usrCookie, pwCookie);
-    return;
   }
   if(document.location.href.includes('/login')){
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
     socket.emit('auth', code)
+    return;
   }
+  if(document.location.href.includes('/')){
+
+    code = (document.location.href.split('/')[3])
+    if(code){
+      loadPage(code)
+    }else{
+      loadPage('home')
+    }
+  }
+
 }
 
 $( window ).resize(function() {
@@ -47,7 +56,13 @@ function toggleMobileMenu(){
 function loadPage(page){
   window.scrollTo(0, 0);
   $('#content').empty()
-  $('#content').load('html/'+page+'.html')
+  $('#content').load('html/'+page+'.html', null, function(response, status, xhr){
+    if(page != 'home'){
+      window.history.pushState({}, null, '/'+page);
+    }else{
+      window.history.pushState({}, null, '/');
+    }
+  })
 }
 
 function refreshProgressBar(){
@@ -258,6 +273,11 @@ socket.on('getHomeStats', function(onions, minutes, msgs){
   increaseTo($('#msgsCount'), msgs)
 })
 
+socket.on('getProfile', function(discordID){
+  $('#discordID').val(discordID)
+  $('#discordID').addClass('is-success')
+})
+
 function increaseTo(e, num){
   let i = 0;
   let inter = setInterval(function(){
@@ -272,25 +292,23 @@ function increaseTo(e, num){
 socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   if(alllogs){
     $('#logs').html(
-      '<li id=\'log-head\'>' +
-        '<div class="columns">' +
-          '<div class="column prime">' +
-            '<strong>Datum</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Auslöser</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Empfänger</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Änderung</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Art</strong>' +
-          '</div>' +
+      '<div class="columns">' +
+        '<div class="column dark">' +
+          '<strong>Datum</strong>' +
         '</div>' +
-      '</li>'
+        '<div class="column dark">' +
+          '<strong>Auslöser</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Empfänger</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Änderung</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Art</strong>' +
+        '</div>' +
+      '</div>'
     )
   }else{
     $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
@@ -300,52 +318,50 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       $('#gambleNetHead').removeClass('is-success')
     }
     $('#logs').html(
-      '<li id=\'log-head\'>' +
-        '<div class="columns">' +
-          '<div class="column prime">' +
-            '<strong>Datum</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Auslöser</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Änderung</strong>' +
-          '</div>' +
-          '<div class="column prime">' +
-            '<strong>Art</strong>' +
-          '</div>' +
+      '<div class="columns">' +
+        '<div class="column dark">' +
+          '<strong>Datum</strong>' +
         '</div>' +
-      '</li>'
+        '<div class="column dark">' +
+          '<strong>Änderung</strong>' +
+        '</div>' +
+        '<div class="column dark">' +
+          '<strong>Art</strong>' +
+        '</div>' +
+      '</div>'
     )
   }
   for(i=0;i<logs.length;i++){
-    color = 'blue';
+    amountColor = 'blue-text';
+    amountPrefix = '';
     if(logs[i].type == 'setCoins' || logs[i].type == 'setTaler'){
 
     }else{
       if(logs[i].amount > 0){
-        color = 'green'
+        amountColor = 'green-text'
+        amountPrefix = '+';
       }else if(logs[i].amount < 0){
-        color = 'rot'
+        amountColor = 'red-text'
       }
     }
+    if(i%2==0){color = 'light-grey'}else{color = 'dark'}
     if(alllogs){
       $('#logs').append(
         '<li id=\'log-head\'>' +
           '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].time +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].trigger_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].receiver_username+'' +
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].amount+' '+logs[i].currency+'' +
+            '<div class="column '+color+'">' +
+              '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
             '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
+            '<div class="column '+color+'">' +
               ''+logs[i].type+'' +
             '</div>' +
           '</div>' +
@@ -353,20 +369,17 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
     }else{
       $('#logs').append(
         '<li id=\'log-head\'>' +
-          '<div class="columns">' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].time.toString()+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].trigger_username+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].amount+' '+logs[i].currency+'' +
-            '</div>' +
-            '<div class="column '+color+'" style="padding: auto; border-top: solid #363636 1px;">' +
-              ''+logs[i].type+'' +
-            '</div>' +
+        '<div class="columns">' +
+          '<div class="column '+color+'">' +
+            ''+logs[i].time +
           '</div>' +
+          '<div class="column '+color+'">' +
+            '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
+          '</div>' +
+          '<div class="column '+color+'">' +
+            ''+logs[i].type+'' +
+          '</div>' +
+        '</div>' +
       '</li>')
     }
   }
@@ -390,9 +403,11 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('.taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
   $('.log-button').removeClass('hidden')
-  window.history.pushState('home', 'PokerZwiebel', '/');
   if(isMod){
     $('.logs-button').removeClass('hidden');
+  }
+  if(window.location.pathname.includes('/login')){
+    loadPage('home');
   }
 })
 
@@ -471,6 +486,51 @@ socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
   });
 })
 
+socket.on('getGambleStats', function(gambleStats){
+  $('#totalGambleAmount').html(gambleStats.global)
+  labels = [];
+  series = [];
+  most = gambleStats.most;
+  for(i=0;i<most.length;i++){
+    labels.push(most[i].name)
+    series.push(most[i].amount)
+  }
+  var data = {
+    labels: labels,
+    series: [
+      series
+    ]
+  };
+
+  var options = {
+    horizontalBars: true,
+    seriesBarDistance: 10,
+    reverseData: true,
+    height: '750px',
+    axisX: {
+     onlyInteger: true,
+     offset: 15
+    },
+    axisY: {
+      offset: 150
+    },
+  };
+
+  var responsiveOptions = [
+    ['screen and (max-width: 640px)', {
+      seriesBarDistance: 5,
+      axisX: {
+        labelInterpolationFnc: function (value) {
+          return value[0];
+        }
+      }
+    }]
+
+  ];
+
+  new Chartist.Bar('#gambleStats', data, options, responsiveOptions);
+})
+
 socket.on('getChatterStats', function(totalMessagesSent, topChatter){
   $('#totalMessagesSent').html(totalMessagesSent)
   labels = [];
@@ -503,6 +563,7 @@ socket.on('getChatterStats', function(totalMessagesSent, topChatter){
 })
 
 function showLogout(){
+  loadPage('profil')
   $('.login-button-text').html('Abmelden')
   $(".login-button-link").addClass("rot");
   $(".login-button-link").attr("onclick","logout();");
