@@ -198,9 +198,6 @@ io.on('connection', function (socket) {
         if(!user.password){
           user.password = pwgen(30, false)
         }
-        if(!user.gambleNet){
-          user.gambleNet = pwgen(30, false)
-        }
         user.loggedIntoWebsite ++;
         socket.join(username.toLowerCase())
         isMod = false;
