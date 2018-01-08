@@ -7,13 +7,15 @@ const cookie = require('js-cookie');
 const tmi = require('tmi.js');
 const https = require('https');
 const account = require('./account.js');
-const coincmds = require('./coincmds.js');
 const stats = require('./stats.js');
 const shop = require('./shop.js');
 const twitchchat = require('./twitchchat');
 const streamlab = require('./streamlabs.js');
 const whisper = require('./whisper.js');
-const casino = require('./gamble.js');
+const admincmds = require('./commands/admincmds.js')
+const coincmds = require('./commands/coincmds.js')
+const casino = require('./commands/gamble.js')
+const broadcast = require('./commands/broadcasts.js')
 const channel = account.channel;
 const pwgen = require('password-generator');
 const request = require('request');
@@ -23,7 +25,7 @@ const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe'];
 const nodemailer = require('nodemailer');
 
-var client = new tmi.client({
+const client = new tmi.client({
   options: {
     debug: false
   },
@@ -48,6 +50,7 @@ function interval() {
   if(timer % 33 == 0){
     stats.refreshStats(users, misc);
   }
+  broadcast.playbrd('twitch', client, broadcasts, channel, timer);
   db.saveDatabase();
   timer++;
 }
@@ -63,10 +66,18 @@ var db = new loki('./database.json',
 function loadHandler() {
     users = db.getCollection('users');
     logs = db.getCollection('logs');
+    commands = db.getCollection('commands');
+    broadcasts = db.getCollection('broadcasts');
     misc = db.getCollection('misc');
     streamlabsIDs = db.getCollection('streamlabsIDs');
     if(!streamlabsIDs){
       streamlabsIDs = db.addCollection('streamlabsIDs')
+    }
+    if (!broadcasts) {
+      broadcasts = db.addCollection('broadcasts');
+    }
+    if (!commands) {
+      commands = db.addCollection('commands');
     }
     if (!misc) {
       misc = db.addCollection('misc');
@@ -295,10 +306,10 @@ discord.login(account.discord);
 
 //+TWITCH+//
 client.on("whisper", function (from, userstate, message, self) {
-  whisper.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self, admins)
+  whisper.on(admincmds, broadcast, commands, broadcasts, msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, from, userstate, message, self, admins)
 })
 
 client.on("chat", function(channel, userstate, message, self){
-  twitchchat.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self)
+  twitchchat.on(admincmds, broadcast, commands, broadcasts, msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self)
 })
 //-TWITCH-//
