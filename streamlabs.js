@@ -30,7 +30,7 @@ module.exports = {
       taler = Math.floor(parseInt(eventData.message[0].amount) / 10);
       user.taler += taler;
       if(taler > 0){
-        log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, eventData.message[0].amount + 'Bits')
+        log.addLog(logs, user.name, user.name, 'ZwiebelTaler', taler, eventData.message[0].amount + ' Bits')
         io.to(user.name).emit('showNotification', 'success', '<strong>Vielen Dank</strong> für deine Bits ❤️ Dir wurden <strong>' + taler + ' ZwiebelTaler</strong> gutgeschrieben!');
         io.to(user.name).emit('updateTaler', user.taler);
       }
