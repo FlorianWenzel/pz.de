@@ -291,24 +291,24 @@ function increaseTo(e, num){
 
 socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   if(alllogs){
-    $('#logs').html(
-      '<div class="columns">' +
-        '<div class="column dark">' +
-          '<strong>Datum</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Auslöser</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Empfänger</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Änderung</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Art</strong>' +
-        '</div>' +
-      '</div>'
+    $(#logs).html(
+      `<div class="columns">
+        <div class="column dark">
+          <strong>Datum</strong>
+        </div>
+        <div class="column dark">
+          <strong>Auslöser</strong>
+        </div>
+        <div class="column dark">
+          <strong>Empfänger</strong>
+        </div>
+        <div class="column dark">
+          <strong>Änderung</strong>
+        </div>
+        <div class="column dark">
+          <strong>Art</strong>
+        </div>
+      </div>`
     )
   }else{
     $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
@@ -318,17 +318,17 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       $('#gambleNetHead').removeClass('is-success')
     }
     $('#logs').html(
-      '<div class="columns">' +
-        '<div class="column dark">' +
-          '<strong>Datum</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Änderung</strong>' +
-        '</div>' +
-        '<div class="column dark">' +
-          '<strong>Art</strong>' +
-        '</div>' +
-      '</div>'
+      `<div class="columns">
+        <div class="column dark">
+          <strong>Datum</strong>
+        </div>
+        <div class="column dark">
+          <strong>Änderung</strong>
+        </div>
+        <div class="column dark">
+          <strong>Art</strong>
+        </div>
+      </div>`
     )
   }
   for(i=0;i<logs.length;i++){
@@ -368,19 +368,19 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       '</li>')
     }else{
       $('#logs').append(
-        '<li id=\'log-head\'>' +
-        '<div class="columns">' +
-          '<div class="column '+color+'">' +
-            ''+logs[i].time +
-          '</div>' +
-          '<div class="column '+color+'">' +
-            '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
-          '</div>' +
-          '<div class="column '+color+'">' +
-            ''+logs[i].type+'' +
-          '</div>' +
-        '</div>' +
-      '</li>')
+      `<li> +
+        <div class="columns">
+          <div class="column `+color+`">
+            `+logs[i].time +
+          `</div> +
+          <div class="column`+color+`">` +
+            `<span class="`+amountColor+`">`+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
+          `</div>
+          <div class="column ` + color + '">' +
+            logs[i].type +
+          `</div>
+        </div>
+      </li>`)
     }
   }
 })
