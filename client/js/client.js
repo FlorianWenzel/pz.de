@@ -291,7 +291,7 @@ function increaseTo(e, num){
 
 socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   if(alllogs){
-    $(#logs).html(
+    $('#logs').html(
       `<div class="columns">
         <div class="column dark">
           <strong>Datum</strong>
