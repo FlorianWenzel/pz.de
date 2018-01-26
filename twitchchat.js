@@ -1,5 +1,5 @@
 module.exports = {
-  on: function(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self){
+  on: function(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self, admins){
     if(self || userstate.username  ==  account.nick){
       return;
     }

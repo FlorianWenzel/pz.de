@@ -299,6 +299,6 @@ client.on("whisper", function (from, userstate, message, self) {
 })
 
 client.on("chat", function(channel, userstate, message, self){
-  twitchchat.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self)
+  twitchchat.on(msgCounter, account, casino, coincmds, client, users, io, log, misc, beetIo, channel, userstate, message, self, admins)
 })
 //-TWITCH-//
