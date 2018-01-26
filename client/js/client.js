@@ -368,11 +368,11 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       '</li>')
     }else{
       $('#logs').append(
-      `<li> +
+      `<li> 
         <div class="columns">
           <div class="column `+color+`">
             `+logs[i].time +
-          `</div> +
+          `</div>
           <div class="column`+color+`">` +
             `<span class="`+amountColor+`">`+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
           `</div>
