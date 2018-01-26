@@ -347,7 +347,7 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
     if(i%2==0){color = 'light-grey'}else{color = 'dark'}
     if(alllogs){
       $('#logs').append(
-        '<li id=\'log-head\'>' +
+        '<li>' +
           '<div class="columns">' +
             '<div class="column '+color+'">' +
               ''+logs[i].time +
