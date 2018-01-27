@@ -63,6 +63,7 @@ var db = new loki('./database.json',
 function loadHandler() {
     users = db.getCollection('users');
     logs = db.getCollection('logs');
+    streamlabsAlerts = db.getCollection('streamlabsAlerts');
     misc = db.getCollection('misc');
     streamlabsIDs = db.getCollection('streamlabsIDs');
     if(!streamlabsIDs){
@@ -76,6 +77,9 @@ function loadHandler() {
     }
     if (!logs) {
       logs = db.addCollection('logs');
+    }
+    if (!streamlabsAlerts) {
+      streamlabsAlerts = db.addCollection('streamlabsAlerts');
     }
 
     msgCounter = misc.findOne({id:'msgCounter'});
@@ -260,7 +264,7 @@ io.on('connection', function (socket) {
 
 //+STREAMLABS+//
 streamlabs.on('event', (eventData) => {
-  streamlab.on(eventData, io, users, log)
+  streamlab.on(eventData, io, users, log, streamlabsAlerts)
 });
 //-STREAMLABS-//
 

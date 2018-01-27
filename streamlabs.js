@@ -1,5 +1,8 @@
 module.exports = {
-  on: function(eventData, io, users, log){
+  on: function(eventData, io, users, log, streamlabsAlerts){
+    streamlabsAlerts.insert({
+      eventData
+    })
     if(eventData && eventData.message && eventData.message[0] && eventData.message[0]._id && streamlabsIDs.findOne({id: eventData.message[0]._id})){
       return;
     }else if(eventData && eventData.message && eventData.message[0] && eventData.message[0]._id){
