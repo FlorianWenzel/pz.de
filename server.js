@@ -239,7 +239,7 @@ io.on('connection', function (socket) {
   socket.on('getAllLogs', function(u, p){
     if(!(users.findOne({name:u, password:p}))){return;}
     if(!(admins.includes(users.findOne({name:u, password:p}).name))){return;}
-    socket.emit('getLogs', logs.where(function(){return true;}).slice(0, 99), true)
+    socket.emit('getLogs', logs.where(function(){return true;}), true)
     db.saveDatabase();
   })
   socket.on('getMyLogs', function(u, p){
@@ -247,11 +247,11 @@ io.on('connection', function (socket) {
       return;
     }
     r = log.getFilteredLogs(logs, {trigger_username:'',receiver_username:u,coins:true,taler:true})
-    socket.emit('getLogs', r.slice(0,99), false, users.findOne({name:u, password:p}).gambleNet, users.findOne({name:u, password:p}).coinsCollected)
+    socket.emit('getLogs', r, false, users.findOne({name:u, password:p}).gambleNet, users.findOne({name:u, password:p}).coinsCollected)
   })
   socket.on('getFilteredLogs', function(filter){
     filteredlogs = log.getFilteredLogs(logs, filter);
-    socket.emit('getLogs', filteredlogs.slice(0, 99), true)
+    socket.emit('getLogs', filteredlogs, true)
   })
   socket.on('getHomeStats', function(){
     socket.emit('getHomeStats', misc.findOne({id:'onions'}).count, misc.findOne({id:'seenMinutes'}).count, misc.findOne({id:'msgCounter'}).count)

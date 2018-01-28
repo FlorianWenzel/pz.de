@@ -290,27 +290,7 @@ function increaseTo(e, num){
 }
 
 socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
-  if(alllogs){
-    $('#logs').html(
-      `<div class="columns">
-        <div class="column dark">
-          <strong>Datum</strong>
-        </div>
-        <div class="column dark">
-          <strong>Auslöser</strong>
-        </div>
-        <div class="column dark">
-          <strong>Empfänger</strong>
-        </div>
-        <div class="column dark">
-          <strong>Änderung</strong>
-        </div>
-        <div class="column dark">
-          <strong>Art</strong>
-        </div>
-      </div>`
-    )
-  }else{
+  if(!alllogs){
     $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
     $('#coinsCollected').html(coinsCollected + ' ZwiebelCoins')
     if(gambleNet<0){
@@ -348,7 +328,7 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
     if(alllogs){
       $('#logs').append(
         '<li>' +
-          '<div class="columns">' +
+          '<div class="columns" id="log-' + i + '">' +
             '<div class="column '+color+'">' +
               ''+logs[i].time +
             '</div>' +
@@ -369,7 +349,7 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
     }else{
       $('#logs').append(
       `<li>
-        <div class="columns">
+        <div class="columns" style="opacity: 0;" id="log-` + i + `">
           <div class="column `+color+`">
             `+logs[i].time +
           `</div>
@@ -381,6 +361,9 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
           `</div>
         </div>
       </li>`)
+      $('#log-'+i).animate({
+        opacity: 1
+      }, i*200)
     }
   }
 })
