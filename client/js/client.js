@@ -188,7 +188,11 @@ function convert(){
 }
 
 function redirectToTwitch(){
-  window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=&force_verify=true'
+  if(window.location.href.includes('localhost')){
+    window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=bofmw6j8664aw6l7dza7w1sbjwqht8&redirect_uri=http://localhost:3000/login&response_type=code&scope=&force_verify=true'
+  }else{
+    window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=&force_verify=true'
+  }
 }
 
 function showNotification(type, msg, dies){
