@@ -85,9 +85,9 @@ module.exports = {
       return;
     }
     slotSymbols = [
-      'HSLight',
-      'HSVoid',
-      'TotinosRing'
+      'StinkyCheese',
+      'TwitchLit',
+      'TwitchRPG'
     ]
 
         user.coins -= parts[1];
