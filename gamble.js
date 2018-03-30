@@ -49,8 +49,12 @@ module.exports = {
       client.say(channel, 'Benutz !gamble <Einsatz> um zu gamblen!')
     }else {
       user = users.findOne({ name:userstate.username});
-      if(user.coins < parseInt(msg[1])){
+      if((Date.now() - user.gambleCooldown) < 600000){
+        client.say(channel, 'sorry, du musst noch ' + Math.floor((600000 - (Date.now() - user.gambleCooldown))/1000) + 's warten bevor du wieder gambeln kannst :/')
+        return;
+      } else if (user.coins < parseInt(msg[1])){
         client.say(channel, 'Sorry du hast zu wenig ZwiebelCoins!')
+        return;
       }else{
           user.gambleCooldown = new Date().getTime();
           playerCard = randomCard();
@@ -80,10 +84,15 @@ module.exports = {
       client.say(channel, 'Benutz !slots <einsatz>')
       return;
     }
+    if((Date.now() - user.gambleCooldown) < 600000){
+      client.say(channel, 'sorry, du musst noch ' + Math.floor((600000 - (Date.now() - user.gambleCooldown))/1000) + 's warten bevor du wieder gambeln kannst :/')
+      return;
+    }
     if(user.coins < parts[1]){
       client.say(channel, 'Zu wenig ZwiebelCoins, sorry :(')
       return;
     }
+    user.gambleCooldown = new Date().getTime();
     slotSymbols = [
       'StinkyCheese',
       'TwitchLit',
