@@ -317,6 +317,7 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   }
   monthlyTaler = 0;
   monthlyOtherTaler = 0;
+  monthlySells = 0;
   for(i=0;i<logs.length;i++){
     amountColor = 'blue-text';
     amountPrefix = '';
@@ -354,6 +355,8 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
       '</li>')
       if(logs[i].currency === 'ZwiebelTaler' && (logs[i].type == 'Prime Sub' || logs[i].type.includes('Sub') || logs[i].type.includes('Bits') || logs[i].type.includes('Donation'))){
         monthlyTaler += parseInt(logs[i].amount);
+      }else if (logs[i].currency === 'ZwiebelTaler' && (logs[i].type.includes('Bestellung'))){
+        monthlySells += parseInt(logs[i].amount);
       }else if (logs[i].currency === 'ZwiebelTaler'){
         monthlyOtherTaler += parseInt(logs[i].amount);
       }
@@ -366,35 +369,51 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
               '</div>' +
               '<div class="column prime">Donos/Bits/Subs' +
               '</div>' +
-              '<div class="column prime">-' +
+              '<div class="column prime">' +
               '</div>' +
               '<div class="column prime">' +
-                '<span ">'+(monthlyTaler>=0?'+':'-')+monthlyTaler+' ZwiebelTaler</span>'+
+                '<span ">'+(monthlyTaler>=0?'+':'')+monthlyTaler+' ZwiebelTaler</span>'+
               '</div>' +
               '<div class="column prime">' +
-                'Zusammenfassung' +
+                '' +
               '</div>' +
             '</div>' +
         '</li>'+
         '<li>' +
           '<div class="columns" id="log-' + i + '">' +
             '<div class="column prime">' +
-              logs[i].time.split('.')[1] + '/' + logs[i].time.split('.')[2] +
             '</div>' +
             '<div class="column prime">Commands/Umgetauscht' +
             '</div>' +
-            '<div class="column prime">-' +
+            '<div class="column prime">' +
             '</div>' +
             '<div class="column prime">' +
-              '<span ">'+(monthlyOtherTaler>=0?'+':'-')+monthlyOtherTaler+' ZwiebelTaler</span>'+
+              '<span ">'+(monthlyOtherTaler>=0?'+':'')+monthlyOtherTaler+' ZwiebelTaler</span>'+
             '</div>' +
             '<div class="column prime">' +
               '' +
             '</div>' +
           '</div>' +
-        '</li>')
+        '</li>' + ((monthlySells != 0) ?
+        '<li>' +
+          '<div class="columns" id="log-' + i + '">' +
+            '<div class="column prime">' +
+            '</div>' +
+            '<div class="column prime">ZwiebelBack' +
+            '</div>' +
+            '<div class="column prime">' +
+            '</div>' +
+            '<div class="column prime">' +
+              '<span ">'+(monthlySells>=0?'+':'')+monthlySells+' ZwiebelTaler</span>'+
+            '</div>' +
+            '<div class="column prime">' +
+              '' +
+            '</div>' +
+          '</div>' +
+        '</li>' : ''))
         monthlyTaler = 0;
         monthlyOtherTaler = 0;
+        monthlySells = 0;
       }
     }else{
       $('#logs').append(
