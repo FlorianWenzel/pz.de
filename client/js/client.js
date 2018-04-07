@@ -11,93 +11,96 @@ var contactPerTwitch = false;
 socket = io.connect()
 
 onload()
-function onload(){
+
+function onload() {
   //AUTO-LOGIN
-  if(pwCookie && usrCookie){
+  if (pwCookie && usrCookie) {
     socket.emit('autoLogin', usrCookie, pwCookie);
   }
-  if(document.location.href.includes('/login')){
+  if (document.location.href.includes('/login')) {
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
     socket.emit('auth', code)
     return;
   }
-  if(document.location.href.includes('/')){
+  if (document.location.href.includes('/')) {
 
     code = (document.location.href.split('/')[3])
-    if(code){
+    if (code) {
       loadPage(code)
-    }else{
+    } else {
       loadPage('home')
     }
   }
 
 }
 
-$( window ).resize(function() {
+$(window).resize(function() {
   fitContentToNavbar();
 });
 
-$(document).ready (function() {
+$(document).ready(function() {
   $(".toggle").click(function() {
     toggleMobileMenu();
   });
   fitContentToNavbar();
 });
 
-function fitContentToNavbar(){
+function fitContentToNavbar() {
   $('#content').css('padding-top', $('#header').height())
 }
 
-function toggleMobileMenu(){
-  $( ".menu" ).stop().slideToggle( "slow" );
+function toggleMobileMenu() {
+  $(".menu").stop().slideToggle("slow");
   $('.m-icon').toggleClass('active');
 }
 
-function loadPage(page){
+function loadPage(page) {
   window.scrollTo(0, 0);
   $('#content').empty()
-  $('#content').load('html/'+page+'.html', null, function(response, status, xhr){
-    if(page != 'home'){
-      window.history.pushState({}, null, '/'+page);
-    }else{
+  $('#content').load('html/' + page + '.html', null, function(response, status, xhr) {
+    if (page != 'home') {
+      window.history.pushState({}, null, '/' + page);
+    } else {
       window.history.pushState({}, null, '/');
     }
   })
 }
 
-function refreshProgressBar(){
-  if(!user){return;}
-  coins = user.coins;
-  taler = user.taler;
-  if(!$('#progressBar')){
+function refreshProgressBar() {
+  if (!user) {
     return;
   }
-  if(coins > 1000){
+  coins = user.coins;
+  taler = user.taler;
+  if (!$('#progressBar')) {
+    return;
+  }
+  if (coins > 1000) {
     coins = 1000
   }
-  $('#progressBar').attr('value', coins/1000 * 100)
+  $('#progressBar').attr('value', coins / 1000 * 100)
   $('#progressText').html(coins + ' / 1000')
-  if(coins < 333){
+  if (coins < 333) {
     $('#progressBar').removeClass('is-warning')
     $('#progressBar').removeClass('is-success')
     $('#progressBar').addClass('is-danger')
-  }else if(coins < 666){
+  } else if (coins < 666) {
     $('#progressBar').removeClass('is-danger')
     $('#progressBar').removeClass('is-success')
     $('#progressBar').addClass('is-warning')
-  }else{
+  } else {
     $('#progressBar').removeClass('is-warning')
     $('#progressBar').removeClass('is-danger')
     $('#progressBar').addClass('is-success')
   }
-  if(coins >= 1000){
+  if (coins >= 1000) {
     $('#convertButton').removeClass('is-danger')
     $('#convertButton').addClass('is-success')
-  }else{
+  } else {
     $('#convertButton').addClass('is-danger')
     $('#convertButton').removeClass('is-success')
   }
-  if(taler > 200){
+  if (taler > 200) {
     $('#muetzeButton').removeClass('is-danger')
     $('#muetzeButton').addClass('is-success')
     $('#plueschButton').removeClass('is-danger')
@@ -105,12 +108,12 @@ function refreshProgressBar(){
   }
 }
 
-function buy(product){
-  if(!user){
+function buy(product) {
+  if (!user) {
     showNotification('danger', 'Bitte log dich erst ein!');
     return;
   }
-  if(taler < 200){
+  if (((product == 'PlüschZwiebel' || product == 'ZwiebelMütze') && user.taler < 200) || (product == 'ZwiebelShirt' && user.taler < 222)) {
     showNotification('danger', 'Zu wenig ZwiebelTaler!');
     return;
   }
@@ -133,36 +136,36 @@ function buy(product){
     $('#vorname').removeClass('is-danger')
     $('#name').removeClass('is-danger')
     missedSomething = false;
-    if(!$('#street').val()){
+    if (!$('#street').val()) {
       $('#street').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#plz').val()){
+    if (!$('#plz').val()) {
       $('#plz').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#city').val()){
+    if (!$('#city').val()) {
       $('#city').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#print').val()){
+    if (!$('#print').val()) {
       $('#print').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#vorname').val()){
+    if (!$('#vorname').val()) {
       $('#vorname').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#name').val()){
+    if (!$('#name').val()) {
       $('#name').addClass('is-danger')
       missedSomething = true;
     }
-    if(!$('#email').val() && contactPerMail){
+    if (!$('#email').val() && contactPerMail) {
       $('#email').addClass('is-danger')
       missedSomething = true;
     }
 
-    if(missedSomething){
+    if (missedSomething) {
       return;
     }
     socket.emit('buy', usrCookie, pwCookie, product, $('#street').val(), $('#plz').val(), $('#city').val(), $('#print').val(), $('#misc').val(), $('#vorname').val(), $('#name').val(), $('#zusatz').val(), contactPerMail, contactPerTwitch, $('#email').val())
@@ -170,16 +173,16 @@ function buy(product){
   });
 }
 
-function convert(){
+function convert() {
   coins = parseInt($('.coins-amount').html())
-  if(coins < 1000){
+  if (coins < 1000) {
     showNotification('danger', 'Zu wenig ZwiebelCoins!')
     $("#convertButton").addClass("shake")
-    i = setInterval(function(){
+    i = setInterval(function() {
       $("#convertButton").removeClass("shake")
       clearInterval(i);
     }, 1000)
-  }else{
+  } else {
     audioCoins.pause();
     audioCoins.currentTime = 0
     audioCoins.play()
@@ -187,16 +190,16 @@ function convert(){
   }
 }
 
-function redirectToTwitch(){
-  if(window.location.href.includes('localhost')){
+function redirectToTwitch() {
+  if (window.location.href.includes('localhost')) {
     window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=bofmw6j8664aw6l7dza7w1sbjwqht8&redirect_uri=http://localhost:3000/login&response_type=code&scope=&force_verify=true'
-  }else{
+  } else {
     window.location = 'https://api.twitch.tv/kraken/oauth2/authorize?client_id=ui25tzwjmuypf8imx9jkevb49yvt3q&redirect_uri=http://pokerzwiebel.de/login&response_type=code&scope=&force_verify=true'
   }
 }
 
-function showNotification(type, msg, dies){
-  if(type == 'danger' || type == 'info'){
+function showNotification(type, msg, dies) {
+  if (type == 'danger' || type == 'info') {
     audioNotifiaction.pause();
     audioNotifiaction.currentTime = 0
     audioNotifiaction.play()
@@ -205,99 +208,100 @@ function showNotification(type, msg, dies){
   notifications.push(id);
   $('#notifications').append(
     '<li id="notification-' + id + '" class="notification-li fly-in">' +
-      '<div class="notification is-' + type + '">' +
-        '<button onclick="deleteNotification('+id+')" class="delete"></button>' +
-        msg +
-      '</div>' +
+    '<div class="notification is-' + type + '">' +
+    '<button onclick="deleteNotification(' + id + ')" class="delete"></button>' +
+    msg +
+    '</div>' +
     '</li>'
   )
-  if(dies){
-    selfDestructions.push(setTimeout(function(){
+  if (dies) {
+    selfDestructions.push(setTimeout(function() {
       deleteNotification(id);
     }, 1000))
   }
 }
 
-function deleteNotification(id){
-  $( "#notification-"+id ).animate({
-  opacity: 0.25,
-  left: "+=50",
-  height: "toggle"
-}, 150, function() {
-    $('#notification-'+id).remove()});
+function deleteNotification(id) {
+  $("#notification-" + id).animate({
+    opacity: 0.25,
+    left: "+=50",
+    height: "toggle"
+  }, 150, function() {
+    $('#notification-' + id).remove()
+  });
 }
 
-function toggleMail(){
-  if(contactPerMail){
+function toggleMail() {
+  if (contactPerMail) {
     contactPerMail = false;
     $('#mail-wrap').addClass('hidden')
-  }else{
+  } else {
     contactPerMail = true;
     $('#mail-wrap').removeClass('hidden')
   }
 }
 
-function toggleTwitch(){
-  if(contactPerTwitch){
+function toggleTwitch() {
+  if (contactPerTwitch) {
     contactPerTwitch = false;
-  }else{
+  } else {
     contactPerTwitch = true;
   }
 }
 
-socket.on('updateCoins', function(amount){
+socket.on('updateCoins', function(amount) {
   user.coins = amount;
   $('.coins-amount').html(amount);
   refreshProgressBar();
 })
 
-socket.on('updateTaler', function(amount){
+socket.on('updateTaler', function(amount) {
   user.taler = amount;
   $('.taler-amount').html(amount);
   refreshProgressBar();
 })
 
-socket.on('confirmPurchase', function(product){
+socket.on('confirmPurchase', function(product) {
   showNotification('success', 'Danke für deine Bestellung!')
   $('#modal').removeClass('is-active')
 })
 
-socket.on('canceledPurchase', function(product){
+socket.on('canceledPurchase', function(product) {
   showNotification('danger', 'Irgendwas lief schief, versuchs bitte später nochmal!')
   $('#modal').removeClass('is-active')
 })
 
-socket.on('showNotification', function(type, msg){
+socket.on('showNotification', function(type, msg) {
   showNotification(type, msg);
 })
 
-socket.on('getHomeStats', function(onions, minutes, msgs){
+socket.on('getHomeStats', function(onions, minutes, msgs) {
   increaseTo($('#onionCount'), onions)
   increaseTo($('#minutesCount'), minutes)
   increaseTo($('#msgsCount'), msgs)
 })
 
-socket.on('getProfile', function(discordID){
+socket.on('getProfile', function(discordID) {
   $('#discordID').val(discordID)
   $('#discordID').addClass('is-success')
 })
 
-function increaseTo(e, num){
+function increaseTo(e, num) {
   let i = 0;
-  let inter = setInterval(function(){
+  let inter = setInterval(function() {
     i++;
-    e.html('<strong>' + Math.floor((num/20)*i) + '</strong>')
-    if(i >= 20){
+    e.html('<strong>' + Math.floor((num / 20) * i) + '</strong>')
+    if (i >= 20) {
       clearInterval(inter);
     }
   }, 50)
 }
 
-socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
-  if(!alllogs){
+socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected) {
+  if (!alllogs) {
     $('#gambleNet').html(gambleNet + ' ZwiebelCoins')
     $('#coinsCollected').html(coinsCollected + ' ZwiebelCoins')
-    if(gambleNet<0){
+    if (gambleNet < 0) {
       $('#gambleNetHead').addClass('is-danger')
       $('#gambleNetHead').removeClass('is-success')
     }
@@ -318,85 +322,89 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
   monthlyTaler = 0;
   monthlyOtherTaler = 0;
   monthlySells = 0;
-  for(i=0;i<logs.length;i++){
+  for (i = 0; i < logs.length; i++) {
     amountColor = 'blue-text';
     amountPrefix = '';
-    if(logs[i].type == 'setCoins' || logs[i].type == 'setTaler'){
+    if (logs[i].type == 'setCoins' || logs[i].type == 'setTaler') {
 
-    }else{
-      if(logs[i].amount > 0){
+    } else {
+      if (logs[i].amount > 0) {
         amountColor = 'green-text'
         amountPrefix = '+';
-      }else if(logs[i].amount < 0){
+      } else if (logs[i].amount < 0) {
         amountColor = 'red-text'
       }
     }
-    if(i%2==0){color = 'light-grey'}else{color = 'dark'}
-    if(alllogs){
+    if (i % 2 == 0) {
+      color = 'light-grey'
+    } else {
+      color = 'dark'
+    }
+    if (alllogs) {
       $('#logs').append(
         '<li>' +
-          '<div class="columns" id="log-' + i + '">' +
-            '<div class="column '+color+'">' +
-              ''+logs[i].time +
-            '</div>' +
-            '<div class="column '+color+'">' +
-              ''+logs[i].trigger_username+'' +
-            '</div>' +
-            '<div class="column '+color+'">' +
-              ''+logs[i].receiver_username+'' +
-            '</div>' +
-            '<div class="column '+color+'">' +
-              '<span class="'+amountColor+'">'+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
-            '</div>' +
-            '<div class="column '+color+'">' +
-              ''+logs[i].type+'' +
-            '</div>' +
-          '</div>' +
-      '</li>')
-      if(logs[i].currency === 'ZwiebelTaler' && (logs[i].type == 'Prime Sub' || logs[i].type.includes('Sub') || logs[i].type.includes('Bits') || logs[i].type.includes('Donation'))){
+        '<div class="columns" id="log-' + i + '">' +
+        '<div class="column ' + color + '">' +
+        '' + logs[i].time +
+        '</div>' +
+        '<div class="column ' + color + '">' +
+        '' + logs[i].trigger_username + '' +
+        '</div>' +
+        '<div class="column ' + color + '">' +
+        '' + logs[i].receiver_username + '' +
+        '</div>' +
+        '<div class="column ' + color + '">' +
+        '<span class="' + amountColor + '">' + amountPrefix + logs[i].amount + ' ' + logs[i].currency + '</span>' +
+        '</div>' +
+        '<div class="column ' + color + '">' +
+        '' + logs[i].type + '' +
+        '</div>' +
+        '</div>' +
+        '</li>')
+      if (logs[i].currency === 'ZwiebelTaler' && (logs[i].type == 'Prime Sub' || logs[i].type.includes('Sub') || logs[i].type.includes('Bits') || logs[i].type.includes('Donation'))) {
         monthlyTaler += parseInt(logs[i].amount);
-      }else if (logs[i].currency === 'ZwiebelTaler' && (logs[i].type.includes('Bestellung'))){
+      } else if (logs[i].currency === 'ZwiebelTaler' && (logs[i].type.includes('Bestellung'))) {
         monthlySells += parseInt(logs[i].amount);
-      }else if (logs[i].currency === 'ZwiebelTaler'){
+      } else if (logs[i].currency === 'ZwiebelTaler') {
         monthlyOtherTaler += parseInt(logs[i].amount);
       }
-      if((logs[i+1] && logs[i+1].time.split('.')[1] != logs[i].time.split('.')[1]) || i == logs.length-1){
+      if ((logs[i + 1] && logs[i + 1].time.split('.')[1] != logs[i].time.split('.')[1]) || i == logs.length - 1) {
         $('#logs').append(
           '<li>' +
-            '<div class="columns" id="log-' + i + '">' +
-              '<div class="column prime">' +
-                logs[i].time.split('.')[1] + '/' + logs[i].time.split('.')[2] +
-              '</div>' +
-              '<div class="column prime">Donos/Bits/Subs' +
-              '</div>' +
-              '<div class="column prime">' +
-              '</div>' +
-              '<div class="column prime">' +
-                '<span ">'+(monthlyTaler>=0?'+':'')+monthlyTaler+' ZwiebelTaler</span>'+
-              '</div>' +
-              '<div class="column prime">' +
-                '' +
-              '</div>' +
-            '</div>' +
-        '</li>'+
-        '<li>' +
           '<div class="columns" id="log-' + i + '">' +
-            '<div class="column prime">' +
-            '</div>' +
-            '<div class="column prime">Commands/Umgetauscht' +
-            '</div>' +
-            '<div class="column prime">' +
-            '</div>' +
-            '<div class="column prime">' +
-              '<span ">'+(monthlyOtherTaler>=0?'+':'')+monthlyOtherTaler+' ZwiebelTaler</span>'+
-            '</div>' +
-            '<div class="column prime">' +
-              '' +
-            '</div>' +
+          '<div class="column prime">' +
+          logs[i].time.split('.')[1] + '/' + logs[i].time.split('.')[2] +
           '</div>' +
-        '</li>' + ((monthlySells != 0) ?
-        '<li>' +
+          '<div class="column prime">Donos/Bits/Subs' +
+          '</div>' +
+          '<div class="column prime">' +
+          '</div>' +
+          '<div class="column prime">' +
+          '<span ">' + (monthlyTaler >= 0 ? '+' : '') + monthlyTaler + ' ZwiebelTaler</span>' +
+          '</div>' +
+          '<div class="column prime">' +
+          '' +
+          '</div>' +
+          '</div>' +
+          '</li>' +
+          '<li>' +
           '<div class="columns" id="log-' + i + '">' +
+          '<div class="column prime">' +
+          '</div>' +
+          '<div class="column prime">Commands/Umgetauscht' +
+          '</div>' +
+          '<div class="column prime">' +
+          '</div>' +
+          '<div class="column prime">' +
+          '<span ">' + (monthlyOtherTaler >= 0 ? '+' : '') + monthlyOtherTaler + ' ZwiebelTaler</span>' +
+          '</div>' +
+          '<div class="column prime">' +
+          '' +
+          '</div>' +
+          '</div>' +
+          '</li>' + ((monthlySells != 0) ?
+            '<li>' +
+            '<div class="columns" id="log-' + i + '">' +
             '<div class="column prime">' +
             '</div>' +
             '<div class="column prime">ZwiebelBack' +
@@ -404,46 +412,50 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected){
             '<div class="column prime">' +
             '</div>' +
             '<div class="column prime">' +
-              '<span ">'+(monthlySells>=0?'+':'')+monthlySells+' ZwiebelTaler</span>'+
+            '<span ">' + (monthlySells >= 0 ? '+' : '') + monthlySells + ' ZwiebelTaler</span>' +
             '</div>' +
             '<div class="column prime">' +
-              '' +
+            '' +
             '</div>' +
-          '</div>' +
-        '</li>' : ''))
+            '</div>' +
+            '</li>' : ''))
         monthlyTaler = 0;
         monthlyOtherTaler = 0;
         monthlySells = 0;
       }
-    }else{
+    } else {
       $('#logs').append(
-      `<li>
+        `<li>
         <div class="columns" id="log-` + i + `">
-          <div class="column `+color+`">
-            `+logs[i].time +
-          `</div>
-          <div class="column `+color+`">` +
-            `<span class="`+amountColor+`">`+amountPrefix+logs[i].amount+' '+logs[i].currency+'</span>'+
-          `</div>
+          <div class="column ` + color + `">
+            ` + logs[i].time +
+        `</div>
+          <div class="column ` + color + `">` +
+        `<span class="` + amountColor + `">` + amountPrefix + logs[i].amount + ' ' + logs[i].currency + '</span>' +
+        `</div>
           <div class="column ` + color + '">' +
-            logs[i].type +
-          `</div>
+        logs[i].type +
+        `</div>
         </div>
       </li>`)
     }
   }
 })
 
-socket.on('loginSuccessful', function(usr, isMod){
+socket.on('loginSuccessful', function(usr, isMod) {
   user = usr;
   Cookies.remove('USR')
   Cookies.remove('UID')
-  Cookies.set('USR', user.name, { expires: 365})
-  Cookies.set('UID', user.password, { expires: 365})
+  Cookies.set('USR', user.name, {
+    expires: 365
+  })
+  Cookies.set('UID', user.password, {
+    expires: 365
+  })
   pwCookie = user.password;
   usrCookie = user.name;
   $('.login-button-text').html(user.name)
-  $(".login-button-link").attr("onclick","showLogout();");
+  $(".login-button-link").attr("onclick", "showLogout();");
   $(".login-button-link").removeClass("lila");
   $(".login-button-link").addClass("blue");
   $('.login-button-icon').removeClass('fa-twitch');
@@ -452,15 +464,15 @@ socket.on('loginSuccessful', function(usr, isMod){
   $('.taler-amount').html(user.taler);
   $('.currency-display').removeClass('hidden')
   $('.log-button').removeClass('hidden')
-  if(isMod){
+  if (isMod) {
     $('.logs-button').removeClass('hidden');
   }
-  if(window.location.pathname.includes('/login')){
+  if (window.location.pathname.includes('/login')) {
     loadPage('home');
   }
 })
 
-socket.on('loginUnsuccessful', function(){
+socket.on('loginUnsuccessful', function() {
   Cookies.remove('USR')
   Cookies.remove('UID')
   code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
@@ -468,13 +480,13 @@ socket.on('loginUnsuccessful', function(){
 })
 
 
-socket.on('getChallengeStats', function(data){
+socket.on('getChallengeStats', function(data) {
   labels = [];
   series = [];
-  for(i=0;i<data.length;i++){
-    if(i==0){
+  for (i = 0; i < data.length; i++) {
+    if (i == 0) {
       labels.push('Bankroll')
-    }else{
+    } else {
       labels.push(i)
     }
     series.push(data[i].net - 100)
@@ -504,11 +516,11 @@ socket.on('getChallengeStats', function(data){
   });
 })
 
-socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
+socket.on('getGiessenStats', function(totalWateredOnions, topGiesser) {
   $('#totalWateredOnions').html(totalWateredOnions)
   labels = [];
   series = [];
-  for(i=0;i<topGiesser.length;i++){
+  for (i = 0; i < topGiesser.length; i++) {
     labels.push(topGiesser[i].name)
     series.push(topGiesser[i].count)
   }
@@ -522,25 +534,25 @@ socket.on('getGiessenStats', function(totalWateredOnions, topGiesser){
     reverseData: true,
     horizontalBars: true,
     axisX: {
-     onlyInteger: true,
-     offset: 15
+      onlyInteger: true,
+      offset: 15
     },
     axisY: {
       offset: 150
     },
-    height: topGiesser.length*30+'px',
+    height: topGiesser.length * 30 + 'px',
     chartPadding: {
       right: 50
     }
   });
 })
 
-socket.on('getGambleStats', function(gambleStats){
+socket.on('getGambleStats', function(gambleStats) {
   $('#totalGambleAmount').html(gambleStats.global)
   labels = [];
   series = [];
   most = gambleStats.most;
-  for(i=0;i<most.length;i++){
+  for (i = 0; i < most.length; i++) {
     labels.push(most[i].name)
     series.push(most[i].amount)
   }
@@ -557,8 +569,8 @@ socket.on('getGambleStats', function(gambleStats){
     reverseData: true,
     height: '750px',
     axisX: {
-     onlyInteger: true,
-     offset: 15
+      onlyInteger: true,
+      offset: 15
     },
     axisY: {
       offset: 150
@@ -569,7 +581,7 @@ socket.on('getGambleStats', function(gambleStats){
     ['screen and (max-width: 640px)', {
       seriesBarDistance: 5,
       axisX: {
-        labelInterpolationFnc: function (value) {
+        labelInterpolationFnc: function(value) {
           return value[0];
         }
       }
@@ -580,11 +592,11 @@ socket.on('getGambleStats', function(gambleStats){
   new Chartist.Bar('#gambleStats', data, options, responsiveOptions);
 })
 
-socket.on('getChatterStats', function(totalMessagesSent, topChatter){
+socket.on('getChatterStats', function(totalMessagesSent, topChatter) {
   $('#totalMessagesSent').html(totalMessagesSent)
   labels = [];
   series = [];
-  for(i=0;i<topChatter.length;i++){
+  for (i = 0; i < topChatter.length; i++) {
     labels.push(topChatter[i].name)
     series.push(topChatter[i].count)
   }
@@ -598,31 +610,31 @@ socket.on('getChatterStats', function(totalMessagesSent, topChatter){
     reverseData: true,
     horizontalBars: true,
     axisX: {
-     onlyInteger: true,
-     offset: 15
+      onlyInteger: true,
+      offset: 15
     },
     axisY: {
       offset: 150
     },
-    height: topChatter.length*30+'px',
+    height: topChatter.length * 30 + 'px',
     chartPadding: {
       right: 50
     }
   });
 })
 
-function showLogout(){
+function showLogout() {
   loadPage('profil')
   $('.login-button-text').html('Abmelden')
   $(".login-button-link").addClass("rot");
-  $(".login-button-link").attr("onclick","logout();");
+  $(".login-button-link").attr("onclick", "logout();");
   $('.login-button-link').removeClass('blue');
   $('.login-button-icon').removeClass('fa-user');
   $('.login-button-icon').addClass('fa-sign-out');
-  timeout = setInterval(function(){
+  timeout = setInterval(function() {
     $('.login-button-text').html(user.name)
     $(".login-button-link").removeClass("rot");
-    $(".login-button-link").attr("onclick","showLogout();");
+    $(".login-button-link").attr("onclick", "showLogout();");
     $('.login-button-icon').removeClass('fa-sign-out');
     $('.login-button-icon').addClass('fa-user');
     $(".login-button-link").addClass("blue");
@@ -638,6 +650,6 @@ function logout() {
 }
 
 function em(input) {
-    var emSize = parseFloat($("body").css("font-size"));
-    return (emSize * input);
+  var emSize = parseFloat($("body").css("font-size"));
+  return (emSize * input);
 }

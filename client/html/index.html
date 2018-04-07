@@ -1,300 +1,301 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>PokerZwiebel</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="css/bulma.css" />
-    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-    <script src="./socket.io/socket.io.js"></script>
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="./js/cookie.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src="./js/chartist-plugin-threshold.js"></script>
-  </head>
 
-  <body>
-    <header id="header" class="unselectable" style="border-bottom: solid #00d1b2 1px">
-      <nav class="is-hidden-desktop has-text-centered" role="navigation">
-        <a class="toggle">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PokerZwiebel</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="css/bulma.css" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="./socket.io/socket.io.js"></script>
+  <script src="https://embed.twitch.tv/embed/v1.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="./js/cookie.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+  <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+  <script src="./js/chartist-plugin-threshold.js"></script>
+</head>
+
+<body>
+  <header id="header" class="unselectable" style="border-bottom: solid #00d1b2 1px">
+    <nav class="is-hidden-desktop has-text-centered" role="navigation">
+      <a class="toggle">
           <a class="toggle m-icon -menu">
             <span></span>
             <span></span>
             <span></span>
           </a>
-        </a>
-        <ul class="menu">
-          <li>
-            <a onclick="toggleMobileMenu(); loadPage('home')">
+      </a>
+      <ul class="menu">
+        <li>
+          <a onclick="toggleMobileMenu(); loadPage('home')">
               <img src="./img/logo-white.png" class="vanishIn" alt="">
             </a>
-          </li>
-          <li>
-             <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('stream')">
+        </li>
+        <li>
+          <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('stream')">
                <span class="icon is-large">
                  <i class="fa fa-tv"></i>
                </span>
                 Stream
              </a>
-          </li>
-          <li>
-            <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('zwiebelback')">
+        </li>
+        <li>
+          <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('zwiebelback')">
               <span class="icon is-large">
                 <i class="fa fa-heart"></i>
               </span>
               ZwiebelBack
             </a>
-          </li>
-          <li>
-            <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('graphen')">
+        </li>
+        <li>
+          <a class="dark has-icon-left" onclick="toggleMobileMenu(); loadPage('graphen')">
               <span class="icon is-large">
                 <i class="fa fa-bar-chart"></i>
               </span>
               Graphen
             </a>
-          </li>
-          <li class="log-button log-button-m hidden">
-            <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('verlauf');">
-                <figure class="icon" >
-                  <img title="ZwiebelCoin" src="./img/white.svg" style="color:white;" />
-                </figure>
-              <span class="logs-text white-text">Verlauf</span>
-            </a>
-          </li>
-          <li class="currency-display currency-display-m hidden">
-            <div>
-                <figure class="icon" >
-                  <img title="ZwiebelCoin" src="./img/copper.svg" />
-                </figure>
-                <span class="coins-amount" style="color:white">
+        </li>
+        <li class="log-button log-button-m hidden">
+          <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('verlauf');">
+            <figure class="icon">
+              <img title="ZwiebelCoin" src="./img/white.svg" style="color:white;" />
+            </figure>
+            <span class="logs-text white-text">Verlauf</span>
+          </a>
+        </li>
+        <li class="currency-display currency-display-m hidden">
+          <div>
+            <figure class="icon">
+              <img title="ZwiebelCoin" src="./img/copper.svg" />
+            </figure>
+            <span class="coins-amount" style="color:white">
                   1337
                 </span>
-            </div>
-            <div>
-              <figure class="icon" >
-                <img title="ZwiebelTaler" src="./img/gold.svg" />
-              </figure>
-              <span class="taler-amount" style="color:white">
+          </div>
+          <div>
+            <figure class="icon">
+              <img title="ZwiebelTaler" src="./img/gold.svg" />
+            </figure>
+            <span class="taler-amount" style="color:white">
                 23
               </span>
-            </div>
-          </li>
-          <li class="login-button-link navbar-item lila" aria-hidden="true" onclick="redirectToTwitch();">
-            <span class="icon is-large">
+          </div>
+        </li>
+        <li class="login-button-link navbar-item lila" aria-hidden="true" onclick="redirectToTwitch();">
+          <span class="icon is-large">
               <i class="login-button-icon fa fa-twitch"></i>
             </span>
-            <span class="login-button-text">Einloggen</span>
-          </li>
-        </ul>
-      </nav>
-      <nav class="navbar is-hidden-touch is-dark">
-        <div class="navbar-brand">
-          <a class="navbar-item is-hidden-touch" onclick="loadPage('home')">
+          <span class="login-button-text">Einloggen</span>
+        </li>
+      </ul>
+    </nav>
+    <nav class="navbar is-hidden-touch is-dark">
+      <div class="navbar-brand">
+        <a class="navbar-item is-hidden-touch" onclick="loadPage('home')">
             <img src="./img/logo-white.png" alt="">
           </a>
-          <a class="navbar-item is-hidden-touch" onclick="loadPage('stream')">
+        <a class="navbar-item is-hidden-touch" onclick="loadPage('stream')">
             <span class="icon">
               <i class="fa fa-television"></i>
             </span>
             Stream
           </a>
-          <!--<a class="navbar-item" onclick="loadPage('zwiebelnation')">
+        <!--<a class="navbar-item" onclick="loadPage('zwiebelnation')">
             <span class="icon">
               <i class="fa fa-hashtag"></i>
             </span>
             ZwiebelNation
           </a>-->
-          <a class="navbar-item is-hidden-touch" onclick="loadPage('zwiebelback')">
+        <a class="navbar-item is-hidden-touch" onclick="loadPage('zwiebelback')">
             <span class="icon">
               <i class="fa fa-heart"></i>
             </span>
             ZwiebelBack
           </a>
-          <a class="navbar-item is-hidden-touch" onclick="loadPage('graphen')">
+        <a class="navbar-item is-hidden-touch" onclick="loadPage('graphen')">
             <span class="icon">
               <i class="fa fa-bar-chart"></i>
             </span>
             Graphen
           </a>
-          <div class="navbar is-hidden-touch is-dark" style="position:absolute; right: 0px;">
-            <div class="currency-display hidden navbar-item ">
-              <figure class="image is-24x24" >
-                <img title="ZwiebelCoin" src="./img/copper.svg" />
-              </figure>
-              <span class="coins-amount" style="color:white">
+        <div class="navbar is-hidden-touch is-dark" style="position:absolute; right: 0px;">
+          <div class="currency-display hidden navbar-item ">
+            <figure class="image is-24x24">
+              <img title="ZwiebelCoin" src="./img/copper.svg" />
+            </figure>
+            <span class="coins-amount" style="color:white">
                 1337
               </span>
-            </div>
-            <div class="currency-display hidden navbar-item">
-              <figure class="image is-24x24" >
-                <img title="ZwiebelTaler" src="./img/gold.svg" />
-              </figure>
-              <span class="taler-amount" style="color:white">
+          </div>
+          <div class="currency-display hidden navbar-item">
+            <figure class="image is-24x24">
+              <img title="ZwiebelTaler" src="./img/gold.svg" />
+            </figure>
+            <span class="taler-amount" style="color:white">
                 23
               </span>
-            </div>
-            <a class="navbar-item logs-button is-hidden-touch rot hidden" aria-hidden="true" onclick="loadPage('logs');">
+          </div>
+          <a class="navbar-item logs-button is-hidden-touch rot hidden" aria-hidden="true" onclick="loadPage('logs');">
               <span class="icon">
                 <i class="logs-icon fa fa-list"></i>
               </span>
               <span class="logs-text">Alle Logs</span>
             </a>
-            <a class="navbar-item log-button prime hidden is-hidden-touch" aria-hidden="true" onclick="loadPage('verlauf');">
-                <figure class="image is-24x24">
-                  <img title="ZwiebelCoin" src="./img/white.svg" />
-                </figure>
-              <span class="logs-text white-text">Verlauf</span>
-            </a>
-            <a class="navbar-item login-button-link lila" onclick="redirectToTwitch();">
+          <a class="navbar-item log-button prime hidden is-hidden-touch" aria-hidden="true" onclick="loadPage('verlauf');">
+            <figure class="image is-24x24">
+              <img title="ZwiebelCoin" src="./img/white.svg" />
+            </figure>
+            <span class="logs-text white-text">Verlauf</span>
+          </a>
+          <a class="navbar-item login-button-link lila" onclick="redirectToTwitch();">
               <span class="icon">
                 <i class="login-button-icon fa fa-twitch"></i>
               </span>
               <span class="login-button-text">Einloggen</span>
             </a>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <!-- NOTIFICATION -->
-    <ul id="notifications">
-    </ul>
-    <!-- END NOTIFICATION -->
-
-    <!-- END PAGE CONTENT -->
-    <div id="content">
-    </div>
-    <!-- END PAGE CONTENT -->
-
-    <!-- MODAL -->
-    <div id="modal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <article class="message is-info">
-          <div id="modal-header" class="message-header">
-            ZwiebelMütze
-            <button onclick="$('#modal').removeClass('is-active')" class="delete"></button>
-          </div>
-          <div id="modal-content" class="message-body">
-            <div class="field">
-              <div class="columns">
-                <div class="column">
-                  <div class="control">
-                    Vorname:
-                    <input id="vorname" class="input" type="text" placeholder="Max">
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="control">
-                    Name:
-                    <input id="name" class="input" type="text" placeholder="Mustermann">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                Straße + Hausnummer:
-                <input id="street" class="input" type="text" placeholder="Musterstraße 3">
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                Adresszusatz (optional):
-                <input id="zusatz" class="input" type="text" placeholder="">
-              </div>
-            </div>
-            <div class="field">
-              <div class="columns">
-                <div class="column">
-                  <div class="control">
-                    PLZ:
-                    <input id="plz" class="input" type="number" placeholder="1337">
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="control">
-                    Stadt:
-                    <input id="city" class="input" type="text" placeholder="Musterstadt">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                Aufdruck:
-                <input id="print" class="input" type="text" placeholder="in den Bildern: PokerZwiebel">
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                Sontiges (optional):
-                <textarea id="misc" class="textarea" rows="3" type="text" placeholder="Sonderwünsche? Hier rein!"></textarea>
-              </div>
-            </div>
-            <div class="field">
-              <div class="columns">
-                <div class="column">
-                  <input onclick="toggleTwitch();" class="tgl tgl-flip" id="contactTwitch" type="checkbox"/>
-                    Kontaktier mich über Twitch:
-                  <label class="tgl-btn" data-tg-off="Ne" data-tg-on="Klar!" for="contactTwitch"></label>
-                </div>
-                <div class="column">
-                  <input onclick="toggleMail();" class="tgl tgl-flip" id="contactMail" type="checkbox"/>
-                    Kontaktier mich per Mail:
-                  <label class="tgl-btn is-centered" data-tg-off="Ne" data-tg-on="Klar!" for="contactMail"></label>
-                </div>
-              </div>
-            </div>
-            <div class="field hidden" id="mail-wrap">
-              <div class="control">
-                Email:
-                <input id="email" class="input" type="email" placeholder="musterman@max.email">
-              </div>
-            </div>
-            <div class="field">
-              Da der ZwiebelMerch (von <a target="_blank" href="https://twitch.tv/sunshine_deluxe">sunshine_deluxe</a>) handgemacht wird dauert die Produktion etwas, bitte rechne mit 3-4 Wochen bis zum Versand!
-            </div>
-            <div class="field">
-              <div class="control has-text-centered">
-                <a id="confirmButton" class="button is-primary">Ok!</a> <a id="cancelButton" onclick="$('#modal').removeClass('is-active')" class="button is-danger">Doch nicht</a>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!-- END MODAL -->
-
-    <footer id="footer" class="hero is-dark is-hidden-touch" style="width:100%;">
-      <div class="container is-dark">
-        <div class="content is-dark has-text-centered">
-          <br />
-          <a onclick="loadPage('impressum')">Impressum</a> | ©PokerZwiebel 2017<br />
-          <br />
         </div>
       </div>
-    </footer>
-  </body>
-  <script src="./js/client.js"></script>
+    </nav>
+  </header>
+
+  <!-- NOTIFICATION -->
+  <ul id="notifications">
+  </ul>
+  <!-- END NOTIFICATION -->
+
+  <!-- END PAGE CONTENT -->
+  <div id="content">
+  </div>
+  <!-- END PAGE CONTENT -->
+
+  <!-- MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <article class="message is-info">
+        <div id="modal-header" class="message-header">
+          ZwiebelMütze
+          <button onclick="$('#modal').removeClass('is-active')" class="delete"></button>
+        </div>
+        <div id="modal-content" class="message-body">
+          <div class="field">
+            <div class="columns">
+              <div class="column">
+                <div class="control">
+                  Vorname:
+                  <input id="vorname" class="input" type="text" placeholder="Max">
+                </div>
+              </div>
+              <div class="column">
+                <div class="control">
+                  Name:
+                  <input id="name" class="input" type="text" placeholder="Mustermann">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              Straße + Hausnummer:
+              <input id="street" class="input" type="text" placeholder="Musterstraße 3">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              Adresszusatz (optional):
+              <input id="zusatz" class="input" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="field">
+            <div class="columns">
+              <div class="column">
+                <div class="control">
+                  PLZ:
+                  <input id="plz" class="input" type="number" placeholder="1337">
+                </div>
+              </div>
+              <div class="column">
+                <div class="control">
+                  Stadt:
+                  <input id="city" class="input" type="text" placeholder="Musterstadt">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              Aufdruck:
+              <input id="print" class="input" type="text" placeholder="in den Bildern: PokerZwiebel">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              Sontiges (optional):
+              <textarea id="misc" class="textarea" rows="3" type="text" placeholder="Sonderwünsche? Hier rein!"></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <div class="columns">
+              <div class="column">
+                <input onclick="toggleTwitch();" class="tgl tgl-flip" id="contactTwitch" type="checkbox" /> Kontaktier mich über Twitch:
+                <label class="tgl-btn" data-tg-off="Ne" data-tg-on="Klar!" for="contactTwitch"></label>
+              </div>
+              <div class="column">
+                <input onclick="toggleMail();" class="tgl tgl-flip" id="contactMail" type="checkbox" /> Kontaktier mich per Mail:
+                <label class="tgl-btn is-centered" data-tg-off="Ne" data-tg-on="Klar!" for="contactMail"></label>
+              </div>
+            </div>
+          </div>
+          <div class="field hidden" id="mail-wrap">
+            <div class="control">
+              Email:
+              <input id="email" class="input" type="email" placeholder="musterman@max.email">
+            </div>
+          </div>
+          <div class="field">
+            Da der ZwiebelMerch (von <a target="_blank" href="https://twitch.tv/sunshine_deluxe">sunshine_deluxe</a>) handgemacht wird dauert die Produktion etwas, bitte rechne mit 3-4 Wochen bis zum Versand!
+          </div>
+          <div class="field">
+            <div class="control has-text-centered">
+              <a id="confirmButton" class="button is-primary">Ok!</a> <a id="cancelButton" onclick="$('#modal').removeClass('is-active')" class="button is-danger">Doch nicht</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+  <!-- END MODAL -->
+
+  <footer id="footer" class="hero is-dark is-hidden-touch" style="width:100%;">
+    <div class="container is-dark">
+      <div class="content is-dark has-text-centered">
+        <br />
+        <a onclick="loadPage('impressum')">Impressum</a> | ©PokerZwiebel 2017<br />
+        <br />
+      </div>
+    </div>
+  </footer>
+</body>
+<script src="./js/client.js"></script>
+
 </html>
