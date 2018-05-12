@@ -322,6 +322,7 @@ socket.on('getLogs', function(logs, alllogs, gambleNet, coinsCollected) {
   monthlyTaler = 0;
   monthlyOtherTaler = 0;
   monthlySells = 0;
+  $('#logs').html('')
   for (i = 0; i < logs.length; i++) {
     amountColor = 'blue-text';
     amountPrefix = '';
