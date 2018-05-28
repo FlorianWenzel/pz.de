@@ -1,5 +1,6 @@
 var pwCookie = Cookies.get('UID')
 var usrCookie = Cookies.get('USR')
+var cookies_accepted = Cookies.get('cookies_accepted')
 var user;
 var notifications = [];
 var selfDestructions = [];
@@ -13,6 +14,13 @@ socket = io.connect()
 onload()
 
 function onload() {
+
+  //COOKIE STUFF
+  if(!cookies_accepted){
+    $('#cookie').addClass('is-active')
+  }
+
+
   //AUTO-LOGIN
   if (pwCookie && usrCookie) {
     socket.emit('autoLogin', usrCookie, pwCookie);
@@ -456,9 +464,7 @@ socket.on('loginSuccessful', function(usr, isMod) {
   pwCookie = user.password;
   usrCookie = user.name;
   $('.login-button-text').html(user.name)
-  $(".login-button-link").attr("onclick", "showLogout();");
-  $(".login-button-link").removeClass("lila");
-  $(".login-button-link").addClass("blue");
+  $(".login-button-link").attr("onclick", "toggleMobileMenu(); loadPage('verlauf');");
   $('.login-button-icon').removeClass('fa-twitch');
   $('.login-button-icon').addClass('fa-user');
   $('.coins-amount').html(user.coins);
@@ -624,30 +630,10 @@ socket.on('getChatterStats', function(totalMessagesSent, topChatter) {
   });
 })
 
-function showLogout() {
-  loadPage('profil')
-  $('.login-button-text').html('Abmelden')
-  $(".login-button-link").addClass("rot");
-  $(".login-button-link").attr("onclick", "logout();");
-  $('.login-button-link').removeClass('blue');
-  $('.login-button-icon').removeClass('fa-user');
-  $('.login-button-icon').addClass('fa-sign-out');
-  timeout = setInterval(function() {
-    $('.login-button-text').html(user.name)
-    $(".login-button-link").removeClass("rot");
-    $(".login-button-link").attr("onclick", "showLogout();");
-    $('.login-button-icon').removeClass('fa-sign-out');
-    $('.login-button-icon').addClass('fa-user');
-    $(".login-button-link").addClass("blue");
-    clearInterval(timeout);
-  }, 1500)
-}
-
 function logout() {
-  clearInterval(timeout);
   Cookies.remove('UID');
   Cookies.remove('USR');
-  location.reload();
+  window.location = 'https://pokerzwiebel.de'
 }
 
 function em(input) {

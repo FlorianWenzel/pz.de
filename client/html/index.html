@@ -74,14 +74,6 @@
               Graphen
             </a>
         </li>
-        <li class="log-button log-button-m hidden">
-          <a class="log-button hidden" aria-hidden="true" onclick="toggleMobileMenu(); loadPage('verlauf');">
-            <figure class="icon">
-              <img title="ZwiebelCoin" src="./img/white.svg" style="color:white;" />
-            </figure>
-            <span class="logs-text white-text">Verlauf</span>
-          </a>
-        </li>
         <li class="currency-display currency-display-m hidden">
           <div>
             <figure class="icon">
@@ -106,6 +98,13 @@
             </span>
           <span class="login-button-text">Einloggen</span>
         </li>
+        <li>
+          <a class="has-icon-left" onclick="toggleMobileMenu(); loadPage('profil')">
+              <span class="icon is-large">
+                <i class="fa fa-cog"></i>
+              </span>
+            </a>
+        </li>
       </ul>
     </nav>
     <nav class="navbar is-hidden-touch is-dark">
@@ -119,12 +118,6 @@
             </span>
             Stream
           </a>
-        <!--<a class="navbar-item" onclick="loadPage('zwiebelnation')">
-            <span class="icon">
-              <i class="fa fa-hashtag"></i>
-            </span>
-            ZwiebelNation
-          </a>-->
         <a class="navbar-item is-hidden-touch" onclick="loadPage('zwiebelback')">
             <span class="icon">
               <i class="fa fa-heart"></i>
@@ -155,23 +148,22 @@
               </span>
           </div>
           <a class="navbar-item logs-button is-hidden-touch rot hidden" aria-hidden="true" onclick="loadPage('logs');">
-              <span class="icon">
-                <i class="logs-icon fa fa-list"></i>
-              </span>
-              <span class="logs-text">Alle Logs</span>
-            </a>
-          <a class="navbar-item log-button prime hidden is-hidden-touch" aria-hidden="true" onclick="loadPage('verlauf');">
-            <figure class="image is-24x24">
-              <img title="ZwiebelCoin" src="./img/white.svg" />
-            </figure>
-            <span class="logs-text white-text">Verlauf</span>
+            <span class="icon">
+              <i class="logs-icon fa fa-list"></i>
+            </span>
+            <span class="logs-text">Alle Logs</span>
           </a>
           <a class="navbar-item login-button-link lila" onclick="redirectToTwitch();">
-              <span class="icon">
-                <i class="login-button-icon fa fa-twitch"></i>
-              </span>
-              <span class="login-button-text">Einloggen</span>
-            </a>
+            <span class="icon">
+              <i class="login-button-icon fa fa-twitch"></i>
+            </span>
+            <span class="login-button-text">Einloggen</span>
+          </a>
+          <a onmouseover="$('#cog-icon').addClass('fa-spin');" onmouseout="$('#cog-icon').removeClass('fa-spin');" class="navbar-item log-button hidden blue is-hidden-touch" aria-hidden="true" onclick="loadPage('profil');">
+            <span class="icon">
+              <i id="cog-icon" class="logs-icon fa fa-cog white-text"></i>
+            </span>
+          </a>
         </div>
       </div>
     </nav>
@@ -186,6 +178,31 @@
   <div id="content">
   </div>
   <!-- END PAGE CONTENT -->
+  <!-- START COOKIE MODAL -->
+  <div style="z-index: 10000000" id="cookie" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <article class="message is-info">
+        <div id="cookie-header" class="message-header">
+          Wir lieben Cookies.
+        </div>
+        <div id="cookie-content" class="message-body">
+          <div class="field">
+            <div class="control has-text-centered">
+                Diese Website benutzt Cookies um dich über Twitch einzuloggen.<br />
+                Ohne Cookies funktioniert sie nicht.
+            </div>
+          </div>
+          <div class="field">
+            <div class="control has-text-centered">
+              <a id="confirmButton" onclick="  Cookies.set('cookies_accepted', true, {expires: 7}); $('#cookie').removeClass('is-active')" class="button is-primary">Okay!</a> <a id="cancelButton" onclick="window.location = 'https://www.google.de'" class="button is-danger">Nö, kein bock auf Cookies</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <!-- END MODAL -->
 
   <!-- MODAL -->
   <div id="modal" class="modal">

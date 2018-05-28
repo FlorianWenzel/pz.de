@@ -20,6 +20,11 @@
       <button onclick="linkDiscord();" class="button is-centered is-primary">Verknüpfen</button>
     </div>
   </div>
+  <div class="field is-dark">
+    <a onclick="logout()" class="button is-danger is-big">
+      Logout
+    </a>
+  </div>
 </section>
 <script>
 socket.emit('getProfile', usrCookie, pwCookie)
