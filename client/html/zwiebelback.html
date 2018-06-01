@@ -21,9 +21,9 @@
     <div class="unselectable" style="width: 100%;">
       <p class="has-text-centered is-size-1">ZwiebelMütze</p>
       <p class="has-text-centered is-size-2">200 ZwiebelTaler</p>
-      <div id="slider">
-        <a class="control_next">></a>
-        <a class="control_prev">
+      <div class="slider" id="slider">
+        <a class="control_nextx control_next">></a>
+        <a class="control_prevx control_prev">
           <</a>
             <ul>
               <li class="holz">
@@ -51,9 +51,9 @@
     <div class="lila unselectable" style="width: 100%;">
       <p class="has-text-centered is-size-1">Plüschzwiebel</p>
       <p class="has-text-centered is-size-2">200 ZwiebelTaler</p>
-      <div id="slider2">
-        <a class="control_next2">></a>
-        <a class="control_prev2">
+      <div class="slider" id="slider2">
+        <a class="control_nextx control_next2">></a>
+        <a class="control_prevx control_prev2">
           <</a>
             <ul>
               <li class="holz">
@@ -83,9 +83,9 @@
     <p class="has-text-centered is-size-1">ZwiebelShirt</p>
     <p class="has-text-centered is-size-2">Einführungspreis statt 299 bis Ende Juni:</p>
     <p class="has-text-centered is-size-2">222 ZwiebelTaler</p>
-    <div id="slider3">
-      <a class="control_next3">></a>
-      <a class="control_prev3">
+    <div class="slider" id="slider3">
+      <a class="control_nextx control_next3">></a>
+      <a class="control_prevx control_prev3">
         <</a>
           <ul>
             <li class="holz">
@@ -100,6 +100,31 @@
     </div>
     <div class="has-text-centered">
       <button id="shirtButton" onclick="buy('ZwiebelShirt')" class="button is-danger is-medium" style="margin-top:1.25em;">
+        Will ich!
+      </button>
+    </div>
+  </div>
+  <div class="column prime">
+    <p class="has-text-centered is-size-1">!ZwiebelShirt</p>
+    <p class="has-text-centered is-size-2">Einführungspreis statt 349 bis Ende Juni:</p>
+    <p class="has-text-centered is-size-2">299 ZwiebelTaler</p>
+    <div class="slider" id="slider4">
+      <a class="control_nextx control_next4">></a>
+      <a class="control_prevx control_prev4">
+        <</a>
+          <ul>
+            <li class="holz">
+              <span class="helper"></span>
+              <img class="img" src="https://i.imgur.com/kpK2boW.jpg" />
+            </li>
+            <li class="holz">
+              <span class="helper"></span>
+              <img class="img" src="https://i.imgur.com/nUVvKOP.jpg" />
+            </li>
+          </ul>
+    </div>
+    <div class="has-text-centered">
+      <button id="shirtButton" onclick="buy('!ZwiebelShirt')" class="button is-danger is-medium" style="margin-top:1.25em;">
         Will ich!
       </button>
     </div>
@@ -125,6 +150,11 @@
     var slideWidth3 = $('#slider3 ul li').width();
     var slideHeight3 = $('#slider3 ul li').height();
     var sliderUlWidth3 = slideCount3 * slideWidth3;
+
+    var slideCount4 = $('#slider4 ul li').length;
+    var slideWidth4 = $('#slider4 ul li').width();
+    var slideHeight4 = $('#slider4 ul li').height();
+    var sliderUlWidth4 = slideCount4 * slideWidth4;
 
     $('#slider').css({
       width: slideWidth,
@@ -162,6 +192,18 @@
 
     $('#slider3 ul li:last-child').prependTo('#slider3 ul');
 
+    $('#slider4').css({
+      width: slideWidth4,
+      height: slideHeight4
+    });
+
+    $('#slider4 ul').css({
+      width: sliderUlWidth4,
+      marginLeft: -slideWidth4
+    });
+
+    $('#slider4 ul li:last-child').prependTo('#slider4 ul');
+
     function moveLeft() {
       $('#slider ul').animate({
         left: +slideWidth
@@ -186,6 +228,15 @@
       }, 200, function() {
         $('#slider3 ul li:last-child').prependTo('#slider3 ul');
         $('#slider3 ul').css('left', '');
+      });
+    };
+
+    function moveLeft4() {
+      $('#slider4 ul').animate({
+        left: +slideWidth4
+      }, 200, function() {
+        $('#slider4 ul li:last-child').prependTo('#slider4 ul');
+        $('#slider4 ul').css('left', '');
       });
     };
 
@@ -216,6 +267,15 @@
       });
     };
 
+    function moveRight4() {
+      $('#slider4 ul').animate({
+        left: -slideWidth4
+      }, 200, function() {
+        $('#slider4 ul li:first-child').appendTo('#slider4 ul');
+        $('#slider4 ul').css('left', '');
+      });
+    };
+
     $('a.control_prev').click(function() {
       moveLeft();
     });
@@ -225,6 +285,9 @@
     $('a.control_prev3').click(function() {
       moveLeft3();
     });
+    $('a.control_prev4').click(function() {
+      moveLeft4();
+    });
     $('a.control_next').click(function() {
       moveRight();
     });
@@ -233,6 +296,9 @@
     });
     $('a.control_next3').click(function() {
       moveRight3();
+    });
+    $('a.control_next4').click(function() {
+      moveRight4();
     });
   });
 </script>
@@ -248,18 +314,14 @@
     font-weight: 300;
   }
 
-  #slider,
-  #slider2,
-  #slider3 {
+  .slider {
     position: relative;
     overflow: hidden;
     margin: 20px auto 0 auto;
     border-radius: 4px;
   }
 
-  #slider ul,
-  #slider2 ul,
-  #slider3 ul {
+  .slider ul, {
     position: relative;
     margin: 0;
     padding: 0;
@@ -267,9 +329,7 @@
     list-style: none;
   }
 
-  #slider ul li,
-  #slider2 ul li,
-  #slider3 ul li {
+  .slider ul li{
     position: relative;
     display: block;
     float: left;
@@ -282,12 +342,8 @@
     line-height: 500px;
   }
 
-  a.control_prev,
-  a.control_next,
-  a.control_prev2,
-  a.control_next2,
-  a.control_prev3,
-  a.control_next3 {
+  a.control_prevx,
+  a.control_nextx {
     position: absolute;
     top: 40%;
     z-index: 19;
@@ -304,25 +360,17 @@
     cursor: pointer;
   }
 
-  a.control_prev:hover,
-  a.control_next:hover,
-  a.control_prev2:hover,
-  a.control_next2:hover,
-  a.control_prev3:hover,
-  a.control_next3:hover {
+  a.control_prevx:hover,
+  a.control_nextx:hover{
     opacity: 1;
     -webkit-transition: all 0.2s ease;
   }
 
-  a.control_prev,
-  a.control_prev2,
-  a.control_prev3 {
+  a.control_prevx {
     border-radius: 0 2px 2px 0;
   }
 
-  a.control_next,
-  a.control_next2,
-  a.control_next3 {
+  a.control_nextx {
     right: 0;
     border-radius: 2px 0 0 2px;
   }

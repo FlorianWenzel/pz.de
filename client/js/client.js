@@ -121,7 +121,7 @@ function buy(product) {
     showNotification('danger', 'Bitte log dich erst ein!');
     return;
   }
-  if (((product == 'PlüschZwiebel' || product == 'ZwiebelMütze') && user.taler < 200) || (product == 'ZwiebelShirt' && user.taler < 222)) {
+  if (((product == 'PlüschZwiebel' || product == 'ZwiebelMütze') && user.taler < 200) || (product == 'ZwiebelShirt' && user.taler < 222) || (product == '!ZwiebelShirt' && user.taler < 299)) {
     showNotification('danger', 'Zu wenig ZwiebelTaler!');
     return;
   }
@@ -135,8 +135,9 @@ function buy(product) {
   $('#name').removeClass('is-danger')
   $('#modal').addClass('is-active')
   $('#modal-header').html(product)
-  $('#confirmButton').unbind('click');
-  $('#confirmButton').bind('click', function() {
+}
+
+function confirmButton(){
     $('#street').removeClass('is-danger')
     $('#plz').removeClass('is-danger')
     $('#city').removeClass('is-danger')
@@ -174,11 +175,12 @@ function buy(product) {
     }
 
     if (missedSomething) {
+    console.log('triggersed')
       return;
     }
+    console.log('triggered')
     socket.emit('buy', usrCookie, pwCookie, product, $('#street').val(), $('#plz').val(), $('#city').val(), $('#print').val(), $('#misc').val(), $('#vorname').val(), $('#name').val(), $('#zusatz').val(), contactPerMail, contactPerTwitch, $('#email').val())
     $('#confirmButton').addClass('is-loading')
-  });
 }
 
 function convert() {

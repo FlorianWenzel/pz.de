@@ -1,6 +1,8 @@
 const muetzePrice = 200;
 const plueschPrice = 200;
 const shirtPrice = 222;
+const expShirtPrice = 299;
+
 module.exports = {
   buy: function(users, nodemailer, log, socket, account, u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email) {
     if (!u || !p || !product || !street || !plz || !city || !print || !vorname || !name) {
@@ -36,6 +38,14 @@ module.exports = {
         } else {
           change = -shirtPrice;
           user.taler -= shirtPrice;
+        }
+        break;
+      case '!ZwiebelShirt':
+        if (user.taler < expShirtPrice) {
+          return;
+        } else {
+          change = -expShirtPrice;
+          user.taler -= expShirtPrice;
         }
         break;
     }
