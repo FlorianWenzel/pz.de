@@ -8,6 +8,7 @@ var audioNotifiaction = new Audio('sounds/notification.mp3');
 var audioCoins = new Audio('sounds/coins.mp3');
 var contactPerMail = false;
 var contactPerTwitch = false;
+let product;
 
 socket = io.connect()
 
@@ -116,7 +117,8 @@ function refreshProgressBar() {
   }
 }
 
-function buy(product) {
+function buy(p) {
+  product = p;
   if (!user) {
     showNotification('danger', 'Bitte log dich erst ein!');
     return;
@@ -175,7 +177,6 @@ function confirmButton(){
     }
 
     if (missedSomething) {
-    console.log('triggersed')
       return;
     }
     console.log('triggered')

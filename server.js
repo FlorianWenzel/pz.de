@@ -23,7 +23,7 @@ const log = require('./log.js');
 const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe', 'fropfsy', 'volkaput', 'glatti2015'];
 const nodemailer = require('nodemailer');
 
-var client = new tmi.client({
+let client = new tmi.client({
   options: {
     debug: false
   },
@@ -42,17 +42,17 @@ client.connect();
 var timer = 0;
 setInterval(interval, (1000))
 function interval() {
-  if(timer % 60 == 0){
+  if(timer % 60 === 0){
     coincmds.rewardCoins(channel, users, account.twitchID, io)
   }
-  if(timer % 33 == 0){
+  if(timer % 33 === 0){
     stats.refreshStats(users, misc);
   }
   db.saveDatabase();
   timer++;
 }
 
-var db = new loki('./database.json',
+let db = new loki('./database.json',
       {
         autoload: true,
         autoloadCallback : loadHandler,
@@ -101,9 +101,9 @@ function loadHandler() {
 }
 
 //+BEET+//
-var beet = express();
-var beetServer = http.createServer(beet);
-var beetIo = socketio(beetServer);
+let beet = express();
+let beetServer = http.createServer(beet);
+let beetIo = socketio(beetServer);
 beetIo.on('connection', function(sock){
   if(!misc.findOne({id:'zwiebelbeetCounter'})){
     misc.insert({
@@ -133,7 +133,7 @@ server.listen(3000, () => console.log('Zwiebelpage listening on port 3000'));
 //-WEBSITE-EXPRESS-//
 
 //+WEBSITE-SOCKETIO+//
-var io = socketio(server);
+let io = socketio(server);
 io.on('connection', function (socket) {
   socket.on('autoLogin', function(username, password){
     user = users.findOne({name:username.toLowerCase()})
@@ -147,8 +147,8 @@ io.on('connection', function (socket) {
     }
     user.loggedIntoWebsite ++;
     socket.join(username.toLowerCase())
-    isMod = false;
-    if(admins.includes(user.name)){isMod = true;}
+
+    isMod = admins.includes(user.name);
     socket.emit('loginSuccessful', user, isMod);
   })
   socket.on('setDiscord', function(u, p, id){
