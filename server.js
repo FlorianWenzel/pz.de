@@ -163,11 +163,22 @@ io.on('connection', function (socket) {
       socket.emit('getProfile', user.discord)
     }
   })
-  socket.on('auth', function (code){
+  socket.on('auth', function (type, code){
+    id = account.twitchID;
+    secret = account.twitchSecret;
+    redirect_uri = account.redirect_uri;
+    if(type === 'testing'){
+      id = account.testTwitchID;
+      secret = account.testTwitchSecret;
+      redirect_uri = account.testRedirect_uri;
+    }
     request.post({
-        url: 'https://api.twitch.tv/kraken/oauth2/token?client_id='+account.twitchID+'&client_secret=' + account.twitchSecret + '&code=' + code + '&grant_type=authorization_code&redirect_uri=http://pokerzwiebel.de/login',
+        url: 'https://api.twitch.tv/kraken/oauth2/token?client_id='+id+'&client_secret=' + secret + '&code=' + code + '&grant_type=authorization_code&redirect_uri=' + redirect_uri,
         json: true
     }, function (error, response, body) {
+      if(error){
+        return;
+      }
       if(!body.access_token){
         return;
       }
