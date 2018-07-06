@@ -163,7 +163,8 @@ io.on('connection', function (socket) {
       socket.emit('getProfile', user.discord)
     }
   })
-  socket.on('auth', function (type, code){
+  socket.on('auth', function (code, type){
+    console.log(code, type)
     id = account.twitchID;
     secret = account.twitchSecret;
     redirect_uri = account.redirect_uri;

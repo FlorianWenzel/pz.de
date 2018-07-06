@@ -28,7 +28,7 @@ function onload() {
   }
   if (document.location.href.includes('/login')) {
     code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
-    socket.emit('auth', (window.location.href.includes('localhost') ? 'testing' : 'production'), code)
+    socket.emit('auth', code, (window.location.href.includes('localhost') ? 'testing' : 'production'))
     return;
   }
   if (document.location.href.includes('/')) {
@@ -486,7 +486,7 @@ socket.on('loginUnsuccessful', function() {
   Cookies.remove('USR')
   Cookies.remove('UID')
   code = (document.location.href.split('&scope=')[0]).split('/login?code=')[1]
-  socket.emit('auth', (window.location.href.includes('localhost') ? 'testing' : 'production'), code)
+  socket.emit('auth', code, (window.location.href.includes('localhost') ? 'testing' : 'production'))
 })
 
 
