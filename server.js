@@ -187,38 +187,49 @@ io.on('connection', function (socket) {
         url: 'https://api.twitch.tv/kraken?oauth_token=' + body.access_token,
         json: true
       }, function (error, response, body){
-        if(!body.token.user_name){
-          return;
-        }
-        username = body.token.user_name;
-        user = users.findOne({name:username.toLowerCase()})
-        if(!user){
-          coincmds.knowUser(users, username);
+        request({
+          url: 'https://api.twitch.tv/kraken/users/' + body.token.user_name + '?client_id=' + id,
+          json: true
+        }, (err, response, body) => {
+          if(!body.display_name){
+            return;
+          }
+          username = body.display_name;
           user = users.findOne({name:username.toLowerCase()})
-        }
-        if(!user.taler){
-          user.taler = 0;
-        }
-        if(!user.coinsCollected){
-          user.coinsCollected = 0;
-        }
-        if(!user.gambleNet){
-          user.gambleNet = 0;
-        }
-        if(!user.notifications){
-          user.notifications = [];
-        }
-        if(!user.loggedIntoWebsite){
-          user.loggedIntoWebsite = 0;
-        }
-        if(!user.password){
-          user.password = pwgen(30, false)
-        }
-        user.loggedIntoWebsite ++;
-        socket.join(username.toLowerCase())
-        isMod = false;
-        if(admins.includes(user.name)){isMod = true;}
-        socket.emit('loginSuccessful', user, isMod);
+          if(!user){
+            coincmds.knowUser(users, username);
+            user = users.findOne({name:username.toLowerCase()})
+          }
+          if(!user.taler){
+            user.taler = 0;
+          }
+          if(!user.id){
+            user.id = body._id;
+          }
+          if(!user.logo){
+            user.logo = body.logo;
+          }
+          if(!user.coinsCollected){
+            user.coinsCollected = 0;
+          }
+          if(!user.gambleNet){
+            user.gambleNet = 0;
+          }
+          if(!user.notifications){
+            user.notifications = [];
+          }
+          if(!user.loggedIntoWebsite){
+            user.loggedIntoWebsite = 0;
+          }
+          if(!user.password){
+            user.password = pwgen(30, false)
+          }
+          user.loggedIntoWebsite ++;
+          socket.join(username.toLowerCase())
+          isMod = false;
+          if(admins.includes(user.name)){isMod = true;}
+          socket.emit('loginSuccessful', user, isMod);
+        })
       })
     })
     db.saveDatabase();
