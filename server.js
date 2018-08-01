@@ -20,7 +20,7 @@ const request = require('request');
 const io_client = require('socket.io-client');
 const streamlabs = io_client(`https://sockets.streamlabs.com?token=` + account.streamlabsToken);
 const log = require('./log.js');
-const admins = ['dukexentis', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe', 'fropfsy', 'volkaput', 'glatti2015'];
+const admins = ['dukexentis', 'xknueppelx', 'onlyamiga', 'pokerzwiebel', 'sunshine_deluxe', 'fropfsy', 'volkaput', 'glatti2015'];
 const nodemailer = require('nodemailer');
 
 let client = new tmi.client({

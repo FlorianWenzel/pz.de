@@ -123,7 +123,7 @@ function buy(p) {
     showNotification('danger', 'Bitte log dich erst ein!');
     return;
   }
-  if (((product == 'PlüschZwiebel' || product == 'ZwiebelMütze') && user.taler < 200) || (product == 'ZwiebelShirt' && user.taler < 222) || (product == '!ZwiebelShirt' && user.taler < 299)) {
+  if (((product == 'PlüschZwiebel' || product == 'ZwiebelMütze') && user.taler < 200) || (product == 'ZwiebelShirt' && user.taler < 299) || (product == '!ZwiebelShirt' && user.taler < 349)) {
     showNotification('danger', 'Zu wenig ZwiebelTaler!');
     return;
   }

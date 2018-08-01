@@ -1,7 +1,7 @@
 const muetzePrice = 200;
 const plueschPrice = 200;
-const shirtPrice = 222;
-const expShirtPrice = 299;
+const shirtPrice = 299;
+const expShirtPrice = 349;
 
 module.exports = {
   buy: function(users, nodemailer, log, socket, account, u, p, product, street, plz, city, print, misc, vorname, name, zusatz, contactPerMail, contactPerTwitch, email) {
